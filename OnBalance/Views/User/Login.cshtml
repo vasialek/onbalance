@@ -1,0 +1,17 @@
+﻿@model OnBalance.ViewModels.User.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Html.EnableClientValidation(true);
+}
+
+<h2>Login</h2>
+
+@using(Html.BeginForm())
+{
+    
+    @Html.ValidationSummary(false)
+    @Html.EditorFor(x => Model)
+    
+    <input type="submit" value="@OnBalance.MyMessages.Login" />
+}

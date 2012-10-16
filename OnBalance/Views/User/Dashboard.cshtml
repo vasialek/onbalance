@@ -1,0 +1,38 @@
+﻿@model OnBalance.ViewModels.User.DashboardViewModel
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+
+<div class="user_shop_list">
+    @foreach(var item in Model.Shops)
+    {
+        <div class="user_shop_item">@Html.ActionLink(item.Name, "balance", "pradmin", new { id = item.Id }, null)</div>
+    }
+</div>
+
+<div class="user_imports_list">
+    <div>Pending imports</div>
+    @foreach(var item in Model.Imports)
+    {
+        <div class="user_import_item">
+            <div>@Html.Encode(item.CreatedAt.ToString("yyyy-MM-dd HH:mm"))</div>
+            <div>@Html.ActionLink("View", "view", "balancer", new { id = item.Id }, null)</div>
+        </div>
+    }
+</div>
+
+<div class="user_exports_list">
+    <div>Pending exports</div>
+    @foreach(var item in Model.Exports)
+    {
+        <div class="user_export_item">
+            <div>@Html.Encode(item.CreatedAt.ToString("yyyy-MM-dd HH:mm"))</div>
+            <div>@Html.ActionLink("View", "view", "balancer", new { id = item.Id }, null)</div>
+        </div>
+    }
+</div>
+
+@Html.DisplayFor(x => Model)
