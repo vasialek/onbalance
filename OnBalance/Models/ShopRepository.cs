@@ -14,7 +14,7 @@ namespace OnBalance.Models
             {
                 return new List<Shop> 
                 {
-                    new Shop{ Name = "GJ Sportland.com", UserId = "GJ" }
+                    new Shop{ Id = 100001, Name = "GJ Sportland.com", UserId = "GJ" }
                 };
             }
         }

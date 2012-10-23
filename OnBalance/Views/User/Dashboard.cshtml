@@ -7,6 +7,7 @@
 <h2>Dashboard</h2>
 
 <div class="user_shop_list">
+    <div>Shops</div>
     @foreach(var item in Model.Shops)
     {
         <div class="user_shop_item">@Html.ActionLink(item.Name, "balance", "pradmin", new { id = item.Id }, null)</div>

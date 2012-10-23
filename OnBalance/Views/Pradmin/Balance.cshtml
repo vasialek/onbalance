@@ -1,7 +1,45 @@
-﻿@{
+﻿@model IEnumerable<OnBalance.Models.ExchangeItem>
+@{
     ViewBag.Title = "Balance";
+    Layout = null;
 }
 
-<h2>Balance</h2>
+<style>
+		
+	/*margin and padding on body element can introduce errors in determining element position and are not recommended; we turn them off as a foundation for YUI CSS treatments. */
+	body {
+		margin:0;
+		padding:0;
+	}
+
+	.yui-skin-sam .yui-dt-col-address pre { font-family:arial;font-size:100%; } /* Use PRE in first col to preserve linebreaks*/
+</style>
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/fonts/fonts-min.css")" />
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/datatable/assets/skins/sam/datatable.css")">
+<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/yahoo-dom-event/yahoo-dom-event.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/calendar/calendar-min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/element/element-min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/datasource/datasource-min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/event-delegate/event-delegate-min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/datatable/datatable-min.js")"></script>
+
+<script src="@Url.Content("~/scripts/balance.js")"></script>
+
+<script type="text/javascript">
+
+    YAHOO.example.Data = {
+        products: [
+        @foreach (var item in Model)
+        {
+            @Html.Raw(string.Format("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3}, price_release_minor: '{4}' }},", item.Name, item.InternalCode, item.Price, item.Quantity, item.PriceOfRelease))
+        }
+        
+    ]
+    };
 
 
+</script>
+
+<body class="yui-skin-sam">
+	<div id="MainBalanceDiv"></div>
+</body>
