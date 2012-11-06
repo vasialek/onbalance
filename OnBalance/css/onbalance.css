@@ -1,8 +1,8 @@
 body
 {
-    font-size: .85em;
-    font-family: "Trebuchet MS", Verdana, Helvetica, Sans-Serif;
-    color: #232323;
+    font-size: 12px;
+    font-family: Arial;
+    color: #505050;
     background-color: #fff;
 }
 
@@ -34,14 +34,89 @@ textarea
     min-height: 75px;
 }
 
+h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #1b548d;
+    background: #e6f0f3;
+    padding: 10px 12px;
+    border-bottom: 1px solid #b3cbd6;
+}
+
+#wrapper {
+    width: 1000px;
+    margin: 0 auto;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    background: #fff;
+}
+
+#header {
+    height: 68px;
+    /*background: #fff;*/
+    background: url(/images/header-repeat.jpg) repeat-x;
+}
+
+#middle {
+    width: 100%;
+    padding: 0 0 30px;
+    height: 1%;
+    position: relative;
+}
+
+#container {
+    width: 100%;
+    float: left;
+    overflow: hidden;
+}
+
+#content {
+    padding: 0 5px 0 155px;
+}
+
+#footer {
+    width: 1000px;
+    margin: -30px auto 0;
+    height: 30px;
+    position: relative;
+    background: #E1E8F4;
+}
+
+#sideLeft {
+    float: left;
+    width: 150px;
+    margin-left: -100%;
+    position: relative;
+    /*background: #315e88;*/
+}
+
+.copyright {
+    padding-top: 8px;
+    text-align: center;
+}
+
+.logo {
+    width: 214px;
+    height: 68px;
+    background: url(/images/logo.png) no-repeat;
+    position: relative;
+    background-position: 30px 18px;
+}
+
 .editor-label 
 {
     margin: 1em 0 0 0;
 }
 
-.editor-field 
+.editor-field input
 {
-    margin:0.5em 0 0 0;
+    border-radius: 4px;
+    border: 2px solid #BCC2CD;
+    background-color:#FFFFFF;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 16px;
 }
 
 
@@ -72,4 +147,58 @@ textarea
 .validation-summary-valid
 {
     display: none;
+}
+
+/* Customisation */
+input
+{
+    border:1px solid #bcc2cd;
+    border-radius: 3px;
+    color:#585858;
+    font-size:13px;
+}
+
+a
+{
+    font-size: 12px;
+    line-height: 12px;
+    color: #003db8;
+    text-decoration: none;
+}
+
+.vspacer5
+{
+    /*height: 5px;*/
+}
+
+.main_content_left
+{
+    float: left;
+    width: 155px;
+}
+
+.main_content_center
+{
+    float: left;
+}
+
+.user_shop_list, .user_imports_list, .user_exports_list
+{
+    width: 150px;
+    padding: 0;
+    font-weight: bold;
+    border: solid 1px #97aebf;
+    min-height: 100px;
+}
+
+.list_header
+{
+    background-color: #97aebf;
+    padding: 2px;
+    color: #fff;
+}
+
+.user_export_item, .user_import_item, .user_shop_item
+{
+    padding-left: 5px;
 }

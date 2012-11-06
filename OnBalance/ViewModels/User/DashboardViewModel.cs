@@ -15,5 +15,17 @@ namespace OnBalance.ViewModels.User
 
         public List<Task> Exports { get; set; }
 
+        public DashboardViewModel()
+        {
+            Shops = new List<Shop>();
+            Shops = new ShopRepository().Shops.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
+            Imports = new List<Task>()
+            {
+                new Task{ Type = Task.TypeId.Import, Status = Status.Pending }
+                , new Task{ Type = Task.TypeId.Import, Status = Status.Pending }
+            };
+            Exports = new List<Task>();
+        }
+
     }
 }
