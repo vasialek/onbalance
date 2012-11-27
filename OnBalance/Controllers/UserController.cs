@@ -32,15 +32,34 @@ namespace OnBalance.Controllers
         // POST: /user/login
 
         [HttpPost]
-        public ActionResult Login(LoginViewModel model)
+        public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             if(ModelState.IsValid)
             {
-                FormsAuthentication.SetAuthCookie("Test", false);
-                return RedirectToAction("dashboard");
+                if(Membership.ValidateUser(model.Username, model.Password))
+                {
+                    FormsAuthentication.SetAuthCookie(model.Username, false);
+                    if(Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/") && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+                    {
+                        return Redirect(returnUrl);
+                    } else
+                    {
+                        return RedirectToAction("dashboard", "user");
+                    }
+                }
             }
 
             return View(model);
+        }
+
+        //
+        // GET: /user/logout
+
+        [Authorize]
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            return Redirect("/");
         }
 
         //
@@ -50,7 +69,7 @@ namespace OnBalance.Controllers
         public ActionResult Dashboard()
         {
             var dashboard = new DashboardViewModel();
-            dashboard.Shops = new ShopRepository().Shops.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
+            dashboard.Shops = new PosRepository().Items.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
             dashboard.Imports = new List<Task>()
             {
                 new Task{ Type = Task.TypeId.Import, Status = Status.Pending }

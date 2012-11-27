@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<log4net>
+
+  <appender name="AdoNetAppender" type="log4net.Appender.AdoNetAppender">
+    <bufferSize value="1" />
+    <!--<connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />-->
+    <connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+    <connectionString value="server=sunnystarsdev.db.9408771.hostedresource.com; uid=sunnystarsdev; pwd=mho+batch70dEr; database=sunnystarsdev;" />
+    <commandText value="INSERT INTO star_log ([Date],[Thread],[Level],[Logger],[Message],[Exception]) VALUES (@log_date, @thread, @log_level, @logger, @message, @exception)" />
+    <parameter>
+      <parameterName value="@log_date" />
+      <dbType value="DateTime" />
+      <layout type="log4net.Layout.RawTimeStampLayout" />
+    </parameter>
+    <parameter>
+      <parameterName value="@thread" />
+      <dbType value="String" />
+      <size value="255" />
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%thread" />
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@log_level" />
+      <dbType value="String" />
+      <size value="50" />
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%level" />
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@logger" />
+      <dbType value="String" />
+      <size value="255" />
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%logger" />
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@message" />
+      <dbType value="String" />
+      <size value="4000" />
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%message" />
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@exception" />
+      <dbType value="String" />
+      <size value="2000" />
+      <layout type="log4net.Layout.ExceptionLayout" />
+    </parameter>
+  </appender>
+
+  <appender name="RolingLogFile" type="log4net.Appender.RollingFileAppender">
+    <file value="logs\\onbalance.log" />
+    <appendToFile value="true" />
+    <rollingStyle value="Date" />
+    <datePattern value="yyyyMMdd" />
+    <maxSizeRollBackups value="3" />
+    <layout type="log4net.Layout.PatternLayout">
+      <!-- Print the date in ISO 8601 format -->
+      <conversionPattern value="%date %-5level %logger %ndc - %message%newline" />
+    </layout>
+  </appender>
+  <root>
+    <level value="ALL" />
+    <appender-ref ref="RolingLogFile" />
+    <!--<appender-ref ref="AdoNetAppender" />-->
+  </root>
+</log4net>

@@ -9,7 +9,7 @@ namespace OnBalance.ViewModels.User
     public class DashboardViewModel
     {
 
-        public List<Shop> Shops { get; set; }
+        public List<Pos> Shops { get; set; }
 
         public List<Task> Imports { get; set; }
 
@@ -17,8 +17,8 @@ namespace OnBalance.ViewModels.User
 
         public DashboardViewModel()
         {
-            Shops = new List<Shop>();
-            Shops = new ShopRepository().Shops.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
+            Shops = new List<Pos>();
+            Shops = new PosRepository().Items.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
             Imports = new List<Task>()
             {
                 new Task{ Type = Task.TypeId.Import, Status = Status.Pending }

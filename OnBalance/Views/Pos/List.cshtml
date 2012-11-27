@@ -1,0 +1,29 @@
+﻿@model IQueryable<OnBalance.Models.Organization>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.ToList()) {
+    <tr>
+        <td>@item.Id</td>
+        <td>@item.Name</td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>

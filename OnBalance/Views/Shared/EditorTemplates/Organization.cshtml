@@ -1,0 +1,14 @@
+﻿@model OnBalance.Models.Organization
+
+<div class="editor-label">@Html.LabelFor(x => x.StatusId)</div>
+<div class="editor-field">
+    @Html.EditorFor(x => x.StatusId, "Enum")
+    @Html.ValidationMessageFor(x => x.StatusId)
+</div>
+
+<div class="editor-label">@Html.LabelFor(x => x.Name)</div>
+<div class="editor-field">
+    @Html.EditorFor(x => x.Name)
+    @Html.ValidationMessageFor(x => x.Name)
+</div>
+

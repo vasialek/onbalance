@@ -1,0 +1,27 @@
+﻿@model List<MembershipUser>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>E-mail</th>
+            <th>Approved</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var user in Model)
+    {
+        <tr>
+            <td>@user.UserName</td>
+            <td>@user.Email</td>
+            <td>@user.IsApproved</td>
+        </tr>
+    }
+    </tbody>
+</table>

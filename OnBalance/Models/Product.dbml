@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="vasialek_onbalance" Class="ProductDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=184.173.226.203;Initial Catalog=vasialek_onbalance;User ID=vasialek_onbalance_user" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="vasialek_onbalanceConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="vasialek_onbalance_user.product" Member="Products">
+    <Type Name="Product">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="status_id" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="pos_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="uid" Type="System.String" DbType="VarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="user_id" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="created_at" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_ProductDetail" Member="ProductDetails" ThisKey="id" OtherKey="product_id" Type="ProductDetail" />
+    </Type>
+  </Table>
+  <Table Name="vasialek_onbalance_user.product_detail" Member="ProductDetails">
+    <Type Name="ProductDetail">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="status_id" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="product_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="parameter_name" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="parameter_value" Type="System.String" DbType="VarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="price_minor" Type="System.Decimal" DbType="Decimal(10,4) NOT NULL" CanBeNull="false" />
+      <Column Name="price_release_minor" Type="System.Decimal" DbType="Decimal(10,4) NOT NULL" CanBeNull="false" />
+      <Column Name="quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="created_at" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_ProductDetail" Member="Product" ThisKey="product_id" OtherKey="id" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

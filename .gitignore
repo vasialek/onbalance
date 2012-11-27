@@ -1,0 +1,13 @@
+*.suo
+packages/
+doc/*.xls
+doc/jsdatagrids/
+OnBalance/bin/
+OnBalance/obj/
+OnBalance/Scripts/yui/
+OnBalance/App_Data/
+OnBalance/logs/
+OnBalance/ConnectionString.config
+*.sln
+
+

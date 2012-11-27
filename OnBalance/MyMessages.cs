@@ -19,5 +19,10 @@ namespace OnBalance
             public const string CouldNotParseCodeForLineFmt = "Could not parse code of product for line #%NR%";
         }
 
+        public class Errors
+        {
+            public const string DataIsEmpty = "Data is empty!";
+        }
+
     }
 }
