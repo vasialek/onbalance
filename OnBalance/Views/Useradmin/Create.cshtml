@@ -1,0 +1,20 @@
+﻿@model OnBalance.ViewModels.User.UserViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+<h2>Create</h2>
+
+@using(Html.BeginForm())
+{
+    @Html.ValidationSummary(false)
+    @Html.EditorForModel()
+
+    <p>
+        @Html.ActionLink(OnBalance.MyMessages.ButtonText.Back, "index", "useradmin")
+        <input type="submit" value="@OnBalance.MyMessages.ButtonText.Save" />
+    </p>
+}
