@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using OnBalance.ViewModels.User;
 
 namespace OnBalance.Controllers
 {
@@ -40,26 +41,36 @@ namespace OnBalance.Controllers
         // POST: /useradmin/create
 
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(UserViewModel model)
         {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                if(ModelState.IsValid)
+                {
+                    MembershipUser user = Membership.CreateUser(model.Name, model.Password, model.Email);
+                    return RedirectToAction("edit", new { id = user.UserName });
+                }
             }
             catch
             {
-                return View();
+                
             }
+            return View(model);
         }
         
         //
-        // GET: /useradmin/edit/5
+        // GET: /useradmin/edit/test
  
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            MembershipUser user = Membership.GetUser(id);
+            UserViewModel model = new UserViewModel();
+            model.Name = user.UserName;
+            model.Email = user.Email;
+            model.IsApproved = user.IsApproved;
+            // Hide password
+            model.Password = "";
+            return View(model);
         }
 
         //

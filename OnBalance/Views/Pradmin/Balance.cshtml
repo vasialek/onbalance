@@ -1,9 +1,10 @@
-﻿@model IEnumerable<OnBalance.Models.Product>
+﻿@model OnBalance.ViewModels.Product.ProductBalanceViewModel
 @{
     ViewBag.Title = "Balance";
     Layout = null;
     
     var pendingChanges = new OnBalance.ViewModels.PendingChangesViewModel();
+    var sb = new System.Text.StringBuilder();
 }
 
 <style>
@@ -74,13 +75,19 @@
 
     YAHOO.example.Data = {
         products: [
-            @foreach(var p in Model)
+            @foreach(var p in Model.Products)
             {
-                @Html.Raw(string.Format("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3}, price_release_minor: '{4}' }},", p.name, p.uid, 0, 0, 0))
+
+                sb.Clear();
+                foreach(var kvp in p.GetQuantityForAllSizes())
+                {
+                    sb.AppendFormat(", '{0}': {1}", kvp.Key, kvp.Value);
+                }
+
+                @Html.Raw(string.Format("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3} {4} }},", p.name, p.internal_code, p.price, 0, sb.ToString()))
             }
         ]
     };
-
 
     YAHOO.namespace("example.container");
 
@@ -101,6 +108,32 @@
         var handleFailure = function(o) {
             alert("Submission failed: " + o.status);
         };
+        var formatLocalChangesForSubmit = function()
+        {
+            var s = "";
+            for(var i = 0; i < gLocalChanges.length; i++)
+            {
+                s += "<input type='hidden' name='[" + i + "].InternalCode' value='" + gLocalChanges[i].code + "' />";
+                s += "<input type='hidden' name='[" + i + "].ProductName' value='" + gLocalChanges[i].name + "' />";
+                s += "<input type='hidden' name='[" + i + "].Price' value='" + gLocalChanges[i].price + "' />";
+            }
+            return s;
+        }
+        var displayPendingChangesDialog = function(o)
+        {
+            console.log("Displaying pending changes...");
+            var dlg = YAHOO.example.container.dialog1;
+            var s = gLocalChanges.length > 0 ? "" : "@OnBalance.MyMessages.Balancer.NoPendingLocalChanges";
+//            for( var i = 0; i < gLocalChanges.length; i++ )
+//            {
+//                s += "<label>" + gLocalChanges[i].name + ", " + gLocalChanges[i].price + "</label>";
+//                s += "<input type='hidden' name='[" + i + "].InternalCode' value='" + gLocalChanges[i].code + "' />";
+//                s += "<input type='hidden' name='[" + i + "].ProductName' value='" + gLocalChanges[i].name + "' />";
+//                s += "<input type='hidden' name='[" + i + "].Price' value='" + gLocalChanges[i].price + "' />";
+//            }
+            document.getElementById("PendingChangesDiv").innerHTML = formatLocalChangesForSubmit();
+            dlg.show();
+        }
 
         // Remove progressively enhanced content class, just before creating the module
         YAHOO.util.Dom.removeClass("dialog1", "yui-pe-content");
@@ -108,25 +141,14 @@
         // Instantiate the Dialog
         YAHOO.example.container.dialog1 = new YAHOO.widget.Dialog("dialog1",
                 { width:"30em",
-                    fixedcenter:true,
-                    visible:false,
-                    constraintoviewport:true,
+                    fixedcenter: true,
+                    visible: false,
+                    constraintoviewport: true,
                     buttons:[
                         { text:"Submit", handler:handleSubmit, isDefault:true },
                         { text:"Cancel", handler:handleCancel }
                     ]
                 });
-
-        // Validate the entries in the form to require that both first and last name are entered
-        YAHOO.example.container.dialog1.validate = function() {
-            var data = this.getData();
-            if (data.firstname == "" || data.lastname == "") {
-                alert("Please enter your first and last names.");
-                return false;
-            } else {
-                return true;
-            }
-        };
 
         // Wire up the success and failure handlers
         YAHOO.example.container.dialog1.callback = {
@@ -137,7 +159,7 @@
         // Render the Dialog
         YAHOO.example.container.dialog1.render();
 
-        YAHOO.util.Event.addListener("ShowRemotePending", "click", YAHOO.example.container.dialog1.show, YAHOO.example.container.dialog1, true);
+        YAHOO.util.Event.addListener("ShowRemotePending", "click", displayPendingChangesDialog, YAHOO.example.container.dialog1, true);
         YAHOO.util.Event.addListener("hide", "click", YAHOO.example.container.dialog1.hide, YAHOO.example.container.dialog1, true);
     });
 
@@ -145,6 +167,7 @@
 </script>
 
 <body class="yui-skin-sam">
+
     <div class="balance_status_panel">
         @Html.DisplayFor(x => pendingChanges)
         @*<label>Local pending changes to be synced with remote: </label>
@@ -156,19 +179,10 @@
     <div id="dialog1" class="yui-pe-content">
         <div class="hd">Please review pending changes to confirm them</div>
         <div class="bd">
-            <form method="POST" action="/home/test">
+            <form method="POST" action="/balance/dosend">
                 <div id="PendingChangesDiv">
 
                 </div>
-                <label>REE 153Lt, 3pcs</label><input type="checkbox" name="p[]" value="1" />
-                <div class="clear"/>
-                <!--<label>REE 153Lt, 3pcs</label><input type="checkbox" name="p[]" value="1" />-->
-                <!--<div class="clear"/>-->
-                <!--<label>REE 153Lt, 3pcs</label><input type="checkbox" name="p[]" value="1" />-->
-                <!--<div class="clear"/>-->
-                <!--<label>REE 153Lt, 3pcs</label><input type="checkbox" name="p[]" value="1" />-->
-                <div class="clear"/>
-
             </form>
         </div>
     </div>

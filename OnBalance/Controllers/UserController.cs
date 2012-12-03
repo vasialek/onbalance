@@ -9,7 +9,7 @@ using OnBalance.Models;
 
 namespace OnBalance.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         //
         // GET: /user/
@@ -36,6 +36,7 @@ namespace OnBalance.Controllers
         {
             if(ModelState.IsValid)
             {
+                Log.InfoFormat("Trying to log as user {0}, providing pasword length of {1}", model.Username, model.Password.Length);
                 if(Membership.ValidateUser(model.Username, model.Password))
                 {
                     FormsAuthentication.SetAuthCookie(model.Username, false);
@@ -46,6 +47,10 @@ namespace OnBalance.Controllers
                     {
                         return RedirectToAction("dashboard", "user");
                     }
+                } else
+                {
+                    ModelState.AddModelError("", "Bad username and/or password!");
+                    Log.WarnFormat("Bad password for user {0}!", model.Username);
                 }
             }
 

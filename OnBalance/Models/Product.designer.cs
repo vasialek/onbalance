@@ -97,11 +97,15 @@ namespace OnBalance.Models
 		
 		private int _pos_id;
 		
+		private string _internal_code;
+		
 		private string _uid;
 		
 		private string _user_id;
 		
 		private string _name;
+		
+		private decimal _price;
 		
 		private System.DateTime _created_at;
 		
@@ -117,12 +121,16 @@ namespace OnBalance.Models
     partial void Onstatus_idChanged();
     partial void Onpos_idChanging(int value);
     partial void Onpos_idChanged();
+    partial void Oninternal_codeChanging(string value);
+    partial void Oninternal_codeChanged();
     partial void OnuidChanging(string value);
     partial void OnuidChanged();
     partial void Onuser_idChanging(string value);
     partial void Onuser_idChanged();
     partial void OnnameChanging(string value);
     partial void OnnameChanged();
+    partial void OnpriceChanging(decimal value);
+    partial void OnpriceChanged();
     partial void Oncreated_atChanging(System.DateTime value);
     partial void Oncreated_atChanged();
     #endregion
@@ -193,6 +201,26 @@ namespace OnBalance.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_internal_code", DbType="VarChar(64) NOT NULL", CanBeNull=false)]
+		public string internal_code
+		{
+			get
+			{
+				return this._internal_code;
+			}
+			set
+			{
+				if ((this._internal_code != value))
+				{
+					this.Oninternal_codeChanging(value);
+					this.SendPropertyChanging();
+					this._internal_code = value;
+					this.SendPropertyChanged("internal_code");
+					this.Oninternal_codeChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_uid", DbType="VarChar(64) NOT NULL", CanBeNull=false)]
 		public string uid
 		{
@@ -249,6 +277,26 @@ namespace OnBalance.Models
 					this._name = value;
 					this.SendPropertyChanged("name");
 					this.OnnameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_price", DbType="Decimal(8,4) NOT NULL")]
+		public decimal price
+		{
+			get
+			{
+				return this._price;
+			}
+			set
+			{
+				if ((this._price != value))
+				{
+					this.OnpriceChanging(value);
+					this.SendPropertyChanging();
+					this._price = value;
+					this.SendPropertyChanged("price");
+					this.OnpriceChanged();
 				}
 			}
 		}

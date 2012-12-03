@@ -5,9 +5,11 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="status_id" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
       <Column Name="pos_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="internal_code" Type="System.String" DbType="VarChar(64) NOT NULL" CanBeNull="false" />
       <Column Name="uid" Type="System.String" DbType="VarChar(64) NOT NULL" CanBeNull="false" />
       <Column Name="user_id" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="price" Type="System.Decimal" DbType="Decimal(8,4) NOT NULL" CanBeNull="false" />
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="Product_ProductDetail" Member="ProductDetails" ThisKey="id" OtherKey="product_id" Type="ProductDetail" />
     </Type>

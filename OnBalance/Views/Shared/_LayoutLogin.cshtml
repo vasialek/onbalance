@@ -14,32 +14,12 @@
 	    </div>
     </header>
 
-<section id="middle">
+	<div id="container">
+		<div id="content">
+            @RenderBody()
+        </div><!-- #content-->
+	</div><!-- #container-->
 
-		<div id="container">
-			<div id="content">
-                <h2>@Html.Encode(ViewBag.Title)</h2>
-                @RenderBody()
-            </div><!-- #content-->
-		</div><!-- #container-->
-
-		<aside id="sideLeft">
-            <div class="main_menu">
-                <div class="menu_tab">
-                    <div class="menu_header">
-                        Menu 1
-                    </div>
-                    <div class="menu_item">
-                        Sub menu1.1
-                    </div>
-                </div>
-            </div>
-        </aside><!-- #sideLeft -->
-
-	</section>
-    <footer id="footer">
-        <div class="copyright">2012 &copy;</div>
-    </footer>
 </div>
 
 </body>

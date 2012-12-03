@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Net;
 using System.Collections.Specialized;
+using OnBalance.ViewModels.Product;
 
 namespace OnBalance.Controllers
 {
@@ -29,22 +30,13 @@ namespace OnBalance.Controllers
 
         public ActionResult Balance(int id)
         {
+            ProductBalanceViewModel pb = new ProductBalanceViewModel();
             ProductRepository db = new ProductRepository();
-            var products = db.Items.Where(x => x.status_id == (byte)Status.Approved);
-            if(TempData["ExchangeItems"] != null)
-            {
-                Session["ExchangeItems"] = TempData["ExchangeItems"];
-            }
+            PosRepository dbPos = new PosRepository();
 
-            if(Session["ExchangeItems"] == null)
-            {
-                //return Content("Error during parsing!");
-                Session["ExchangeItems"] = new List<BalanceItem> {
-                    new BalanceItem{ InternalCode = "00001", ProductName = "Adidas", Price = 250, PriceOfRelease = 340, Quantity = 2 }
-                };
-            }
-
-            return View(products);
+            pb.Products = db.Items.Where(x => x.pos_id == id && x.status_id == (byte)Status.Approved).ToList();
+            pb.Shops = dbPos.Items.ToList();
+            return View(pb);
         }
 
         //

@@ -10,7 +10,7 @@ var myColumnDefs = [
     { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
     { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
     { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
-    { key: "amount", label: "Total", sortable: true }
+//    { key: "amount", label: "Total", sortable: true }
 ];
 //myColumnDefs[myColumnDefs.length] = {key: "QuantityControl", label: " ", formatter: function(elCell){
 //    var s = "<img src='/images/decrease.gif' title='Decrease' onclick='gIncreaseOrDecrease = -1' />";
@@ -30,11 +30,14 @@ for(var i = 0; i < arDetails.length; i++)
 //        myColumnDefs[myColumnDefs.length] = { key: arDetails[i], label: arDetails[i], editor: new YAHOO.widget.RadioCellEditor({ radioOptions: ["yes", "no"], disableBtns: true }) };
 //    }
 }
-myColumnDefs[myColumnDefs.length] = { key: "price_release_minor", label: "Price release", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ validator: YAHOO.widget.DataTable.validateNumber }) };
+//myColumnDefs[myColumnDefs.length] = { key: "price_release_minor", label: "Price release", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ validator: YAHOO.widget.DataTable.validateNumber }) };
 myColumnDefs[myColumnDefs.length] = {key: "Delete", label: " ", formatter: function(elCell){
     elCell.innerHTML = "<img src='/images/delete.png' title='delete row' />";
     elCell.style.cursor = 'pointer';
 }};
+
+var gLocalChanges = [
+];
 
 
 YAHOO.util.Event.addListener(window, "load", function()
@@ -96,13 +99,14 @@ YAHOO.util.Event.addListener(window, "load", function()
             }});
         myDataTable.subscribe("cellUpdateEvent", function(record, column, oldData)
         {
-            var target                  = e.target,
-                column                  = this.getColumn(target),
-                record                  = this.getRecord(target),
-                data                    = record.getData(),
-                recordIndex             = this.getRecordIndex(record);
+//            var target                  = e.target,
+//                column                  = this.getColumn(target),
+//                record                  = this.getRecord(target),
+//                data                    = record.getData(),
+//                recordIndex             = this.getRecordIndex(record);
             console.log("updated...");
-            console.log(data);
+            console.log(record);
+            onProductChanged(record);
         });
 
         return {
@@ -110,4 +114,47 @@ YAHOO.util.Event.addListener(window, "load", function()
             oDT: myDataTable
         };
     }();
+
+    function onProductChanged(record)
+    {
+        console.log("onProductChanged: ");
+        console.log(record);
+        var code = record.record._oData.code;
+        console.log(YAHOO.example.LocalChanges);
+        console.log("Internal code to update is: " + code);
+        var indexOfProduct = getIndexByCode(code);
+        // Not exists in array
+        if( indexOfProduct < 0 )
+        {
+            indexOfProduct = gLocalChanges.length;
+        }
+
+        gLocalChanges[indexOfProduct] = {
+            code: code
+            , name: record.record._oData.name
+            , price: record.record._oData.price_minor
+            , details: [{
+                pName: "size"
+                , pVal: record.column.field
+//                , quantity: record.column._oData[record.column.field]
+            }]
+
+        }
+        console.log("Pending changes:");
+        console.log(gLocalChanges);
+    }
+
+    function getIndexByCode(code)
+    {
+        for(var i = 0; i < gLocalChanges.length; i++)
+        {
+            if( gLocalChanges[i].code == code )
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
 });
