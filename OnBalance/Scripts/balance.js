@@ -1,11 +1,4 @@
-﻿YAHOO.example.Data = {
-    products: [
-//        { name: "Adidas", code: "123456", price_minor: 150, amount: 5, price_release_minor: 220, colors: ["red"], fruit: ["banana", "cherry"], last_login: "4/19/2007" },
-//        { name: "Nike", code: "123456", price_minor: 220, amount: 3, price_release_minor: 300, colors: ["red", "blue"], fruit: ["apple"], last_login: "2/15/2006" },
-    ]
-};
-
-var arDetails = ["35", "36", "37", "38", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "46", "46.5", "47", "48", "49", "49.5", "50", "51", "52", "53", "54", "54.5", "55"];
+﻿var arDetails = ["35", "36", "37", "38", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "46", "46.5", "47", "48", "49", "49.5", "50", "51", "52", "53", "54", "54.5", "55"];
 var myColumnDefs = [
     { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
     { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
@@ -36,15 +29,11 @@ myColumnDefs[myColumnDefs.length] = {key: "Delete", label: " ", formatter: funct
     elCell.style.cursor = 'pointer';
 }};
 
-var gLocalChanges = [
-];
-
-
 YAHOO.util.Event.addListener(window, "load", function()
 {
-    YAHOO.example.InlineCellEditing = function()
+    YAHOO.InlineCellEditing = function()
     {
-        var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.products);
+        var myDataSource = new YAHOO.util.DataSource(YAHOO.OnBalance.products);
 //        var myDataSource = new YAHOO.util.XHRDataSource("http://localhost:49630/pradmin/balance/100001?");
 //        myDataSource.responseType = YAHOO.util.DataSource.TYPE_XHR;
 //        myDataSource.connXhrMode = "queueRequests";
@@ -99,15 +88,16 @@ YAHOO.util.Event.addListener(window, "load", function()
             }});
         myDataTable.subscribe("cellUpdateEvent", function(record, column, oldData)
         {
-//            var target                  = e.target,
-//                column                  = this.getColumn(target),
-//                record                  = this.getRecord(target),
-//                data                    = record.getData(),
-//                recordIndex             = this.getRecordIndex(record);
             console.log("updated...");
             console.log(record);
             onProductChanged(record);
         });
+
+        var contextMenu = new YAHOO.widget.ContextMenu("OnBalanceContextMenu", {
+            trigger: myDataTable.getTbodyEl()
+        });
+        contextMenu.render();
+//        contextMenu.clickEvent.subscribe(onContextMenuClick, myDataTable);
 
         return {
             oDS: myDataSource,
@@ -120,16 +110,16 @@ YAHOO.util.Event.addListener(window, "load", function()
         console.log("onProductChanged: ");
         console.log(record);
         var code = record.record._oData.code;
-        console.log(YAHOO.example.LocalChanges);
+        console.log(YAHOO.OnBalance.LocalChanges);
         console.log("Internal code to update is: " + code);
         var indexOfProduct = getIndexByCode(code);
         // Not exists in array
         if( indexOfProduct < 0 )
         {
-            indexOfProduct = gLocalChanges.length;
+            indexOfProduct = YAHOO.OnBalance.localChanges.length;
         }
 
-        gLocalChanges[indexOfProduct] = {
+        YAHOO.OnBalance.localChanges[indexOfProduct] = {
             code: code
             , name: record.record._oData.name
             , price: record.record._oData.price_minor
@@ -141,14 +131,14 @@ YAHOO.util.Event.addListener(window, "load", function()
 
         }
         console.log("Pending changes:");
-        console.log(gLocalChanges);
+        console.log(YAHOO.OnBalance.localChanges);
     }
 
     function getIndexByCode(code)
     {
-        for(var i = 0; i < gLocalChanges.length; i++)
+        for(var i = 0; i < YAHOO.OnBalance.localChanges.length; i++)
         {
-            if( gLocalChanges[i].code == code )
+            if( YAHOO.OnBalance.localChanges[i].code == code )
             {
                 return i;
             }
