@@ -34,11 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
-      <HintPath>D:\install\log4net-1.2.11\bin\net\2.0\release\log4net.dll</HintPath>
+      <HintPath>..\..\eSPIS\eSPIS\Lib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq" />
@@ -96,6 +93,7 @@
     <Compile Include="Models\Task.cs" />
     <Compile Include="MyConstants.cs" />
     <Compile Include="MyMessages.cs" />
+    <Compile Include="ObLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\PendingChangesViewModel.cs" />
     <Compile Include="ViewModels\Product\ProductBalanceViewModel.cs" />
@@ -105,6 +103,9 @@
     <Compile Include="ViewModels\User\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ConnectionString.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="css\onbalance.css" />
     <Content Include="Global.asax" />
     <Content Include="log4net.xml" />
@@ -153,11 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\DisplayTemplates\PendingChangesViewModel.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ConnectionString.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_LogOnPartial.cshtml" />

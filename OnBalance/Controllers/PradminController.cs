@@ -14,12 +14,13 @@ using OnBalance.ViewModels.Product;
 
 namespace OnBalance.Controllers
 {
-    [Authorize]
-    public class PradminController : Controller
+
+    public class PradminController : BaseController
     {
         //
         // GET: /pradmin/
 
+        [Authorize]
         public ActionResult Index()
         {
             return View();
@@ -37,6 +38,29 @@ namespace OnBalance.Controllers
             pb.Products = db.Items.Where(x => x.pos_id == id && x.status_id == (byte)Status.Approved).ToList();
             pb.Shops = dbPos.Items.ToList();
             return View(pb);
+        }
+
+        //
+        // GET: /pradmin/get/100001
+
+        public ActionResult Get(int id)
+        {
+            string callback = Request["callback"] ?? "";
+            StringBuilder sbMain = new StringBuilder();
+
+            sbMain.AppendLine("{ data: [");
+            for(int i = 0; i < 3; i++)
+            {
+                sbMain.AppendFormat("{{ name: 'Name_{0}', code: 'Code-{1}' }},", (i+1), (i+1)).AppendLine();
+            }
+            sbMain.AppendLine("] }");
+
+            if(!string.IsNullOrEmpty(callback))
+            {
+                return Content(string.Format("{0}({1})", callback, sbMain.ToString()));
+            }
+
+            return Content(sbMain.ToString());
         }
 
         //
@@ -84,6 +108,7 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/parse/100002
 
+        [Authorize]
         public ActionResult Parse(int id)
         {
             return View();
@@ -91,6 +116,7 @@ namespace OnBalance.Controllers
 
         // POST: /pradmin/parse
 
+        [Authorize]
         [HttpPost]
         public ActionResult Parse(TextParserViewModel model)
         {
@@ -175,6 +201,7 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/export/100001
 
+        [Authorize]
         public ActionResult Export(int id)
         {
             if( TempData["ExchangeItems"] == null )
@@ -190,6 +217,7 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/confirm
 
+        [Authorize]
         public ActionResult Confirm()
         {
             if(TempData["ExchangeItems"] == null)
