@@ -14,12 +14,13 @@ using OnBalance.ViewModels.Product;
 
 namespace OnBalance.Controllers
 {
-    [Authorize]
-    public class PradminController : Controller
+
+    public class PradminController : BaseController
     {
         //
         // GET: /pradmin/
 
+        [Authorize]
         public ActionResult Index()
         {
             return View();
@@ -44,30 +45,22 @@ namespace OnBalance.Controllers
 
         public ActionResult Get(int id)
         {
-            ProductRepository db = new ProductRepository();
-            PosRepository dbPos = new PosRepository();
-
+            string callback = Request["callback"] ?? "";
             StringBuilder sbMain = new StringBuilder();
-            StringBuilder sb = new StringBuilder();
-            var products = db.Items.Where(x => x.pos_id == id && x.status_id == (byte)Status.Approved).ToList();
-            //var shops = dbPos.Items.ToList();
-            string callback = Request["callback"];
 
-            // Returns JSON array of all products for specified POS
-
-            foreach(var p in products)
+            sbMain.AppendLine("{ data: [");
+            for(int i = 0; i < 3; i++)
             {
+                sbMain.AppendFormat("{{ name: 'Name_{0}', code: 'Code-{1}' }},", (i+1), (i+1)).AppendLine();
+            }
+            sbMain.AppendLine("] }");
 
-                sb.Clear();
-                foreach(var kvp in p.GetQuantityForAllSizes())
-                {
-                    sb.AppendFormat(", '{0}': {1}", kvp.Key, kvp.Value);
-                }
-
-                sbMain.AppendFormat("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3} {4} }},", p.name, p.internal_code, p.price, 0, sb.ToString());
+            if(!string.IsNullOrEmpty(callback))
+            {
+                return Content(string.Format("{0}({1})", callback, sbMain.ToString()));
             }
 
-            return Content(string.Format("{0}({{'data': [ {1} ]}})", callback, sbMain.ToString()));
+            return Content(sbMain.ToString());
         }
 
         //
@@ -115,6 +108,7 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/parse/100002
 
+        [Authorize]
         public ActionResult Parse(int id)
         {
             return View();
@@ -122,6 +116,7 @@ namespace OnBalance.Controllers
 
         // POST: /pradmin/parse
 
+        [Authorize]
         [HttpPost]
         public ActionResult Parse(TextParserViewModel model)
         {
@@ -206,6 +201,7 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/export/100001
 
+        [Authorize]
         public ActionResult Export(int id)
         {
             if( TempData["ExchangeItems"] == null )
@@ -221,6 +217,7 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/confirm
 
+        [Authorize]
         public ActionResult Confirm()
         {
             if(TempData["ExchangeItems"] == null)
