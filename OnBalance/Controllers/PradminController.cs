@@ -40,6 +40,37 @@ namespace OnBalance.Controllers
         }
 
         //
+        // GET: /pradmin/get/100001
+
+        public ActionResult Get(int id)
+        {
+            ProductRepository db = new ProductRepository();
+            PosRepository dbPos = new PosRepository();
+
+            StringBuilder sbMain = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
+            var products = db.Items.Where(x => x.pos_id == id && x.status_id == (byte)Status.Approved).ToList();
+            //var shops = dbPos.Items.ToList();
+            string callback = Request["callback"];
+
+            // Returns JSON array of all products for specified POS
+
+            foreach(var p in products)
+            {
+
+                sb.Clear();
+                foreach(var kvp in p.GetQuantityForAllSizes())
+                {
+                    sb.AppendFormat(", '{0}': {1}", kvp.Key, kvp.Value);
+                }
+
+                sbMain.AppendFormat("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3} {4} }},", p.name, p.internal_code, p.price, 0, sb.ToString());
+            }
+
+            return Content(string.Format("{0}({{'data': [ {1} ]}})", callback, sbMain.ToString()));
+        }
+
+        //
         // GET: /pradmin/testsync
 
         public ActionResult TestSync()

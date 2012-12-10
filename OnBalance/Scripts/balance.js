@@ -1,10 +1,5 @@
 ﻿var arDetails = ["35", "36", "37", "38", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "46", "46.5", "47", "48", "49", "49.5", "50", "51", "52", "53", "54", "54.5", "55"];
-var myColumnDefs = [
-    { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
-    { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
-    { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
-//    { key: "amount", label: "Total", sortable: true }
-];
+var myColumnDefs = [];
 //myColumnDefs[myColumnDefs.length] = {key: "QuantityControl", label: " ", formatter: function(elCell){
 //    var s = "<img src='/images/decrease.gif' title='Decrease' onclick='gIncreaseOrDecrease = -1' />";
 //    s += "<img src='/images/increase.gif' title='Increase' onclick='gIncreaseOrDecrease = 1' />";
@@ -12,22 +7,27 @@ var myColumnDefs = [
 //    elCell.style.cursor = 'pointer';
 //}};
 
-for(var i = 0; i < arDetails.length; i++)
-{
-    myColumnDefs[myColumnDefs.length] = { key: arDetails[i], label: arDetails[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
-//    if(arDetails[i] == "40")
-//    {
-//        myColumnDefs[myColumnDefs.length] = { key: arDetails[i], label: arDetails[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
-//    }else
-//    {
-//        myColumnDefs[myColumnDefs.length] = { key: arDetails[i], label: arDetails[i], editor: new YAHOO.widget.RadioCellEditor({ radioOptions: ["yes", "no"], disableBtns: true }) };
-//    }
-}
 //myColumnDefs[myColumnDefs.length] = { key: "price_release_minor", label: "Price release", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ validator: YAHOO.widget.DataTable.validateNumber }) };
-myColumnDefs[myColumnDefs.length] = {key: "Delete", label: " ", formatter: function(elCell){
-    elCell.innerHTML = "<img src='/images/delete.png' title='delete row' />";
-    elCell.style.cursor = 'pointer';
-}};
+
+function InitializeTable()
+{
+    myColumnDefs = [
+        { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
+        { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
+        { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
+//    { key: "amount", label: "Total", sortable: true }
+    ];
+
+    for(var i = 0; i < arDetails.length; i++)
+    {
+        myColumnDefs[myColumnDefs.length] = { key: arDetails[i], label: arDetails[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
+    }
+
+    myColumnDefs[myColumnDefs.length] = {key: "Delete", label: " ", formatter: function(elCell){
+        elCell.innerHTML = "<img src='/images/delete.png' title='delete row' />";
+        elCell.style.cursor = 'pointer';
+    }};
+}
 
 YAHOO.util.Event.addListener(window, "load", function()
 {

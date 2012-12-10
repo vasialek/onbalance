@@ -6,7 +6,8 @@
     var pendingChanges = new OnBalance.ViewModels.PendingChangesViewModel();
     var sb = new System.Text.StringBuilder();
 }
-
+<html>
+<head>
 <style>
 		
 	/*margin and padding on body element can introduce errors in determining element position and are not recommended; we turn them off as a foundation for YUI CSS treatments. */
@@ -48,13 +49,32 @@
     }
 
 </style>
-<link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/button/assets/skins/sam/button.css")" />
+@*<link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/button/assets/skins/sam/button.css")" />
 <link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/container/assets/skins/sam/container.css")" />
 <link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/fonts/fonts-min.css")" />
 <link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/datatable/assets/skins/sam/datatable.css")">
-<link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/menu/assets/skins/sam/menu.css")">
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/menu/assets/skins/sam/menu.css")">*@
 
-<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/yahoo-dom-event/yahoo-dom-event.js")"></script>
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/datatable/assets/skins/sam/datatable.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/menu/assets/skins/sam/menu.css">
+
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event-delegate/event-delegate-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datatable/datatable-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/container/container-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js"></script>
+
+
+@*<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/yahoo-dom-event/yahoo-dom-event.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/scripts/yui/build/calendar/calendar-min.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/scripts/yui/build/element/element-min.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/scripts/yui/build/button/button-min.js")"></script>
@@ -64,8 +84,9 @@
 <script type="text/javascript" src="@Url.Content("~/scripts/yui/build/datatable/datatable-min.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/scripts/yui/build/dragdrop/dragdrop-min.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/scripts/yui/build/container/container-min.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/menu/menu-min.js")"></script>
-
+<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/menu/menu-min.js")"></script>*@
+</head>
+<body>
 <script src="@Url.Content("~/scripts/balance.js")"></script>
 
 <script type="text/javascript">
@@ -96,6 +117,8 @@
     YAHOO.namespace("OnBalance.container");
 
     YAHOO.util.Event.onDOMReady(function () {
+
+        InitializeTable();
 
         // Define various event handlers for Dialog
         var handleSubmit = function() {
@@ -204,5 +227,6 @@
     </div>
 
 </body>
+</html>
 
 
