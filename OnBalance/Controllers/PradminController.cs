@@ -41,26 +41,38 @@ namespace OnBalance.Controllers
         }
 
         //
-        // GET: /pradmin/get/100001
+        // GET: /pradmin/get?posid=100001
 
-        public ActionResult Get(int id)
+        public ActionResult Get()
         {
-            string callback = Request["callback"] ?? "";
+            // ID of POS must be!
+            int posId = int.Parse(Request["posid"]);
+            Log.InfoFormat("Loading products for POS ID #{0}...", posId);
+
+            ProductRepository db = new ProductRepository();
+            PosRepository dbPos = new PosRepository();
+
             StringBuilder sbMain = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
+            var products = db.Items.Where(x => x.pos_id == posId && x.status_id == (byte)Status.Approved).ToList();
+            //var shops = dbPos.Items.ToList();
+            string callback = Request["callback"];
 
-            sbMain.AppendLine("{ data: [");
-            for(int i = 0; i < 3; i++)
+            // Returns JSON array of all products for specified POS
+
+            foreach(var p in products)
             {
-                sbMain.AppendFormat("{{ name: 'Name_{0}', code: 'Code-{1}' }},", (i+1), (i+1)).AppendLine();
-            }
-            sbMain.AppendLine("] }");
 
-            if(!string.IsNullOrEmpty(callback))
-            {
-                return Content(string.Format("{0}({1})", callback, sbMain.ToString()));
+                sb.Clear();
+                foreach(var kvp in p.GetQuantityForAllSizes())
+                {
+                    sb.AppendFormat(", '{0}': {1}", kvp.Key, kvp.Value);
+                }
+
+                sbMain.AppendFormat("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3} {4} }},", p.name, p.internal_code, p.price, 0, sb.ToString());
             }
 
-            return Content(sbMain.ToString());
+            return Content(string.Format("{0}({{'data': [ {1} ]}})", callback, sbMain.ToString()));
         }
 
         //
