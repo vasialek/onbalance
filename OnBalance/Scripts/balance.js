@@ -2,19 +2,17 @@
 var gDataSource;
 var gResultFields = [];
 var arDetails = ["35", "36", "37", "38", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "46", "46.5", "47", "48", "49", "49.5", "50", "51", "52", "53", "54", "54.5", "55"];
-var myColumnDefs = [];
-//myColumnDefs[myColumnDefs.length] = {key: "QuantityControl", label: " ", formatter: function(elCell){
-//    var s = "<img src='/images/decrease.gif' title='Decrease' onclick='gIncreaseOrDecrease = -1' />";
-//    s += "<img src='/images/increase.gif' title='Increase' onclick='gIncreaseOrDecrease = 1' />";
-//    elCell.innerHTML = s;
-//    elCell.style.cursor = 'pointer';
-//}};
-
-//myColumnDefs[myColumnDefs.length] = { key: "price_release_minor", label: "Price release", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ validator: YAHOO.widget.DataTable.validateNumber }) };
+var gColumnsDefinitions = [];
 
 function InitializeTable()
 {
-    myColumnDefs = [
+    YAHOO.OnBalance = {
+        localChanges: [],
+        availableCellColors: [],
+        products: []
+    };
+
+    gColumnsDefinitions = [
         { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
         { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
 //    { key: "amount", label: "Total", sortable: true }
@@ -23,25 +21,27 @@ function InitializeTable()
     for(var i = 0; i < arDetails.length; i++)
     {
         gResultFields[gResultFields.length] = { key: arDetails[i] };
-        myColumnDefs[myColumnDefs.length] = { key: arDetails[i], label: arDetails[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
+        gColumnsDefinitions[gColumnsDefinitions.length] = { key: arDetails[i], label: arDetails[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
     }
 
-    myColumnDefs[myColumnDefs.length] = {
+    gColumnsDefinitions[gColumnsDefinitions.length] = {
         key: "code",
         label: "Code",
         sortable: true,
         editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true })
     };
 
-        myColumnDefs[myColumnDefs.length] = {key: "Delete", label: " ", formatter: function(elCell){
-        elCell.innerHTML = "<img src='/images/delete.png' title='delete row' />";
+        gColumnsDefinitions[gColumnsDefinitions.length] = {key: "Delete", label: " ", formatter: function(elCell){
+        elCell.innerHTML = "<img src='http://online-balance.com/images/delete.png' title='delete row' />";
         elCell.style.cursor = 'pointer';
     }};
 }
 
 function InitializeBalanceGrid()
 {
-    gDataSource = new YAHOO.util.ScriptNodeDataSource("http://localhost:49630/pradmin/get/");
+//    YAHOO.namespace("OnBalance");
+
+    gDataSource = new YAHOO.util.ScriptNodeDataSource("http://online-balance.com/pradmin/get/");
     gResultFields = [
         { key: "name" },
         { key: "code" },
@@ -52,7 +52,7 @@ function InitializeBalanceGrid()
         field: gResultFields
     }
     InitializeTable();
-    gTable = new YAHOO.widget.DataTable("MainBalanceDiv", myColumnDefs, gDataSource, {
+    gTable = new YAHOO.widget.DataTable("MainBalanceDiv", gColumnsDefinitions, gDataSource, {
         initialLoad: false
     });
     gTable.subscribe("cellMouseoverEvent", highlightEditableCell);
@@ -76,11 +76,17 @@ function InitializeBalanceGrid()
     {
         // Extract which TR element triggered the context menu
         var elRow = this.contextEventTarget;
-        // Index of clicke
+        // Index of clicked
         var task = oArgs[1];
-        console.log("Clicked menu #: ");
+        console.log("Task:");
         console.log(task);
+        elRow = myDataTable.getTrEl(elRow);
+        console.log("El row:");
+        console.log(elRow);
         var styles = ["red", "green", "blue"];
+        YAHOO.util.Dom.removeClass(elRow, "red");
+        YAHOO.util.Dom.removeClass(elRow, "green");
+        YAHOO.util.Dom.removeClass(elRow, "blue");
         YAHOO.util.Dom.addClass(elRow, styles[task.index]);
     };
 
@@ -91,6 +97,38 @@ function InitializeBalanceGrid()
     contextMenu.clickEvent.subscribe(onContextMenuClick, gTable);
 
     loadDataToTable(100001);
+
+    preparePendingDialog();
+}
+
+function preparePendingDialog()
+{
+    // Remove progressively enhanced content class, just before creating the module
+    YAHOO.util.Dom.removeClass("PendingDialog", "yui-pe-content");
+
+    // Instantiate the Dialog
+    YAHOO.OnBalance.PendingDialog = new YAHOO.widget.Dialog("PendingDialog", {
+        width: "30em",
+        fixedcenter: true,
+        visible: false,
+        constraintoviewport: true,
+        buttons: [
+            { text:"Submit", handler: handlePendingSubmit, isDefault: true },
+            { text:"Cancel", handler: handlePendingCancel }
+        ]});
+
+    // Wire up the success and failure handlers
+    YAHOO.OnBalance.PendingDialog.callback = {
+        success: handleSuccess,
+        failure: handlePendingFailure
+    };
+
+    // Render the Dialog
+    YAHOO.OnBalance.PendingDialog.render();
+
+    var buttons = document.getElementsByClassName("ShowRemotePending");
+    YAHOO.util.Event.addListener(buttons, "click", displayPendingChangesDialog, YAHOO.OnBalance.PendingDialog, true);
+    YAHOO.util.Event.addListener("hide", "click", YAHOO.OnBalance.PendingDialog.hide, YAHOO.OnBalance.PendingDialog, true);
 }
 
 function loadDataToTable(posId)
@@ -158,13 +196,67 @@ function highlightEditableCell(oArgs)
     }
 }
 
+// Define various event handlers for Dialog
+function handlePendingSubmit()
+{
+    this.submit();
+};
+function handlePendingCancel()
+{
+    this.cancel();
+};
+
+function handleSuccess(o)
+{
+    var response = o.responseText;
+    response = response.split("<!")[0];
+    document.getElementById("resp").innerHTML = response;
+}
+
+function handlePendingFailure(o)
+{
+    alert("Submission failed: " + o.status);
+}
+
+function formatLocalChangesForSubmit()
+{
+    console.log("Local changes:");
+    console.log(YAHOO.OnBalance.localChanges);
+    var s = "";
+    for(var i = 0; i < YAHOO.OnBalance.localChanges.length; i++)
+    {
+        s += "<label>" + YAHOO.OnBalance.localChanges[i].name + ", " + YAHOO.OnBalance.localChanges[i].price + "</label>";
+        s += "<input type='hidden' name='[" + i + "].InternalCode' value='" + YAHOO.OnBalance.localChanges[i].code + "' />";
+        s += "<input type='hidden' name='[" + i + "].ProductName' value='" + YAHOO.OnBalance.localChanges[i].name + "' />";
+        s += "<input type='hidden' name='[" + i + "].Price' value='" + YAHOO.OnBalance.localChanges[i].price + "' />";
+    }
+    return s;
+}
+
+function displayPendingChangesDialog(o)
+{
+    console.log("Displaying pending changes...");
+    var dlg = YAHOO.OnBalance.PendingDialog;
+    var s = YAHOO.OnBalance.localChanges.length > 0 ? "" : "@OnBalance.MyMessages.Balancer.NoPendingLocalChanges";
+//            for( var i = 0; i < gLocalChanges.length; i++ )
+//            {
+//                s += "<label>" + gLocalChanges[i].name + ", " + gLocalChanges[i].price + "</label>";
+//                s += "<input type='hidden' name='[" + i + "].InternalCode' value='" + gLocalChanges[i].code + "' />";
+//                s += "<input type='hidden' name='[" + i + "].ProductName' value='" + gLocalChanges[i].name + "' />";
+//                s += "<input type='hidden' name='[" + i + "].Price' value='" + gLocalChanges[i].price + "' />";
+//            }
+    document.getElementById("PendingChangesDiv").innerHTML = formatLocalChangesForSubmit();
+    dlg.show();
+}
+
+
 
 //YAHOO.util.Event.addListener(window, "load", function()
 //{
 //    YAHOO.InlineCellEditing = function()
 //    {
 //        var myDataSource = new YAHOO.util.DataSource(YAHOO.OnBalance.products);
-//        var myDataTable = new YAHOO.widget.DataTable("MainBalanceDiv", myColumnDefs, myDataSource, {
+//        var myDataTable = new YAHOO.widget.DataTable("MainBalanceDiv", gColumnsDefinitions, myDataSource, {
 //            initialLoad: true
 //        });
 //
