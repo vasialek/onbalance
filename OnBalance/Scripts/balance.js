@@ -9,7 +9,14 @@ function InitializeTable()
     YAHOO.OnBalance = {
         localChanges: [],
         availableCellColors: [],
-        products: []
+        products: [],
+        newProduct: {
+            name: "",
+            code: "",
+            price_minor: 0,
+            // Sizes
+            35: 0, 36: 0, 37: 0, 38: 0, 39: 0, 40: 0, 41: 0, 42: 0, 42.5: 0, 43: 0, 44: 0, 44.5: 0, 45: 0, 46: 0, 46.5: 0, 47: 0, 48: 0, 49: 0, 49.5: 0, 50: 0, 51: 0, 52: 0, 53: 0, 54: 0, 54.5: 0, 55: 0
+        }
     };
 
     gColumnsDefinitions = [
@@ -90,21 +97,36 @@ function InitializeBalanceGrid()
         YAHOO.util.Dom.addClass(elRow, styles[task.index]);
     };
 
+    var arContextMenu = [
+                { text: "<span class='cm_red'>Red</span>" },
+                { text: "<span class='cm_green'>Green</span>" },
+                { text: "<span class='cm_blue'>Blue</span>" }
+            ];
     var contextMenu = new YAHOO.widget.ContextMenu("OnBalanceContextMenu", {
         trigger: gTable.getTbodyEl()
     });
+    contextMenu.addItems(arContextMenu);
     contextMenu.render();
     contextMenu.clickEvent.subscribe(onContextMenuClick, gTable);
 
     loadDataToTable(100001);
 
     preparePendingDialog();
+
+	// Add product button
+	YAHOO.util.Event.addListener("AddProductButton", "click",function ()
+	{
+		console.log("Adding new product...");
+		var record = YAHOO.widget.DataTable._cloneObject(YAHOO.OnBalance.newProduct);
+		record.row = record.row + 1;
+		gTable.addRow(record);
+	},this, true);
 }
 
 function preparePendingDialog()
 {
     // Remove progressively enhanced content class, just before creating the module
-    YAHOO.util.Dom.removeClass("PendingDialog", "yui-pe-content");
+    YAHOO.util.Dom.removeClass("dialog", "yui-pe-content");
 
     // Instantiate the Dialog
     YAHOO.OnBalance.PendingDialog = new YAHOO.widget.Dialog("PendingDialog", {

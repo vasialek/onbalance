@@ -202,3 +202,24 @@ a
 {
     padding-left: 5px;
 }
+
+.cm_red
+{
+    color: #f00;
+}
+.cm_green
+{
+    color: #0f0;
+}
+.cm_blue
+{
+    color: #00f;
+}
+
+tr.yui-dt-odd blue,
+tr.yui-dt-even blue,
+.yui-skin-sam tr.yui-dt-odd blue,
+.yui-skin-sam tr.yui-dt-even blue
+{
+    background-color: #00f;
+}
