@@ -1,27 +1,10 @@
 using System.Linq;
 using System.Collections.Generic;
-using log4net;
-using log4net.Config;
 
 namespace OnBalance.Models
 {
     partial class Product
     {
-
-        ILog _log = null;
-        public ILog Log
-        {
-            get
-            {
-                if(_log == null)
-                {
-                    _log = LogManager.GetLogger("OnBalance.Models");
-                    XmlConfigurator.Configure();
-                }
-
-                return _log;
-            }
-        }
 
         public IList<ProductDetail> Details
         {
@@ -81,7 +64,7 @@ namespace OnBalance.Models
 
         public int GetQuantityForSize(string size)
         {
-            Log.DebugFormat("Searching for product #{0} quantity for size {1}...", this.id, size);
+            //Log.DebugFormat("Searching for product #{0} quantity for size {1}...", this.id, size);
             int qnt = 0;
             var p = ProductDetails.SingleOrDefault(x => x.product_id == this.id && x.parameter_name.Equals("size") && x.parameter_value.Equals(size));
             if(p != null)
@@ -89,7 +72,7 @@ namespace OnBalance.Models
                 qnt = p.quantity;
             }
 
-            Log.DebugFormat("Got quantity (probably): {0}", qnt);
+            //Log.DebugFormat("Got quantity (probably): {0}", qnt);
             return qnt;
         }
     }

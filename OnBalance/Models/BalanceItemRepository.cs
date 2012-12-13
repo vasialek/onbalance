@@ -48,7 +48,7 @@ namespace OnBalance.Models
             {
                 var db = GetTable<BalanceItem>();
                 BalanceItem entity = db.SingleOrDefault<BalanceItem>(x => x.InternalCode == bi.InternalCode);
-                Log.DebugFormat("BalanceItem with code {0} already exists...", bi.InternalCode);
+                //Log.DebugFormat("BalanceItem with code {0} already exists...", bi.InternalCode);
                 if(entity == null)
                 {
                     bi.Status = Status.Approved;
@@ -62,7 +62,7 @@ namespace OnBalance.Models
                 db.Context.SubmitChanges();
             } catch(Exception ex)
             {
-                Log.Error("Error saving BalanceItem!", ex);
+                //Log.Error("Error saving BalanceItem!", ex);
                 throw ex;
             }
         }

@@ -27,7 +27,7 @@ namespace OnBalance.Controllers
         //
         // GET: /balance/dosend
 
-        [HttpPost]
+        //[HttpPost]
         public ActionResult DoSend(BalanceItem[] items)
         {
             try
@@ -38,12 +38,8 @@ namespace OnBalance.Controllers
                 {
                     Log.DebugFormat("  {0}: {1}", key, Request.Form[key]);
                 }
+                string callback = Request["callback"] as string;
                 PostBalanceViewModel bal = new PostBalanceViewModel();
-                BalanceItem ei = new BalanceItem { ProductName = "Xxx 1", InternalCode = "GJ_ES_D_038361", Price = 72.02m, Quantity = 3 };
-                //ei.QuantityOfSize = new Dictionary<string, int>();
-                //ei.QuantityOfSize["41"] = 3;
-                //ei.QuantityOfSize["45"] = 0;
-
                 bal.Results = items;
 
                 NameValueCollection nvc = new NameValueCollection();
@@ -58,17 +54,22 @@ namespace OnBalance.Controllers
                     nvc.Add(string.Format("Results[{0}][Details]['41']", i), "2");
 
                 }
-                WebClient wc = new WebClient();
-                string posBalanceUrl = "http://gjsportland.com/test.php/lt/product/dobalance";
-                byte[] ba = wc.UploadValues(posBalanceUrl, "POST", nvc);
-                //return Json(bal, JsonRequestBehavior.AllowGet);
-                Log.InfoFormat("Got response from POS: {0}", Encoding.ASCII.GetString(ba));
+                //WebClient wc = new WebClient();
+                //string posBalanceUrl = "http://gjsportland.com/test.php/lt/product/dobalance";
+                //byte[] ba = wc.UploadValues(posBalanceUrl, "POST", nvc);
+                ////return Json(bal, JsonRequestBehavior.AllowGet);
+                //Log.InfoFormat("Got response from POS: {0}", Encoding.ASCII.GetString(ba));
                 //return Content("Got: " + Encoding.ASCII.GetString(ba));
 
-                return Json(new
+                if(string.IsNullOrEmpty(callback))
                 {
-                    Status = Status.Completed
-                }, JsonRequestBehavior.AllowGet);
+                    return Json(new
+                    {
+                        Status = Status.Completed
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                return Content(string.Format("{0}({{ \"Status\": \"{1}\" }})", callback, Status.Completed));
+
             } catch(Exception ex)
             {
                 Log.Error("Error sending local changes to POS!", ex);
