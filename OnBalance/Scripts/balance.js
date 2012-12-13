@@ -98,17 +98,10 @@ function InitializeBalanceGrid()
     };
 
     var arContextMenu = [
-<<<<<<< HEAD
-                { text: "<span class='cm_red'>Red</span>" },
-                { text: "<span class='cm_green'>Green</span>" },
-                { text: "<span class='cm_blue'>Blue</span>" }
-            ];
-=======
         { text: "<span class='cm_red'>Red</span>" },
         { text: "<span class='cm_green'>Green</span>" },
         { text: "<span class='cm_blue'>Blue</span>" }
     ];
->>>>>>> origin
     var contextMenu = new YAHOO.widget.ContextMenu("OnBalanceContextMenu", {
         trigger: gTable.getTbodyEl()
     });
@@ -120,16 +113,6 @@ function InitializeBalanceGrid()
 
     preparePendingDialog();
 
-<<<<<<< HEAD
-	// Add product button
-	YAHOO.util.Event.addListener("AddProductButton", "click",function ()
-	{
-		console.log("Adding new product...");
-		var record = YAHOO.widget.DataTable._cloneObject(YAHOO.OnBalance.newProduct);
-		record.row = record.row + 1;
-		gTable.addRow(record);
-	},this, true);
-=======
     // Add product button
     YAHOO.util.Event.addListener("AddProductButton", "click",function ()
     {
@@ -138,17 +121,12 @@ function InitializeBalanceGrid()
         record.row = record.row + 1;
         gTable.addRow(record);
     },this, true);
->>>>>>> origin
 }
 
 function preparePendingDialog()
 {
     // Remove progressively enhanced content class, just before creating the module
-<<<<<<< HEAD
-    YAHOO.util.Dom.removeClass("dialog", "yui-pe-content");
-=======
     YAHOO.util.Dom.removeClass("PendingChangesDialog", "yui-pe-content");
->>>>>>> origin
 
     // Instantiate the Dialog
     YAHOO.OnBalance.PendingDialog = new YAHOO.widget.Dialog("PendingChangesDialog", {
@@ -237,24 +215,25 @@ function highlightEditableCell(oArgs)
 // Define various event handlers for pending changes Dialog
 function handlePendingSubmit()
 {
-    YAHOO.OnBalance.localChanges = [
-        {name: "xxx", price: 123.0, code: "GJ_ES_XXXXXXXX" }
-    ];
     var s = "?_token=123456";
     for(var i = 0; i < YAHOO.OnBalance.localChanges.length; i++)
     {
-        s += "&[" + i + "].ProductName=" + YAHOO.OnBalance.localChanges[i].name + "&[" + i + "].Price=" + YAHOO.OnBalance.localChanges[i].price;
-        s += "&[" + i + "].InternalCode=" + YAHOO.OnBalance.localChanges[i].code;
+        s += "&updates[" + i + "][ProductName]=" + YAHOO.OnBalance.localChanges[i].name + "&updates[" + i + "][Price]=" + YAHOO.OnBalance.localChanges[i].price;
+        s += "&updates[" + i + "][InternalCode]=" + YAHOO.OnBalance.localChanges[i].code;
+        //s += "&[" + i + "].ProductName=" + YAHOO.OnBalance.localChanges[i].name + "&[" + i + "].Price=" + YAHOO.OnBalance.localChanges[i].price;
+        //s += "&[" + i + "].InternalCode=" + YAHOO.OnBalance.localChanges[i].code;
     }
+	console.log("Sending updates to: " + s);
 
-    var dsScriptNode = new YAHOO.util.ScriptNodeDataSource("http://localhost:49630/balance/dosend/");
+    //var dsScriptNode = new YAHOO.util.ScriptNodeDataSource("http://localhost:49630/balance/dosend/");
+	var dsScriptNode = new YAHOO.util.ScriptNodeDataSource("http://gjsportland.com/test.php/lt/balance/dosend/");
     //dataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
     dsScriptNode.sendRequest(s, {
         success: function(oRequest, oParsedResponse, oPayload)
         {
             console.log("Sent data OK!");
             // Clear updated products
-//            YAHOO.OnBalance.localChanges = [];
+            YAHOO.OnBalance.localChanges = [];
             this.hide();
         },
         failure: function()
