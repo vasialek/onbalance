@@ -4,32 +4,32 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Text;
-using log4net;
-using log4net.Config;
 
 namespace OnBalance.Controllers
 {
     public class BaseController : Controller
     {
 
-        protected ILog _log = null;
-        public ILog Log
+        public class Log
         {
-            get
-            {
-                if( _log == null )
-                {
-                    _log = LogManager.GetLogger("OnBalance");
-                    XmlConfigurator.Configure();
-                }
 
-                return _log;
+            public static void InfoFormat(string p, params object[] args)
+            {
+                //throw new NotImplementedException();
+            }
+            public static void DebugFormat(string p, params object[] args)
+            {
+                //throw new NotImplementedException();
+            }
+
+            internal static void Error(string p, Exception ex)
+            {
+                //throw new NotImplementedException();
             }
         }
 
         public BaseController()
         {
-            Log.Info("Working...");
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)

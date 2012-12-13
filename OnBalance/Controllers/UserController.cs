@@ -50,7 +50,7 @@ namespace OnBalance.Controllers
                 } else
                 {
                     ModelState.AddModelError("", "Bad username and/or password!");
-                    Log.WarnFormat("Bad password for user {0}!", model.Username);
+                    //Log.WarnFormat("Bad password for user {0}!", model.Username);
                 }
             }
 
