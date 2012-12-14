@@ -1,0 +1,23 @@
+﻿@model OnBalance.Models.BalanceItem
+
+@{
+    string prefix = string.IsNullOrEmpty(ViewData.TemplateInfo.HtmlFieldPrefix) ? "" : ViewData.TemplateInfo.HtmlFieldPrefix + ".";
+    int index = 0;
+    string prefixForDictionary = "";
+    
+    foreach(var item in OnBalance.Models.ProductRepository.GetAvailableNames("size"))
+    {
+        prefixForDictionary = string.Format("{0}QuantityForSizes[{1}].", prefix, index);
+        @Html.Hidden(prefixForDictionary + "key", item);
+        <div style="display: table-row;">
+            <div style="display: table-cell;">@item</div>
+            <div style="display: table-cell;">
+                @Html.TextBox(prefixForDictionary + "value")
+            </div>
+        </div>
+    
+        index++;
+    } 
+
+    
+}

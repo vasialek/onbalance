@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.Linq.Mapping;
+using System.ComponentModel.DataAnnotations;
 
 namespace OnBalance.Models
 {
@@ -72,6 +73,11 @@ namespace OnBalance.Models
             get{ return IsNew ? 'Y' : 'N'; }
             set { IsNew = value == 'Y'; }
         }
+
+        /// <summary>
+        /// Gets/sets quantity for each size ( 41: 3, 45: 1 )
+        /// </summary>
+        public Dictionary<string, string> QuantityForSizes { get; set; }
 
         public bool IsNew { get; set; }
 

@@ -241,5 +241,34 @@ namespace OnBalance.Controllers
             ViewBag.ExchangeItems = TempData["ExchangeItems"];
             return View();
         }
+
+        //
+        // GET: /pradmin/edit/1234
+
+        [Authorize]
+        public ActionResult Edit(int id)
+        {
+            ProductRepository db = new ProductRepository();
+            Product model = db.GetById(id);
+
+            return View(model);
+        }
+
+        //
+        // POST: /pradmin/edit
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Edit(Product model)
+        {
+            if( ModelState.IsValid )
+            {
+                ProductRepository db = new ProductRepository();
+                db.Update(model);
+                return RedirectToAction("Edit", new { id = model.id });
+            }
+
+            return View(model);
+        }
     }
 }

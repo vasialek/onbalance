@@ -183,6 +183,9 @@
     </None>
     <Content Include="Views\Useradmin\Create.cshtml" />
     <Content Include="Views\Useradmin\Edit.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\QuantityForSizes.cshtml" />
+    <Content Include="Views\Pradmin\Edit.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

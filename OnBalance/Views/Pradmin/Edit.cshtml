@@ -1,0 +1,23 @@
+﻿@model OnBalance.Models.Product
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using( Html.BeginForm() )
+{
+
+    @Html.EditorForModel()
+
+    foreach(var item in Model.Details.Where(x => x.parameter_name == "size"))
+    {
+        <div style="padding-left: 2em;">
+            @Html.EditorFor(x => item)
+        </div>
+    }
+
+    <input type="submit" value="@OnBalance.MyMessages.ButtonText.Save" />
+    
+}

@@ -8,7 +8,7 @@ namespace OnBalance.Models
     public class ProductRepository
     {
 
-        protected ProductDataContext db = new ProductDataContext();
+        protected ProductDataContext _db = new ProductDataContext();
 
         /// <summary>
         /// Little cache for available parameter names
@@ -18,7 +18,7 @@ namespace OnBalance.Models
 
         public IQueryable<Product> Items
         {
-            get { return db.Products; }
+            get { return _db.Products; }
         }
 
         public static string[] GetAvailableNames(string parameterName)
@@ -36,6 +36,15 @@ namespace OnBalance.Models
         }
 
 
+        public void Update(Product model)
+        {
+            _db.SubmitChanges();
+        }
 
+        public void Save(Product model)
+        {
+            _db.Products.InsertOnSubmit(model);
+            _db.SubmitChanges();
+        }
     }
 }

@@ -14,9 +14,17 @@ namespace OnBalance.Controllers
 
         public ActionResult Index()
         {
-            var db = new BalanceItemRepository();
-            db.Save(new BalanceItem { ProductName = "Test BI", Quantity = 2, InternalCode = "IA_12345", Price = 666, PosId = 1, IsNew = true });
-            return Content("Done...");
+            BalanceItem bi = new BalanceItem();
+            return View(bi);
+        }
+
+        //
+        // POST: /test/index
+
+        [HttpPost]
+        public ActionResult Index(BalanceItem model)
+        {
+            return RedirectToAction("Index");
         }
 
     }
