@@ -216,10 +216,18 @@ a
     color: #00f;
 }
 
-tr.yui-dt-odd blue,
-tr.yui-dt-even blue,
-.yui-skin-sam tr.yui-dt-odd blue,
-.yui-skin-sam tr.yui-dt-even blue
+.yui-skin-sam tr.yui-dt-odd.red,
+.yui-skin-sam tr.yui-dt-even.red
+{
+    background-color: #f00;
+}
+.yui-skin-sam tr.yui-dt-odd.green,
+.yui-skin-sam tr.yui-dt-even.green
+{
+    background-color: #0f0;
+}
+.yui-skin-sam tr.yui-dt-odd.blue,
+.yui-skin-sam tr.yui-dt-even.blue
 {
     background-color: #00f;
 }

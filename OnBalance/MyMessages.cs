@@ -13,6 +13,7 @@ namespace OnBalance
             public const string Login = "Login";
             public const string Save = "Save";
             public const string Back = "Back";
+            public const string AreYouSure = "Are you sure?!";
         }
 
         public class Parser

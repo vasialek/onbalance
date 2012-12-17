@@ -89,7 +89,6 @@
       <DependentUpon>Product.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductRepository.cs" />
-    <None Include="Models\SizeConvertor.cs.bak" />
     <Compile Include="Models\SizeConvertor.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

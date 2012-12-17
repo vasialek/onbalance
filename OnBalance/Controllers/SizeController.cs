@@ -8,6 +8,8 @@ using OnBalance.ViewModels;
 
 namespace OnBalance.Controllers
 {
+
+    [Authorize]
     public class SizeController : Controller
     {
         //
@@ -53,6 +55,18 @@ namespace OnBalance.Controllers
                 db.Insert(newSize);
             }
             return RedirectToAction("edit");
+        }
+
+        //
+        // GET: /size/delete/1234
+
+        public ActionResult Delete(int id)
+        {
+            SizeConvertorRepository db = new SizeConvertorRepository();
+            SizeConvertor model = db.GetById(id);
+            int categoryId = model.category_id;
+            db.Delete(model);
+            return RedirectToAction("edit", new { id = categoryId });
         }
 
         //

@@ -45,7 +45,7 @@
                     @Html.DisplayFor(modelItem => item.us_size)
                 </td>
                 <td>
-                    @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { onclick = "return confirm('" + OnBalance.MyMessages.ButtonText.AreYouSure + "');" })
                 </td>
             </tr>
         }

@@ -74,8 +74,6 @@ function InitializeBalanceGrid()
         }});
     gTable.subscribe("cellUpdateEvent", function(record, column, oldData)
     {
-        console.log("updated...");
-        console.log(record);
         onProductChanged(record);
     });
 
@@ -166,9 +164,11 @@ function onProductChanged(record)
     console.log("onProductChanged: ");
     console.log(record);
     var code = record.record._oData.code;
-    console.log(YAHOO.OnBalance.LocalChanges);
-    console.log("Internal code to update is: " + code);
+    var qnt = record.column.editor.value;
+//    console.log(YAHOO.OnBalance.LocalChanges);
+//    console.log("Internal code to update is: " + code);
     var indexOfProduct = getIndexByCode(code);
+    console.log(record.record.oData);
     // Not exists in array
     if( indexOfProduct < 0 )
     {
@@ -182,7 +182,7 @@ function onProductChanged(record)
         , details: [{
             pName: "size"
             , pVal: record.column.field
-//                , quantity: record.column._oData[record.column.field]
+            , quantity: qnt
         }]
 
     }
@@ -226,8 +226,8 @@ function handlePendingSubmit()
 	console.log("Sending updates to: " + s);
 
     //var dsScriptNode = new YAHOO.util.ScriptNodeDataSource("http://localhost:49630/balance/dosend/");
-	var dsScriptNode = new YAHOO.util.ScriptNodeDataSource("http://gjsportland.com/test.php/lt/balance/dosend/");
-    //dataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+	var dsScriptNode = new YAHOO.util.ScriptNodeDataSource("http://gjsportland.com/index.php/lt/balance/dosend/");
+    dsScriptNode.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
     dsScriptNode.sendRequest(s, {
         success: function(oRequest, oParsedResponse, oPayload)
         {
@@ -240,6 +240,7 @@ function handlePendingSubmit()
         {
             console.log("failed to send data!");
             alert("Error sending to server!");
+            this.hide();
         }
     });
     console.log(s);
@@ -281,13 +282,10 @@ function displayPendingChangesDialog(o)
     console.log("Displaying pending changes...");
     var dlg = YAHOO.OnBalance.PendingDialog;
     var s = YAHOO.OnBalance.localChanges.length > 0 ? "" : "@OnBalance.MyMessages.Balancer.NoPendingLocalChanges";
-//            for( var i = 0; i < gLocalChanges.length; i++ )
-//            {
-//                s += "<label>" + gLocalChanges[i].name + ", " + gLocalChanges[i].price + "</label>";
-//                s += "<input type='hidden' name='[" + i + "].InternalCode' value='" + gLocalChanges[i].code + "' />";
-//                s += "<input type='hidden' name='[" + i + "].ProductName' value='" + gLocalChanges[i].name + "' />";
-//                s += "<input type='hidden' name='[" + i + "].Price' value='" + gLocalChanges[i].price + "' />";
-//            }
+    for( var i = 0; i < YAHOO.OnBalance.localChanges.length; i++ )
+    {
+        s += "<label>" + YAHOO.OnBalance.localChanges[i].name + ", " + YAHOO.OnBalance.localChanges[i].price + "</label>";
+    }
     document.getElementById("PendingChangesDiv").innerHTML = formatLocalChangesForSubmit();
     dlg.show();
 }
