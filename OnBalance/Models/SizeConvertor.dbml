@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="vasialek_onbalance" Class="SizeConvertorDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=184.173.226.203;Initial Catalog=vasialek_onbalance;User ID=vasialek_onbalance_user" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="vasialek_onbalanceConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="vasialek_onbalance_user.size_convertor" Member="SizeConvertors">
+    <Type Name="SizeConvertor">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="category_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="euro_size" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="uk_size" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="us_size" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>

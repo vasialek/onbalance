@@ -1,0 +1,77 @@
+﻿@model OnBalance.ViewModels.SizeConvertorViewModel
+
+@{
+    Layout = null;
+    
+}
+
+<ul>
+@foreach(var item in Model.Categories)
+{
+    <li>@Html.ActionLink(item.Name, "edit", new { id = item.Id })</li>
+}
+</ul>
+
+@using(Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td colspan="4">Size convertor for <strong>@Model.SelectedCategory.Name</strong></td>
+        </tr>
+        <tr>
+            <th>
+                EuroSize
+            </th>
+            <th>
+                UkSize
+            </th>
+            <th>
+                UsSize
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach(var item in Model.Sizes)
+        {
+            @Html.HiddenFor(x => item.category_id)
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.euro_size)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.uk_size)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.us_size)
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                </td>
+            </tr>
+        }
+
+        <tr>
+            <td colspan="4">New size convertor</td>
+        </tr>
+        <tr>
+            @Html.Hidden("new[CategoryId]", Model.SelectedCategory.Id)
+            <td>
+                @Html.TextBox("new[EuroSize]")
+            </td>
+            <td>
+                @Html.TextBox("new[UkSize]")
+            </td>
+            <td>
+                @Html.TextBox("new[UsSize]")
+            </td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td colspan="4">
+                <input type="submit" value="@OnBalance.MyMessages.ButtonText.Save" />
+            </td>
+        </tr>
+    
+    </table>
+}
