@@ -169,21 +169,26 @@ function onProductChanged(record)
 //    console.log("Internal code to update is: " + code);
     var indexOfProduct = getIndexByCode(code);
     console.log(record.record.oData);
+	var details = [];
     // Not exists in array
     if( indexOfProduct < 0 )
     {
         indexOfProduct = YAHOO.OnBalance.localChanges.length;
-    }
+    }else
+	{
+		details = YAHOO.OnBalance.localChanges[indexOfProduct].details;
+	}
+	details[details.length] = {
+		pName: "size"
+		, pVal: record.column.field
+		, quantity: qnt
+	};
 
     YAHOO.OnBalance.localChanges[indexOfProduct] = {
         code: code
         , name: record.record._oData.name
         , price: record.record._oData.price_minor
-        , details: [{
-            pName: "size"
-            , pVal: record.column.field
-            , quantity: qnt
-        }]
+        , details: details
 
     }
     console.log("Pending changes:");
@@ -220,10 +225,17 @@ function handlePendingSubmit()
     {
         s += "&updates[" + i + "][ProductName]=" + YAHOO.OnBalance.localChanges[i].name + "&updates[" + i + "][Price]=" + YAHOO.OnBalance.localChanges[i].price;
         s += "&updates[" + i + "][InternalCode]=" + YAHOO.OnBalance.localChanges[i].code;
+        console.log("Details:");
+        console.log(YAHOO.OnBalance.localChanges[i].details);
+        var details = YAHOO.OnBalance.localChanges[i].details;
+        for(var j = 0; (details != null) && (j < details.length); j++)
+        {
+            s += "&updates[" + i + "][Sizes][" + details[j].pVal + "]=" + details[j].quantity;
+        }
         //s += "&[" + i + "].ProductName=" + YAHOO.OnBalance.localChanges[i].name + "&[" + i + "].Price=" + YAHOO.OnBalance.localChanges[i].price;
         //s += "&[" + i + "].InternalCode=" + YAHOO.OnBalance.localChanges[i].code;
     }
-	console.log("Sending updates to: " + s);
+    console.log("Sending updates to: " + s);
 
     //var dsScriptNode = new YAHOO.util.ScriptNodeDataSource("http://localhost:49630/balance/dosend/");
 	var dsScriptNode = new YAHOO.util.ScriptNodeDataSource("http://gjsportland.com/index.php/lt/balance/dosend/");
@@ -234,13 +246,13 @@ function handlePendingSubmit()
             console.log("Sent data OK!");
             // Clear updated products
             YAHOO.OnBalance.localChanges = [];
-            this.hide();
+            YAHOO.OnBalance.PendingDialog.hide();
         },
         failure: function()
         {
             console.log("failed to send data!");
             alert("Error sending to server!");
-            this.hide();
+            YAHOO.OnBalance.PendingDialog.hide();
         }
     });
     console.log(s);
