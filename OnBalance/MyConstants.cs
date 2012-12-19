@@ -9,7 +9,7 @@ namespace OnBalance
     /// <summary>
     /// List of available status 
     /// </summary>
-    public enum Status { Approved = 1, Deleted, Pending, Completed, Unknown }
+    public enum Status { Approved = 1, Deleted, Pending, Completed, Unknown, Failed }
 
     public class MyConstants
     {

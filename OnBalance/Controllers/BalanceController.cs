@@ -7,6 +7,7 @@ using System.Net;
 using System.Collections.Specialized;
 using OnBalance.Models;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace OnBalance.Controllers
 {
@@ -21,6 +22,38 @@ namespace OnBalance.Controllers
             string token = Request["_token"];
             return Json(new{
                 Status = 1
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        //
+        // GET: /balance/dosyncfrompos/1234
+
+        public ActionResult DoSyncFromPos(int id)
+        {
+            try
+            {
+                WebClient wc = new WebClient();
+                string resp = wc.DownloadString("http://gjsportland.com/test.php/lt/product/getbalance?_token=12345");
+                Regex regex = new Regex(@"(\""uid\""\:\"")([^""]+)([\""\,\ ]*)(code\""\:\"")([^""]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                MatchCollection matchCollection = regex.Matches(resp);
+                foreach (Match match in matchCollection)
+                {
+                    string uid = match.Groups[2].Value;
+                    string code = match.Groups[5].Value;
+                }
+
+            } catch(Exception ex)
+            {
+                return Json(new {
+                    Status = (int)Status.Failed,
+                    Msg = "Error getting from POS!"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new
+            {
+                Status = (int)Status.Completed,
+                Msg = "Got from POS"
             }, JsonRequestBehavior.AllowGet);
         }
 

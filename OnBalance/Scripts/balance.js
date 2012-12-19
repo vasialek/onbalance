@@ -16,7 +16,8 @@ function InitializeTable()
             price_minor: 0,
             // Sizes
             35: 0, 36: 0, 37: 0, 38: 0, 39: 0, 40: 0, 41: 0, 42: 0, 42.5: 0, 43: 0, 44: 0, 44.5: 0, 45: 0, 46: 0, 46.5: 0, 47: 0, 48: 0, 49: 0, 49.5: 0, 50: 0, 51: 0, 52: 0, 53: 0, 54: 0, 54.5: 0, 55: 0
-        }
+        },
+        contextMenu: []
     };
 
     gColumnsDefinitions = [
@@ -88,22 +89,23 @@ function InitializeBalanceGrid()
         elRow = myDataTable.getTrEl(elRow);
         console.log("El row:");
         console.log(elRow);
-        var styles = ["red", "green", "blue"];
-        YAHOO.util.Dom.removeClass(elRow, "red");
-        YAHOO.util.Dom.removeClass(elRow, "green");
-        YAHOO.util.Dom.removeClass(elRow, "blue");
+        var styles = ["red", "green", "darkyellow", "cyan", "blue"];
+        styles.forEach(function(el, index){
+            YAHOO.util.Dom.removeClass(elRow, el);
+        });
         YAHOO.util.Dom.addClass(elRow, styles[task.index]);
     };
 
-    var arContextMenu = [
-        { text: "<span class='cm_red'>Red</span>" },
-        { text: "<span class='cm_green'>Green</span>" },
-        { text: "<span class='cm_blue'>Blue</span>" }
-    ];
+    var styles = ["red", "green", "darkyellow", "cyan", "blue"];
+    styles.forEach(function(el, index){
+        YAHOO.OnBalance.contextMenu[YAHOO.OnBalance.contextMenu.length] = {
+            text: "<span class='cm_" + el + "'>" + el + "</span>"
+        };
+    });
     var contextMenu = new YAHOO.widget.ContextMenu("OnBalanceContextMenu", {
         trigger: gTable.getTbodyEl()
     });
-    contextMenu.addItems(arContextMenu);
+    contextMenu.addItems(YAHOO.OnBalance.contextMenu);
     contextMenu.render();
     contextMenu.clickEvent.subscribe(onContextMenuClick, gTable);
 
@@ -221,9 +223,11 @@ function highlightEditableCell(oArgs)
 function handlePendingSubmit()
 {
     var s = "?_token=123456";
+    var name;
     for(var i = 0; i < YAHOO.OnBalance.localChanges.length; i++)
     {
-        s += "&updates[" + i + "][ProductName]=" + YAHOO.OnBalance.localChanges[i].name + "&updates[" + i + "][Price]=" + YAHOO.OnBalance.localChanges[i].price;
+        name = YAHOO.OnBalance.localChanges[i].name.trim() == "" ? "UNKNOWN" : YAHOO.OnBalance.localChanges[i].name;
+        s += "&updates[" + i + "][ProductName]=" + name + "&updates[" + i + "][Price]=" + YAHOO.OnBalance.localChanges[i].price;
         s += "&updates[" + i + "][InternalCode]=" + YAHOO.OnBalance.localChanges[i].code;
         console.log("Details:");
         console.log(YAHOO.OnBalance.localChanges[i].details);
