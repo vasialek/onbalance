@@ -244,6 +244,7 @@ function handlePendingSubmit()
     //var dsScriptNode = new YAHOO.util.ScriptNodeDataSource("http://localhost:49630/balance/dosend/");
 	var dsScriptNode = new YAHOO.util.ScriptNodeDataSource("http://gjsportland.com/index.php/lt/balance/dosend/");
     dsScriptNode.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+    dsScriptNode.connMethodPost = true;
     dsScriptNode.sendRequest(s, {
         success: function(oRequest, oParsedResponse, oPayload)
         {

@@ -28,23 +28,46 @@ namespace OnBalance.Controllers
         //
         // GET: /balance/dosyncfrompos/1234
 
-        public ActionResult DoSyncFromPos(int id)
+        public ActionResult DoSyncFromPos()
         {
             try
             {
+                string getBalanceUrl = "http://gjsportland.com/index.php/lt/balance/get?_token=12345";
                 WebClient wc = new WebClient();
-                string resp = wc.DownloadString("http://gjsportland.com/test.php/lt/product/getbalance?_token=12345");
+                //Log4cs.Log("Dowloading from POS: {0}", getBalanceUrl);
+                string resp = wc.DownloadString(getBalanceUrl);
+                //Log4cs.Log("Response from POS: {0}", resp);
+                Regex rx = new Regex(@"(\{)([^}]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
                 Regex regex = new Regex(@"(\""uid\""\:\"")([^""]+)([\""\,\ ]*)(code\""\:\"")([^""]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
-                MatchCollection matchCollection = regex.Matches(resp);
-                foreach (Match match in matchCollection)
+                Regex rxSizes = new Regex(@"([\d\.]+)(=)(\d)(\:)");
+                Match m = rx.Match(resp);
+                // List all products in JSON
+                while( m.Success )
                 {
-                    string uid = match.Groups[2].Value;
-                    string code = match.Groups[5].Value;
+                    string line = m.Groups[2].Value;
+                    //Log4cs.Log("Product to upadate: {0}", line);
+                    Match matchLine = regex.Match(line);
+                    string uid = matchLine.Groups[2].Value;
+                    string code = matchLine.Groups[5].Value;
+                    //Log4cs.Log("Uid: {0}, code: {1}", uid, code);
+                    int start = line.IndexOf('[', matchLine.Groups[5].Index);
+                    int end = line.LastIndexOf(']');
+                    string sizes = line.Substring(start, end - start);
+                    //Log4cs.Log("Sizes to extract: {0}", sizes);
+                    Match mSize = rxSizes.Match(sizes);
+                    while( mSize.Success )
+                    {
+                        //Log4cs.Log("  {0} = {1}", mSize.Groups[1].Value, mSize.Groups[3].Value);
+                        mSize = mSize.NextMatch();
+                    }
+
+                    m = m.NextMatch();
                 }
 
-            } catch(Exception ex)
+            } catch( Exception ex )
             {
-                return Json(new {
+                return Json(new
+                {
                     Status = (int)Status.Failed,
                     Msg = "Error getting from POS!"
                 }, JsonRequestBehavior.AllowGet);
