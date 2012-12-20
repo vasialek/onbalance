@@ -91,11 +91,12 @@ namespace OnBalance.Models
         /// </summary>
         public bool HasRemoteChanges { get; set; }
 
-        //public BalanceItem()
-        //{
+        public BalanceItem()
+        {
+            QuantityForSizes = new Dictionary<string, string>();
         //    IsNew = true;
         //    HasLocalChanges = false;
         //    HasRemoteChanges = false;
-        //}
+        }
     }
 }
