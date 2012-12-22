@@ -32,14 +32,16 @@ namespace OnBalance.Controllers
         {
             int temp;
             List<BalanceItem> list = new List<BalanceItem>();
+            StringBuilder sb = new StringBuilder();
+            BalanceItemRepository db = new BalanceItemRepository();
             try
             {
                 string getBalanceUrl = "http://gjsportland.com/index.php/lt/balance/get?_token=12345";
                 WebClient wc = new WebClient();
                 string resp = wc.DownloadString(getBalanceUrl);
                 Regex rx = new Regex(@"(\{)([^}]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
-                // ("uid"\:")([^""]+)([\"\,\ ]*)(code\"\:\")([^"]+)([\"\,\ ]*)(pr\"\:)(\d+)([,"\s]+)(posid"\:)(\d+)
-                Regex regex = new Regex(@"(""uid""\:"")([^""""]+)([\""\,\ ]*)(code\""\:\"")([^""]+)([\""\,\ ]*)(pr\""\:)(\d+)([,""\s]+)(posid""\:)(\d+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
+                // ("uid"\:")([^""]+)([\"\,\ ]*)(code\"\:\")([^"]+)([\"\,\ ]*)(pr\"\:)(\d+)([,"\s]+)(posid"\:)(\d+)([\"\,\ ]*)(name\"\:\")([^"]+)
+                Regex regex = new Regex(@"(""uid""\:"")([^""""]+)([\""\,\ ]*)(code\""\:\"")([^""]+)([\""\,\ ]*)(pr\""\:)(\d+)([,""\s]+)(posid""\:)(\d+)([\""\,\ ]*)(name\""\:\"")([^""]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
                 Regex rxSizes = new Regex(@"([\d\.]+)(=)(\d)(\:)");
                 Match m = rx.Match(resp);
                 // List all products in JSON
@@ -54,6 +56,7 @@ namespace OnBalance.Controllers
                     bi.Price = temp / 100.0m;
                     int.TryParse(matchLine.Groups[11].Value, out temp);
                     bi.PosId = temp;
+                    bi.ProductName = matchLine.Groups[14].Value.Trim();
                     int start = line.IndexOf('[', matchLine.Groups[5].Index);
                     int end = line.LastIndexOf(']');
                     string sizes = line.Substring(start, end - start);
@@ -63,6 +66,8 @@ namespace OnBalance.Controllers
                         bi.QuantityForSizes[mSize.Groups[1].Value] = mSize.Groups[3].Value;
                         mSize = mSize.NextMatch();
                     }
+
+                    db.Save(bi);
 
                     list.Add(bi);
                     m = m.NextMatch();
@@ -79,6 +84,7 @@ namespace OnBalance.Controllers
 
             } catch( Exception ex )
             {
+                throw ex;
                 return Json(new
                 {
                     Status = (int)Status.Failed,
@@ -145,6 +151,28 @@ namespace OnBalance.Controllers
                 Log.Error("Error sending local changes to POS!", ex);
                 throw ex;
             }
+        }
+
+        //
+        // GET: /balance/
+
+        [Authorize]
+        public ActionResult Index()
+        {
+            return List(1);
+        }
+
+        //
+        // GET: /balance/list
+
+        [Authorize]
+        public ActionResult List(int? id)
+        {
+            BalanceItemRepository db = new BalanceItemRepository();
+            int currentPage = id.HasValue ? id.Value > 0 ? id.Value : 1 : 1;
+            int perPage = 50;
+            int offset = (currentPage - 1) * perPage;
+            return View("List", Layout, db.GetLastUpdated(offset, perPage));
         }
 
     }

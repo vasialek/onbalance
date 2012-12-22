@@ -112,6 +112,7 @@
       <LastGenOutput>SizeConvertor.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\Balance\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConnectionString.config">

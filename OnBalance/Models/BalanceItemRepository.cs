@@ -7,8 +7,9 @@ using System.Configuration;
 
 namespace OnBalance.Models
 {
-    public class BalanceItemRepository : BaseRepository
+    public class BalanceItemRepository /*: BaseRepository*/
     {
+        DataContext _dataContext = new DataContext(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString());
 
         //public BalanceItemRepository()
         //    : base(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString())
@@ -31,14 +32,26 @@ namespace OnBalance.Models
         {
             get
             {
-                var db = GetTable<BalanceItem>();
-                return db.Where(x => x.StatusId == (byte)Status.Approved);
+                return _dataContext.GetTable<BalanceItem>();
             }
         }
 
         public IList<BalanceItem> GetLastUpdated()
         {
-            return Items.ToList();
+            return GetLastUpdated(0, 50);
+        }
+
+        /// <summary>
+        /// Returns list of BalanceItem which has status Approved, order by ID desc.
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="limit"></param>
+        public IList<BalanceItem> GetLastUpdated(int offset, int limit)
+        {
+            return Items.OrderByDescending(x => x.Id)
+                .Skip(offset)
+                .Take(limit)
+                .ToList();
         }
 
         public void Save(BalanceItem bi)
@@ -46,7 +59,7 @@ namespace OnBalance.Models
 
             try
             {
-                var db = GetTable<BalanceItem>();
+                var db = _dataContext.GetTable<BalanceItem>();
                 BalanceItem entity = db.SingleOrDefault<BalanceItem>(x => x.InternalCode == bi.InternalCode);
                 //Log.DebugFormat("BalanceItem with code {0} already exists...", bi.InternalCode);
                 if(entity == null)

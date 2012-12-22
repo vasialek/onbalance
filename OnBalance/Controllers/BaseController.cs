@@ -10,6 +10,8 @@ namespace OnBalance.Controllers
     public class BaseController : Controller
     {
 
+        public string Layout { get { return "_Layout"; } }
+
         public class Log
         {
 
