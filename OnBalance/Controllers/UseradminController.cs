@@ -10,7 +10,7 @@ namespace OnBalance.Controllers
 {
 
     [Authorize]
-    public class UseradminController : Controller
+    public class UseradminController : BaseController
     {
         //
         // GET: /useradmin/

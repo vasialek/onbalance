@@ -5,8 +5,8 @@
     <bufferSize value="1" />
     <!--<connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />-->
     <connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
-    <connectionString value="server=dbhost; uid=dbuser; pwd=dbpass; database=dbname;" />
-    <commandText value="INSERT INTO star_log ([Date],[Thread],[Level],[Logger],[Message],[Exception]) VALUES (@log_date, @thread, @log_level, @logger, @message, @exception)" />
+    <connectionString value="server=184.173.226.203; uid=vasialek_onbalance_user; pwd=w3N2SPzGgwL4; database=vasialek_onbalance;" />
+    <commandText value="INSERT INTO ob_log ([Date],[Thread],[Level],[Logger],[Message],[Exception]) VALUES (@log_date, @thread, @log_level, @logger, @message, @exception)" />
     <parameter>
       <parameterName value="@log_date" />
       <dbType value="DateTime" />
@@ -66,6 +66,6 @@
   <root>
     <level value="ALL" />
     <appender-ref ref="RolingLogFile" />
-    <!--<appender-ref ref="AdoNetAppender" />-->
+    <appender-ref ref="AdoNetAppender" />
   </root>
 </log4net>

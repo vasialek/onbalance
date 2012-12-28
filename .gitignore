@@ -11,5 +11,6 @@ OnBalance/ConnectionString.config
 *.sln
 *.bak
 OnBalance/test*.htm
+OnBalance/log4net.xml
 
 

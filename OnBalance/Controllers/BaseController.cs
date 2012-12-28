@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Text;
+using log4net;
+using log4net.Config;
 
 namespace OnBalance.Controllers
 {
@@ -32,6 +34,9 @@ namespace OnBalance.Controllers
 
         public BaseController()
         {
+            ILog log = LogManager.GetLogger("OnBalance");
+            XmlConfigurator.Configure();
+            log.InfoFormat("Starting...");
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)

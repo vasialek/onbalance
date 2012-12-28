@@ -66,6 +66,7 @@
     <Compile Include="Controllers\BalanceController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\PosController.cs" />
     <Compile Include="Controllers\PradminController.cs" />
     <Compile Include="Controllers\SizeController.cs" />
@@ -79,6 +80,8 @@
     <Compile Include="Models\BalanceItemRepository.cs" />
     <Compile Include="Models\BaseRepository.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\ObLog.cs" />
+    <Compile Include="Models\ObLogRepository.cs" />
     <Compile Include="Models\Organization.cs" />
     <Compile Include="Models\OrganizationRepository.cs" />
     <Compile Include="Models\Pos.cs" />
@@ -117,6 +120,7 @@
     </None>
     <Content Include="log4net.xml" />
     <Content Include="Views\Balance\List.cshtml" />
+    <Content Include="Views\Log\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConnectionString.config">
