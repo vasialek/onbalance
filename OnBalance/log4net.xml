@@ -5,7 +5,7 @@
     <bufferSize value="1" />
     <!--<connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />-->
     <connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
-    <connectionString value="server=sunnystarsdev.db.9408771.hostedresource.com; uid=sunnystarsdev; pwd=mho+batch70dEr; database=sunnystarsdev;" />
+    <connectionString value="server=dbhost; uid=dbuser; pwd=dbpass; database=dbname;" />
     <commandText value="INSERT INTO star_log ([Date],[Thread],[Level],[Logger],[Message],[Exception]) VALUES (@log_date, @thread, @log_level, @logger, @message, @exception)" />
     <parameter>
       <parameterName value="@log_date" />
@@ -65,7 +65,7 @@
   </appender>
   <root>
     <level value="ALL" />
-    <!--<appender-ref ref="RolingLogFile" />-->
+    <appender-ref ref="RolingLogFile" />
     <!--<appender-ref ref="AdoNetAppender" />-->
   </root>
 </log4net>

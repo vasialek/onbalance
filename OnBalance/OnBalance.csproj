@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\eSPIS\eSPIS\Lib\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -112,6 +115,7 @@
       <LastGenOutput>SizeConvertor.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <Content Include="log4net.xml" />
     <Content Include="Views\Balance\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
