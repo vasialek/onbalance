@@ -20,16 +20,16 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Date)
+            @*@Html.DisplayFor(x => item.Date)*@
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Level)
+            @Html.DisplayFor(x => item.Level)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Message)
+            @Html.DisplayFor(x => item.Message)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Exception)
+            @Html.DisplayFor(x => item.Exception)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

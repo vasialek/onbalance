@@ -80,7 +80,11 @@
     <Compile Include="Models\BalanceItemRepository.cs" />
     <Compile Include="Models\BaseRepository.cs" />
     <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\ObLog.cs" />
+    <Compile Include="Models\ObLog.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ObLog.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Models\ObLogRepository.cs" />
     <Compile Include="Models\Organization.cs" />
     <Compile Include="Models\OrganizationRepository.cs" />
@@ -113,12 +117,19 @@
     <Compile Include="ViewModels\User\DashboardViewModel.cs" />
     <Compile Include="ViewModels\User\LoginViewModel.cs" />
     <Compile Include="ViewModels\User\UserViewModel.cs" />
+    <None Include="Models\ObLog.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>ObLog.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Models\SizeConvertor.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>SizeConvertor.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <Content Include="log4net.xml" />
+    <Content Include="log4net.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Balance\List.cshtml" />
     <Content Include="Views\Log\List.cshtml" />
   </ItemGroup>
@@ -129,7 +140,9 @@
     <Content Include="css\onbalance.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\balance.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -214,6 +227,11 @@
   <ItemGroup>
     <None Include="Models\SizeConvertor.dbml.layout">
       <DependentUpon>SizeConvertor.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\ObLog.dbml.layout">
+      <DependentUpon>ObLog.dbml</DependentUpon>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

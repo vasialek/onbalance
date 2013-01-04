@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="ObLog">
+  <DataContextMoniker Name="/ObLogDataContext" />
+  <nestedChildShapes>
+    <classShape Id="96219444-da2a-41a9-894b-245f405d0dec" absoluteBounds="3.25, 2.875, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/ObLogDataContext/ObLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="20d7fa68-4a22-4e0b-b042-13a4af01d7ec" absoluteBounds="3.265, 3.335, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
