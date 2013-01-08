@@ -60,8 +60,9 @@ function InitializeBalanceGrid()
         field: gResultFields
     }
     InitializeTable();
-    gTable = new YAHOO.widget.DataTable("MainBalanceDiv", gColumnsDefinitions, gDataSource, {
-        initialLoad: false
+    gTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", gColumnsDefinitions, gDataSource, {
+        initialLoad: false,
+        height: "50em"
     });
     gTable.subscribe("cellMouseoverEvent", highlightEditableCell);
     gTable.subscribe("cellMouseoutEvent", gTable.onEventUnhighlightCell);
@@ -76,6 +77,12 @@ function InitializeBalanceGrid()
     gTable.subscribe("cellUpdateEvent", function(record, column, oldData)
     {
         onProductChanged(record);
+    });
+    gTable.on("initEvent",function()
+    {
+        gTable.setAttributes({width: "100%"},true);
+//        alert("100%");
+//        YAHOO.util.Dom.setStyle(gTable.getTableEl(), "width", "90%");
     });
 
     var onContextMenuClick = function(eventType, oArgs, myDataTable)
