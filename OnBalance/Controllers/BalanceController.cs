@@ -154,6 +154,36 @@ namespace OnBalance.Controllers
         }
 
         //
+        // GET: /balance/confir/10843
+
+        [Authorize]
+        public ActionResult Confirm(int id)
+        {
+            var db = new BalanceItemRepository();
+            return View("Confirm", db.Items.SingleOrDefault(x => x.Id == id));
+        }
+
+        //
+        // POST: /balance/confirm
+
+        [HttpPost]
+        public ActionResult Confirm(int id, string confirm)
+        {
+            var db = new ProductRepository();
+            var item = new BalanceItemRepository().Items.SingleOrDefault(x => x.Id == id);
+            var product = db.Items.SingleOrDefault(x => x.internal_code == item.InternalCode);
+
+            if(!string.IsNullOrWhiteSpace(item.ProductName))
+            {
+                product.name = item.ProductName;
+            }
+            product.price = item.Price;
+            db.Save(product);
+
+            return RedirectToAction("list");
+        }
+
+        //
         // GET: /balance/
 
         [Authorize]

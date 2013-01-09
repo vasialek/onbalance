@@ -132,6 +132,7 @@
     </Content>
     <Content Include="Views\Balance\List.cshtml" />
     <Content Include="Views\Log\List.cshtml" />
+    <Content Include="Views\Balance\Confirm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConnectionString.config">
