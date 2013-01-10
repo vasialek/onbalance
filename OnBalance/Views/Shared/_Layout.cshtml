@@ -18,18 +18,6 @@
             @Html.Partial("_LogOnPartial")
 	    </div>
     </header>
-
-    <section id="middle">
-    
-        <div id="container">
-        
-        </div>
-
-    </section>
-
-    <footer id="footer">
-        <div class="copyright">2012 &copy;</div>
-    </footer>
 </div>
 <div class="main_content_left">
     <div class="user_shop_list">
@@ -37,12 +25,13 @@
         @foreach(var item in Model.Shops)
         {
             <div class="user_shop_item">@Html.ActionLink(item.Name, "balance", "pradmin", new { id = item.Id }, null)</div>
-            <div class="list_actions">
-                <a href="@Url.Action("parse", "pradmin", new{ id = item.Id})"><img src="@Url.Content("/images/import.png")" alt="Import"/></a>
-            </div>
+            <ul class="list_actions">
+                <li><a href="@Url.Action("parse", "pradmin", new{ id = item.Id})"><img src="@Url.Content("/images/import.png")" alt="Import"/></a></li>
+                <li><a href="@Url.Action("list", "balance", new{ id = item.Id})"><img src="@Url.Content("/images/view.png")" alt="Import"/></a></li>
+            </ul>
         }
     </div>
-    <div class="vspacer5" />
+    <div class="vspacer5"></div>
 
     <div class="user_imports_list">
         <div class="list_header">Pending imports</div>
@@ -56,7 +45,7 @@
             </div>
         }
     </div>
-    <div class="vspacer5" />
+    <div class="vspacer5"></div>
 
     <div class="user_exports_list">
         <div class="list_header">Pending exports</div>
@@ -68,10 +57,18 @@
             </div>
         }
     </div>
-    <div class="vspacer5" />
+    <div class="vspacer5"></div>
 </div>
 <div class="main_content_center">
     @RenderBody()
+</div>
+
+<div style="clear: both;"></div>
+
+<div>
+    <footer id="footer">
+        <div class="copyright">2012 &copy;</div>
+    </footer>
 </div>
 
 </body>

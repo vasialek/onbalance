@@ -54,6 +54,10 @@ namespace OnBalance.Models
                 .ToList();
         }
 
+        /// <summary>
+        /// Inserts/updates item to DB and submits changes
+        /// </summary>
+        /// <param name="bi"></param>
         public void Save(BalanceItem bi)
         {
 

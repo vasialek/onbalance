@@ -37,8 +37,10 @@ namespace OnBalance.Controllers
             try
             {
                 string getBalanceUrl = "http://gjsportland.com/index.php/lt/balance/get?_token=12345";
+                Log.InfoFormat("Going to download changes from POS: {0}", getBalanceUrl);
                 WebClient wc = new WebClient();
                 string resp = wc.DownloadString(getBalanceUrl);
+                Log.DebugFormat("Changes: {0}", resp);
                 Regex rx = new Regex(@"(\{)([^}]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
                 // ("uid"\:")([^""]+)([\"\,\ ]*)(code\"\:\")([^"]+)([\"\,\ ]*)(pr\"\:)(\d+)([,"\s]+)(posid"\:)(\d+)([\"\,\ ]*)(name\"\:\")([^"]+)
                 Regex regex = new Regex(@"(""uid""\:"")([^""""]+)([\""\,\ ]*)(code\""\:\"")([^""]+)([\""\,\ ]*)(pr\""\:)(\d+)([,""\s]+)(posid""\:)(\d+)([\""\,\ ]*)(name\""\:\"")([^""]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
@@ -160,7 +162,12 @@ namespace OnBalance.Controllers
         public ActionResult Confirm(int id)
         {
             var db = new BalanceItemRepository();
-            return View("Confirm", db.Items.SingleOrDefault(x => x.Id == id));
+            var item = new BalanceItemRepository().Items.SingleOrDefault(x => x.Id == id);
+            if(item == null)
+            {
+                return HttpNotFound();
+            }
+            return View("Confirm", item);
         }
 
         //
@@ -169,18 +176,34 @@ namespace OnBalance.Controllers
         [HttpPost]
         public ActionResult Confirm(int id, string confirm)
         {
-            var db = new ProductRepository();
-            var item = new BalanceItemRepository().Items.SingleOrDefault(x => x.Id == id);
-            var product = db.Items.SingleOrDefault(x => x.internal_code == item.InternalCode);
+            var dbProducts = new ProductRepository();
+            var dbBalanceItems = new BalanceItemRepository();
+            Log.InfoFormat("Going to confirm updated product ID #{0} from POS", id);
+            var item = dbBalanceItems.Items.SingleOrDefault(x => x.Id == id);
+            if(item == null)
+            {
+                return HttpNotFound();
+            }
+
+            Log.InfoFormat("Searching for product with code: [{0}]", item.InternalCode);
+            var product = dbProducts.Items.SingleOrDefault(x => x.internal_code == item.InternalCode);
+            if(product == null)
+            {
+                return HttpNotFound();
+            }
 
             if(!string.IsNullOrWhiteSpace(item.ProductName))
             {
                 product.name = item.ProductName;
             }
             product.price = item.Price;
-            db.Save(product);
+            Log.InfoFormat("Going to save changes from POS to Online Balance System DB...");
+            dbProducts.Update(product);
 
-            return RedirectToAction("list");
+            item.StatusId = (byte)Status.Completed;
+            dbBalanceItems.Save(item);
+
+            return RedirectToAction("list", new { id = item.PosId });
         }
 
         //
@@ -189,20 +212,27 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return List(1);
+            return List(new OrganizationRepository().Organizations.FirstOrDefault().Id);
         }
 
         //
-        // GET: /balance/list
+        // GET: /balance/list/100001
 
         [Authorize]
-        public ActionResult List(int? id)
+        public ActionResult List(int id)
         {
             BalanceItemRepository db = new BalanceItemRepository();
-            int currentPage = id.HasValue ? id.Value > 0 ? id.Value : 1 : 1;
+            int currentPage = 0;
+            int.TryParse(Request["p"], out currentPage);
+            
+            currentPage = currentPage > 0 ? currentPage : 1;
             int perPage = 50;
             int offset = (currentPage - 1) * perPage;
-            return View("List", Layout, db.GetLastUpdated(offset, perPage));
+            var list = db.Items
+                .Where(x => x.PosId == id)
+                .Skip(offset)
+                .Take(perPage);
+            return View("List", Layout, list);
         }
 
     }

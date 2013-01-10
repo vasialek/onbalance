@@ -24,7 +24,7 @@ namespace OnBalance.Controllers
             var db = new ObLogRepository();
             int page = id > 0 ? id : 1;
             int perPage = 100;
-            return View("List", Layout, db.GetLast(page * perPage, perPage));
+            return View("List", Layout, db.GetLast( (page - 1) * perPage, perPage));
         }
     }
 }

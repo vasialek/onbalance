@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Models\BalanceItem.cs" />
     <Compile Include="Models\BalanceItemRepository.cs" />
+    <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BaseRepository.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\ObLog.designer.cs">

@@ -1,42 +1,38 @@
 ﻿@model IEnumerable<OnBalance.Models.ObLog>
 
-<table>
+<table style="width: 90%" class="log-table">
     <tr>
-        <th>
+        <th class="dt left">
             Date
         </th>
-        <th>
+        <th class="lvl left">
             Level
         </th>
-        <th>
+        <th class="msg left">
             Message
         </th>
-        <th>
-            Exception
-        </th>
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
-        <td>
-            @*@Html.DisplayFor(x => item.Date)*@
+        <td class="dt">
+            @Html.DisplayFor(x => item.Date)
         </td>
-        <td>
+        <td class="lvl">
             @Html.DisplayFor(x => item.Level)
         </td>
-        <td>
+        <td class="msg">
             @Html.DisplayFor(x => item.Message)
         </td>
-        <td>
-            @Html.DisplayFor(x => item.Exception)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
     </tr>
+    if( !string.IsNullOrWhiteSpace(item.Exception) )
+    {
+        <tr>
+            <td colspan="3" class="ex">
+                @Html.DisplayFor(x => item.Exception)
+            </td>
+        </tr>
+    }
 }
 
 </table>

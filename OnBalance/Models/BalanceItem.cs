@@ -11,14 +11,17 @@ namespace OnBalance.Models
     /// Class to represent item for exchange between server-client (sync-ing)
     /// </summary>
     [Table(Name = "balance_item")]
-    public class BalanceItem
+    public class BalanceItem : BaseModel
     {
         [Column(Name = "id", IsDbGenerated = true, IsPrimaryKey = true)]
         public int Id { get; set; }
 
         [Column(Name = "status_id")]
-        public byte StatusId { get; set; }
+        public new byte StatusId { get; set; }
 
+        /// <summary>
+        /// Gets status as enum value rather than byte
+        /// </summary>
         public Status Status
         {
             get
@@ -37,6 +40,8 @@ namespace OnBalance.Models
 
             set { StatusId = (byte)value; }
         }
+
+        public string StatusName { get { return Status.ToString(); } }
 
         /// <summary>
         /// Id of PointOfService where product is

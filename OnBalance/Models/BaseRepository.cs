@@ -7,13 +7,12 @@ using System.Configuration;
 
 namespace OnBalance.Models
 {
-    public class BaseRepository : DataContext
+    public class BaseRepository/* : DataContext */
     {
 
         public BaseRepository()
-            : base(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString())
         {
-
+            //_db = new DataContext(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString());
         }
 
     }

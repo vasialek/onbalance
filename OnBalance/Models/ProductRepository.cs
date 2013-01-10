@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Configuration;
 
 namespace OnBalance.Models
 {
-    public class ProductRepository
+    public class ProductRepository : BaseRepository
     {
 
-        protected ProductDataContext _db = new ProductDataContext();
+        protected ProductDataContext _dataContext = new ProductDataContext(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString());
 
         /// <summary>
         /// Little cache for available parameter names
@@ -18,7 +19,7 @@ namespace OnBalance.Models
 
         public IQueryable<Product> Items
         {
-            get { return _db.Products; }
+            get { return _dataContext.Products; }
         }
 
         public static string[] GetAvailableNames(string parameterName)
@@ -38,13 +39,13 @@ namespace OnBalance.Models
 
         public void Update(Product model)
         {
-            _db.SubmitChanges();
+            _dataContext.SubmitChanges();
         }
 
         public void Save(Product model)
         {
-            _db.Products.InsertOnSubmit(model);
-            _db.SubmitChanges();
+            _dataContext.Products.InsertOnSubmit(model);
+            _dataContext.SubmitChanges();
         }
     }
 }

@@ -14,29 +14,41 @@ namespace OnBalance.Controllers
 
         public string Layout { get { return "_Layout"; } }
 
-        public class Log
+        //public class Log
+        //{
+
+        //    public static void InfoFormat(string p, params object[] args)
+        //    {
+        //        //throw new NotImplementedException();
+        //    }
+        //    public static void DebugFormat(string p, params object[] args)
+        //    {
+        //        //throw new NotImplementedException();
+        //    }
+
+        //    internal static void Error(string p, Exception ex)
+        //    {
+        //        //throw new NotImplementedException();
+        //    }
+        //}
+
+        ILog _log = null;
+        public ILog Log
         {
-
-            public static void InfoFormat(string p, params object[] args)
+            get
             {
-                //throw new NotImplementedException();
-            }
-            public static void DebugFormat(string p, params object[] args)
-            {
-                //throw new NotImplementedException();
-            }
-
-            internal static void Error(string p, Exception ex)
-            {
-                //throw new NotImplementedException();
+                if( _log == null )
+                {
+                    _log = LogManager.GetLogger("OnBalance");
+                    XmlConfigurator.Configure();
+                }
+                return _log;
+            
             }
         }
 
         public BaseController()
         {
-            ILog log = LogManager.GetLogger("OnBalance");
-            XmlConfigurator.Configure();
-            log.InfoFormat("Starting...");
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)

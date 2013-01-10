@@ -36,7 +36,7 @@
     <tr>
         <td></td>
         <td>
-            @Html.DisplayFor(modelItem => item.StatusId)
+            @Html.DisplayFor(modelItem => item.StatusName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.PosId)
@@ -69,7 +69,10 @@
             @Html.DisplayFor(modelItem => item.HasRemoteChanges)
         </td>
         <td>
-            @Html.ActionLink("Confirm", "confirm", new { id = item.Id })
+            @if( item.Status == OnBalance.Status.Approved )
+            {
+                @Html.ActionLink("Confirm", "confirm", new { id = item.Id });
+            }
         </td>
 
         @*<td>

@@ -23,7 +23,7 @@ function InitializeTable()
     gColumnsDefinitions = [
         { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
         { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
-//    { key: "amount", label: "Total", sortable: true }
+        { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
     ];
 
     for(var i = 0; i < arDetails.length; i++)
@@ -32,12 +32,12 @@ function InitializeTable()
         gColumnsDefinitions[gColumnsDefinitions.length] = { key: arDetails[i], label: arDetails[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
     }
 
-    gColumnsDefinitions[gColumnsDefinitions.length] = {
-        key: "code",
-        label: "Code",
-        sortable: true,
-        editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true })
-    };
+//    gColumnsDefinitions[gColumnsDefinitions.length] = {
+//        key: "code",
+//        label: "Code",
+//        sortable: true,
+//        editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true })
+//    };
 
     gColumnsDefinitions[gColumnsDefinitions.length] = {key: "Delete", label: " ", formatter: function(elCell){
         elCell.innerHTML = "<img src='http://online-balance.com/images/delete.png' title='delete row' />";
@@ -80,9 +80,8 @@ function InitializeBalanceGrid()
     });
     gTable.on("initEvent",function()
     {
-        gTable.setAttributes({width: "100%"},true);
+//        gTable.setAttributes({width: "100%"},true);
 //        alert("100%");
-//        YAHOO.util.Dom.setStyle(gTable.getTableEl(), "width", "90%");
     });
 
     var onContextMenuClick = function(eventType, oArgs, myDataTable)

@@ -7,33 +7,37 @@ using System.Configuration;
 
 namespace OnBalance.Models
 {
-    public class OrganizationRepository : DataContext
+    public class OrganizationRepository : BaseRepository
     {
+        /// <summary>
+        /// Property to work with DB
+        /// </summary>
+        protected DataContext _db = null;
 
-        public OrganizationRepository()
-            : base(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString())
-        {
+        //public OrganizationRepository()
+        //    : base(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString())
+        //{
 
-        }
+        //}
 
-        public OrganizationRepository(string connectionString)
-            : base(connectionString)
-        {
+        //public OrganizationRepository(string connectionString)
+        //    : base(connectionString)
+        //{
 
-        }
+        //}
 
         public IQueryable<Organization> Organizations
         {
             get
             {
-                var db = this.GetTable<Organization>();
-                return db.Where(x => x.StatusId != 0);
+                return _db.GetTable<Organization>()
+                    .Where(x => x.StatusId != 0);
             }
         }
 
         public void Save(Organization model)
         {
-            var db = GetTable<Organization>();
+            var db = _db.GetTable<Organization>();
             db.InsertOnSubmit(model);
             db.Context.SubmitChanges();
         }

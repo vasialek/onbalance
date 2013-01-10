@@ -54,7 +54,11 @@ namespace OnBalance.Controllers
 
             StringBuilder sbMain = new StringBuilder();
             StringBuilder sb = new StringBuilder();
-            var products = db.Items.Where(x => x.pos_id == posId && x.status_id == (byte)Status.Approved).ToList();
+            var products = db.Items
+                .Where(x => x.pos_id == posId && x.status_id == (byte)Status.Approved)
+                .Take(200)
+                .ToList();
+            Log.InfoFormat("Got {0} products for POS ID #{1}", products == null ? "NULL" : products.Count.ToString(), posId);
             //var shops = dbPos.Items.ToList();
             string callback = Request["callback"];
 
