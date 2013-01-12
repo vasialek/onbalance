@@ -187,6 +187,13 @@ a
 .right{ text-align: right; }
 .left{ text-align: left; }
 
+.fleft{float: left;}
+.fright{float: right;}
+
+.b {font-weight: bold;}
+
+/* END of CSS helpers */
+
 .user_shop_list, .user_imports_list, .user_exports_list
 {
     width: 150px;
@@ -201,6 +208,12 @@ a
     background-color: #97aebf;
     padding: 2px;
     color: #fff;
+}
+
+.list_actions li
+{
+    list-style-type: none;
+    display: inline;
 }
 
 .user_export_item, .user_import_item, .user_shop_item

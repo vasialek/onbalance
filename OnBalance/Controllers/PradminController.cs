@@ -10,7 +10,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Net;
 using System.Collections.Specialized;
-using OnBalance.ViewModels.Product;
+using OnBalance.ViewModels.Products;
 
 namespace OnBalance.Controllers
 {
@@ -23,7 +23,37 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return View();
+            return List(new PosRepository().Items.SingleOrDefault().Id);
+        }
+
+        //
+        // GET: /pradmin/list/100003
+
+        [Authorize]
+        public ActionResult List(int id)
+        {
+            ProductsInPosViewModel productsList = new ProductsInPosViewModel();
+            productsList.Pos = new PosRepository().Items.SingleOrDefault(x => x.Id == id);
+            if( productsList.Pos == null )
+            {
+                Log.ErrorFormat("Trying to list products in non-existing POS #{0}!", id);
+                return HttpNotFound();
+            }
+
+            int perPage = 50;
+            int page = 0;
+            if( int.TryParse(Request["p"], out page) == false )
+            {
+                page = 1;
+            }
+            int offset = (page - 1) * perPage;
+
+            Log.InfoFormat("Displaying list of products in POS #{0}, skipping {1}, taking {2} products", id, offset, perPage);
+            productsList.Products = new ProductRepository().GetLastInPos(id, offset, perPage)
+                .OrderBy(x => x.id)
+                .ToList();
+
+            return View("List", Layout, productsList);
         }
 
         //
@@ -31,11 +61,15 @@ namespace OnBalance.Controllers
 
         public ActionResult Balance(int id)
         {
-            ProductBalanceViewModel pb = new ProductBalanceViewModel();
+            ProductsInPosViewModel pb = new ProductsInPosViewModel();
             ProductRepository db = new ProductRepository();
             PosRepository dbPos = new PosRepository();
 
-            pb.Products = db.Items.Where(x => x.pos_id == id && x.status_id == (byte)Status.Approved).ToList();
+            Log.InfoFormat("Selecting products for POS #{0}", id);
+            pb.Products = db.Items
+                .Where(x => x.pos_id == id && x.status_id == (byte)Status.Approved)
+                .Take(100)
+                .ToList();
             pb.Shops = dbPos.Items.ToList();
             return View(pb);
         }

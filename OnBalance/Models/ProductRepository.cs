@@ -47,5 +47,20 @@ namespace OnBalance.Models
             _dataContext.Products.InsertOnSubmit(model);
             _dataContext.SubmitChanges();
         }
+
+        /// <summary>
+        /// Returns list of products (not deleted)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="offset"></param>
+        /// <param name="perPage"></param>
+        public IQueryable<Product> GetLastInPos(int id, int offset, int perPage)
+        {
+            return _dataContext.GetTable<Product>()
+                .Where(x => x.pos_id == id && x.status_id != (byte)Status.Deleted)
+                .OrderBy(x => x.id)
+                .Skip(offset)
+                .Take(perPage);
+        }
     }
 }

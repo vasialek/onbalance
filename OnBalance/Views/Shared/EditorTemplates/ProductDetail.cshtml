@@ -1,0 +1,66 @@
+﻿@model OnBalance.Models.ProductDetail
+
+    @Html.HiddenFor(model => model.id)
+    @Html.HiddenFor(model => model.product_id)
+
+
+    <div style="display: table-row">
+        <div style="display:  table-cell;">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.status_id)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.status_id)
+                @Html.ValidationMessageFor(model => model.status_id)
+            </div>
+        </div>
+        <div style="display:  table-cell;">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.parameter_name)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.parameter_name)
+                @Html.ValidationMessageFor(model => model.parameter_name)
+            </div>
+        </div>
+
+        <div style="display:  table-cell;">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.parameter_value)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.parameter_value)
+                @Html.ValidationMessageFor(model => model.parameter_value)
+            </div>
+        </div>
+        <div style="display:  table-cell;">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.price_release_minor)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.price_release_minor)
+                @Html.ValidationMessageFor(model => model.price_release_minor)
+            </div>
+        </div>
+
+        <div style="display:  table-cell;">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.price_minor)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.price_minor)
+                @Html.ValidationMessageFor(model => model.price_minor)
+            </div>
+        </div>
+
+        <div style="display:  table-cell;">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.quantity)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.quantity)
+                @Html.ValidationMessageFor(model => model.quantity)
+            </div>
+        </div>
+
+    </div>

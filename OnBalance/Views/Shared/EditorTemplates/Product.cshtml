@@ -1,0 +1,59 @@
+﻿@model OnBalance.Models.Product
+
+@Html.HiddenFor(model => model.id)
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.status_id)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.status_id)
+    @Html.ValidationMessageFor(model => model.status_id)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.pos_id)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.pos_id)
+    @Html.ValidationMessageFor(model => model.pos_id)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.internal_code)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.internal_code)
+    @Html.ValidationMessageFor(model => model.internal_code)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.user_id)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.user_id)
+    @Html.ValidationMessageFor(model => model.user_id)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.name)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.name)
+    @Html.ValidationMessageFor(model => model.name)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.price)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.price)
+    @Html.ValidationMessageFor(model => model.price)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.created_at)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.created_at)
+    @Html.ValidationMessageFor(model => model.created_at)
+</div>

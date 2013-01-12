@@ -91,14 +91,7 @@
     <Compile Include="Models\OrganizationRepository.cs" />
     <Compile Include="Models\Pos.cs" />
     <Compile Include="Models\PosRepository.cs" />
-    <Compile Include="Models\Product.cs">
-      <DependentUpon>Product.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Product.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Product.dbml</DependentUpon>
-    </Compile>
+    <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductRepository.cs" />
     <Compile Include="Models\SizeConvertor.designer.cs">
       <AutoGen>True</AutoGen>
@@ -112,7 +105,7 @@
     <Compile Include="ObLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\PendingChangesViewModel.cs" />
-    <Compile Include="ViewModels\Product\ProductBalanceViewModel.cs" />
+    <Compile Include="ViewModels\Products\ProductsInPosViewModel.cs" />
     <Compile Include="ViewModels\SizeConvertorViewModel.cs" />
     <Compile Include="ViewModels\TextParserViewModel.cs" />
     <Compile Include="ViewModels\User\DashboardViewModel.cs" />
@@ -128,18 +121,33 @@
       <LastGenOutput>SizeConvertor.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <Content Include="images\decrease.gif" />
+    <Content Include="images\edit.png" />
+    <Content Include="images\export.png" />
+    <Content Include="images\header-repeat.jpg" />
+    <Content Include="images\import.png" />
+    <Content Include="images\increase.gif" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\sidemenu-repeat-hover.jpg" />
+    <Content Include="images\sidemenu-repeat.jpg" />
+    <Content Include="images\view.png" />
     <Content Include="log4net.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Balance\List.cshtml" />
     <Content Include="Views\Log\List.cshtml" />
     <Content Include="Views\Balance\Confirm.cshtml" />
+    <Content Include="Views\Pradmin\List.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\ProductDetail.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Product.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ProductDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConnectionString.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="css\onbalance.css" />
+    <Content Include="images\delete.png" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\balance.js" />
     <Content Include="Web.config">
@@ -211,14 +219,6 @@
     <Content Include="Views\Shared\EditorTemplates\Enum.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models\Product.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>Product.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Models\Product.dbml.layout">
-      <DependentUpon>Product.dbml</DependentUpon>
-    </None>
     <Content Include="Views\Useradmin\Create.cshtml" />
     <Content Include="Views\Useradmin\Edit.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
@@ -253,7 +253,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>49630</DevelopmentServerPort>
+          <DevelopmentServerPort>52293</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

@@ -1,13 +1,7 @@
 ﻿@model IEnumerable<OnBalance.Models.BalanceItem>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
+<table border="0" cellspacing="0">
     <tr>
-        <th>
-            
-        </th>
         <th>
             Status
         </th>
@@ -29,58 +23,61 @@
         <th>
             Price of release
         </th>
-        <th></th>
+        <th>Actions</th>
     </tr>
 
-@foreach (var item in Model) {
+@if(Model.Count() > 0)
+{
+    foreach(var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PosId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InternalCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceOfRelease)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item._DbFieldIsNew)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsNew)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HasLocalChanges)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HasRemoteChanges)
+            </td>
+            <td>
+                @if(item.Status == OnBalance.Status.Approved)
+                {
+                    @Html.ActionLink("Confirm", "confirm", new { id = item.Id });
+                }
+            </td>
+        </tr>
+    }
+} else
+{
     <tr>
-        <td></td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StatusName)
+        <td colspan="8">
+            No pending changes from this POS
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PosId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InternalCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Quantity)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PriceOfRelease)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item._DbFieldIsNew)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsNew)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.HasLocalChanges)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.HasRemoteChanges)
-        </td>
-        <td>
-            @if( item.Status == OnBalance.Status.Approved )
-            {
-                @Html.ActionLink("Confirm", "confirm", new { id = item.Id });
-            }
-        </td>
-
-        @*<td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>*@
     </tr>
 }
-
 </table>

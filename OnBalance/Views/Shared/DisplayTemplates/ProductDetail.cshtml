@@ -1,0 +1,23 @@
+﻿@model IEnumerable<OnBalance.Models.ProductDetail>
+           
+@{
+    var categories = Model.Select(x => x.parameter_name).Distinct();
+}
+
+@foreach(var c in categories)
+{
+    <div>
+        <div class="b">@c</div>
+        <div style="padding-left: 1em;">
+            @foreach(var size in Model.Where(x => x.parameter_name.Equals(c)))
+            {
+                <div style="width: 10em;" class="fleft">
+                    <span class="b">@size.parameter_value</span>:
+                    <span>@size.price_minor.ToString("C")</span>;
+                    <span>@size.quantity qnt.</span>
+                </div>
+            }
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+}
