@@ -2,9 +2,10 @@
 var gDataSource;
 var gResultFields = [];
 var arDetails = ["35", "36", "37", "38", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "46", "46.5", "47", "48", "49", "49.5", "50", "51", "52", "53", "54", "54.5", "55"];
+var arDetailsChildren = ["122", "128", "134", "140", "152", "158", "164", "170", "176"];
 var gColumnsDefinitions = [];
 
-function InitializeTable()
+function InitializeTable(posId)
 {
     YAHOO.OnBalance = {
         localChanges: [],
@@ -19,10 +20,10 @@ function InitializeTable()
         },
         contextMenu: []
     };
-
+/*
     gColumnsDefinitions = [
         { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
-        { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
+        { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor() },
         { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
     ];
 
@@ -43,12 +44,44 @@ function InitializeTable()
         elCell.innerHTML = "<img src='http://online-balance.com/images/delete.png' title='delete row' />";
         elCell.style.cursor = 'pointer';
     }};
+*/
+}
+
+function CreateTable(posId)
+{
+    gColumnsDefinitions = [
+        { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
+        { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
+        { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
+    ];
+    var details = [];
+    switch(posId)
+    {
+        case 100001:
+            details = ["35", "36", "37", "38", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "46", "46.5", "47", "48", "49", "49.5", "50", "51", "52", "53", "54", "54.5", "55"];
+            break;
+        case 100002:
+            details = ["122", "128", "134", "140", "152", "158", "164", "170", "176"];
+            break;
+    }
+    for(var i = 0; i < details.length; i++)
+    {
+        gResultFields[gResultFields.length] = { key: arDetails[i] };
+        gColumnsDefinitions[gColumnsDefinitions.length] = { key: details[i], label: details[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
+    }
+
+    oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", gColumnsDefinitions, gDataSource, {
+        initialLoad: false,
+        height: "50em"
+    });
+
+    return oTable;
 }
 
 function InitializeBalanceGrid()
 {
 //    YAHOO.namespace("OnBalance");
-
+    var posId = 100002;
     gDataSource = new YAHOO.util.ScriptNodeDataSource("http://online-balance.com/pradmin/get/");
     gResultFields = [
         { key: "name" },
@@ -59,11 +92,14 @@ function InitializeBalanceGrid()
         resultsList: "data",
         field: gResultFields
     }
-    InitializeTable();
+    InitializeTable(posId);
+    gTable = CreateTable(posId);
+/*
     gTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", gColumnsDefinitions, gDataSource, {
         initialLoad: false,
         height: "50em"
     });
+*/
     gTable.subscribe("cellMouseoverEvent", highlightEditableCell);
     gTable.subscribe("cellMouseoutEvent", gTable.onEventUnhighlightCell);
     gTable.subscribe("cellClickEvent", gTable.onEventShowCellEditor);
@@ -115,7 +151,7 @@ function InitializeBalanceGrid()
     contextMenu.render();
     contextMenu.clickEvent.subscribe(onContextMenuClick, gTable);
 
-    loadDataToTable(100002);
+    loadDataToTable(posId);
 
     preparePendingDialog();
 
@@ -155,6 +191,7 @@ function preparePendingDialog()
 
 function loadDataToTable(posId)
 {
+    gTable = CreateTable(posId);
     gTable.load({
         request: "?posid=" + posId
 //        callback: {
