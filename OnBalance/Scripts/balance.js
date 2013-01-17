@@ -5,21 +5,23 @@ var arDetails = ["35", "36", "37", "38", "39", "40", "41", "42", "42.5", "43", "
 var arDetailsChildren = ["122", "128", "134", "140", "152", "158", "164", "170", "176"];
 var gColumnsDefinitions = [];
 
+YAHOO.OnBalance = {
+    uid: "",
+    localChanges: [],
+    availableCellColors: [],
+    products: [],
+    newProduct: {
+        name: "",
+        code: "",
+        price_minor: 0,
+        // Sizes
+        35: 0, 36: 0, 37: 0, 38: 0, 39: 0, 40: 0, 41: 0, 42: 0, 42.5: 0, 43: 0, 44: 0, 44.5: 0, 45: 0, 46: 0, 46.5: 0, 47: 0, 48: 0, 49: 0, 49.5: 0, 50: 0, 51: 0, 52: 0, 53: 0, 54: 0, 54.5: 0, 55: 0
+    },
+    contextMenu: []
+};
+
 function InitializeTable(posId)
 {
-    YAHOO.OnBalance = {
-        localChanges: [],
-        availableCellColors: [],
-        products: [],
-        newProduct: {
-            name: "",
-            code: "",
-            price_minor: 0,
-            // Sizes
-            35: 0, 36: 0, 37: 0, 38: 0, 39: 0, 40: 0, 41: 0, 42: 0, 42.5: 0, 43: 0, 44: 0, 44.5: 0, 45: 0, 46: 0, 46.5: 0, 47: 0, 48: 0, 49: 0, 49.5: 0, 50: 0, 51: 0, 52: 0, 53: 0, 54: 0, 54.5: 0, 55: 0
-        },
-        contextMenu: []
-    };
 /*
     gColumnsDefinitions = [
         { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
@@ -45,6 +47,19 @@ function InitializeTable(posId)
         elCell.style.cursor = 'pointer';
     }};
 */
+}
+
+function isAuthorized()
+{
+    return YAHOO.OnBalance.uid.length > 0;
+}
+
+function securePage()
+{
+    if( !isAuthorized() )
+    {
+        alert("Login, please!");
+    }
 }
 
 function CreateTable(posId)
@@ -80,6 +95,7 @@ function CreateTable(posId)
 
 function InitializeBalanceGrid()
 {
+    securePage();
 //    YAHOO.namespace("OnBalance");
     var posId = 100002;
     gDataSource = new YAHOO.util.ScriptNodeDataSource("http://online-balance.com/pradmin/get/");
