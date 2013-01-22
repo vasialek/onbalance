@@ -23,7 +23,7 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return List(new PosRepository().Items.SingleOrDefault().Id);
+            return List(new PosRepository().Items.First().Id);
         }
 
         //

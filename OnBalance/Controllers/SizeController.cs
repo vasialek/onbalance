@@ -18,7 +18,7 @@ namespace OnBalance.Controllers
         public ActionResult Index()
         {
             SizeConvertorRepository db = new SizeConvertorRepository();
-            return RedirectToAction("edit", new { id = db.GetCategories().First().Id });
+            return RedirectToAction("edit", new { id = db.GetCategories().First().id });
         }
 
         //
@@ -29,7 +29,7 @@ namespace OnBalance.Controllers
             SizeConvertorRepository db = new SizeConvertorRepository();
             SizeConvertorViewModel szViewModel = new SizeConvertorViewModel();
             szViewModel.Categories = db.GetCategories();
-            szViewModel.SelectedCategory = szViewModel.Categories.FirstOrDefault(x => x.Id == id);
+            szViewModel.SelectedCategory = szViewModel.Categories.FirstOrDefault(x => x.id == id);
             szViewModel.Sizes = db.GetAll(id).OrderBy(x => x.euro_size).ToList();
             return View("edit", szViewModel);
         }

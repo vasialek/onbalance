@@ -22,7 +22,7 @@ namespace OnBalance.Models
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="vasialek_onbalance")]
+    //[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="vasialek_onbalance")]
 	public partial class SizeConvertorDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -35,8 +35,8 @@ namespace OnBalance.Models
     partial void DeleteSizeConvertor(SizeConvertor instance);
     #endregion
 		
-		public SizeConvertorDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["vasialek_onbalanceConnectionString"].ConnectionString, mappingSource)
+		public SizeConvertorDataContext() :
+        base(global::System.Configuration.ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

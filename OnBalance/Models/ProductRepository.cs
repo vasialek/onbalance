@@ -39,6 +39,8 @@ namespace OnBalance.Models
 
         public void Update(Product model)
         {
+            var p = Items.SingleOrDefault(x => x.id == model.id);
+            p.name = model.name;
             _dataContext.SubmitChanges();
         }
 

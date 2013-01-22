@@ -5,12 +5,12 @@ using System.Web;
 
 namespace OnBalance.Models
 {
-    public class Category
-    {
+    //public class Category
+    //{
 
-        public int Id { get; set; }
+    //    public int Id { get; set; }
 
-        public string Name { get; set; }
+    //    public string Name { get; set; }
 
-    }
+    //}
 }

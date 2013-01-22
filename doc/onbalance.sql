@@ -25,11 +25,21 @@ create table pos
 );
 create index PosUserIdIndex on pos(user_id);
 
+create table category
+(
+    id int primary key not null identity(1000, 1),
+    status_id tinyint not null default(1),
+    parent_id int not null default(0),
+    used_in_org varchar(128),
+    name nvarchar(128) not null
+);
+
 create table product
 (
     id integer primary key not null identity(100000, 1),
     status_id tinyint not null default(1),
     pos_id integer not null,
+    category_id int not null default(0),
     uid varchar(64) not null unique,
     user_id varchar(128) not null,
     name varchar(128) not null,

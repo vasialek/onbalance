@@ -11,19 +11,11 @@ namespace OnBalance.Models
     {
 
         protected SizeConvertorDataContext _db = new SizeConvertorDataContext();
-        //protected static List<SizeConvertor> _db = new List<SizeConvertor>();
 
-        protected readonly static List<Category> _categories = new List<Category> { new Category { Id = 1, Name = "Vyr. batai" }, new Category { Id = 2, Name = "Mot. batai" }, new Category { Id = 3, Name = "Vaik. batai" } };
-
-        //public SizeConvertorRepository()
-        //    : base(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString())
-        //{
-
-        //}
+        protected readonly static List<Category> _categories = null; //new ProductDataContext().Categories.ToList();
 
         public List<SizeConvertor> GetAll(int sizeCategoryId)
         {
-            //var db = new SizeConvertorDataContext();
             if( sizeCategoryId > 0 )
             {
                 return _db.SizeConvertors.Where(x => x.category_id == sizeCategoryId).ToList();
@@ -41,7 +33,6 @@ namespace OnBalance.Models
         {
             if( model != null )
             {
-                //var db = new SizeConvertorDataContext();
                 int categoryId = model.FirstOrDefault().category_id;
                 var deleted = _db.SizeConvertors.Where(x => x.category_id == categoryId);
                 _db.SizeConvertors.DeleteAllOnSubmit(deleted);
@@ -57,7 +48,6 @@ namespace OnBalance.Models
 
         public void Insert(SizeConvertor newSize)
         {
-            //var db = new SizeConvertorDataContext();
             _db.SizeConvertors.InsertOnSubmit(newSize);
             _db.SubmitChanges();
         }

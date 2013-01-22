@@ -91,7 +91,15 @@
     <Compile Include="Models\OrganizationRepository.cs" />
     <Compile Include="Models\Pos.cs" />
     <Compile Include="Models\PosRepository.cs" />
-    <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Product.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>Product.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Product.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Product.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Models\ProductRepository.cs" />
     <Compile Include="Models\SizeConvertor.designer.cs">
       <AutoGen>True</AutoGen>
@@ -115,6 +123,14 @@
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>ObLog.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\Product.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Product.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\Product.dbml.layout">
+      <DependentUpon>Product.dbml</DependentUpon>
     </None>
     <None Include="Models\SizeConvertor.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
