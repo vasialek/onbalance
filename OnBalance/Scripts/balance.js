@@ -7,6 +7,7 @@ var gColumnsDefinitions = [];
 
 YAHOO.OnBalance = {
     uid: "",
+    currentPosId: 100002,
     localChanges: [],
     availableCellColors: [],
     products: [],
@@ -17,37 +18,48 @@ YAHOO.OnBalance = {
         // Sizes
         35: 0, 36: 0, 37: 0, 38: 0, 39: 0, 40: 0, 41: 0, 42: 0, 42.5: 0, 43: 0, 44: 0, 44.5: 0, 45: 0, 46: 0, 46.5: 0, 47: 0, 48: 0, 49: 0, 49.5: 0, 50: 0, 51: 0, 52: 0, 53: 0, 54: 0, 54.5: 0, 55: 0
     },
+    organizations: [
+        {
+            name: "GJ Eshop",
+            categories: [
+                { name: "Avalyne", id: 1001, sizes: ["33","34","35","35,5","36","36,5","37","37,5","38","38,5","39","40","41","42","42.5","43","44","44.5","45","45,5","46","46.5","47","47,5","48","48,5","49","49.5","50","50,5","51","52","52,5","53","54"] },
+                { name: "Apranga vyrams ir apranga moteris", id: 1002, sizes: ["XXS"," XS"," S"," M"," L"," XL"," XXL"," XXXL"] },
+                { name: "Apranga vaikams", id: 1003, sizes: ["122cm","128","134","140","152","158","164","170","176"] }
+//                { name: "Kepures (priedai)", id: 1004, sizes:  }
+            ]
+        }
+    ],
+    // Menu object
+    oApplicationMenu: null,
+    // Menu for global tasks
+    applicationMenu: [
+        {
+            text: "Shops",
+            submenu: {
+                id: "MenuShops",
+                itemdata: [
+                    "GJ E-shop",
+                    "GJ Gariunai",
+                    "GJ London"
+                ]
+            }
+        },
+        {
+            text: "Categories",
+            submenu: {
+                id: "MenuCategories",
+                itemdata: [
+                    { text: "Avalyne", onclick: { fn: function(){ console.log(YAHOO.OnBalance.organizations); CreateTableBySchema( YAHOO.OnBalance.organizations[0].categories[this.index]); } }, keylistener: { ctrl: true, keys: 49 } },
+                    { text: "Apranga vyrams ir apranga moteris", onclick: { fn: function(){ CreateTableBySchema( YAHOO.OnBalance.organizations[0].categories[this.index]); } }, keylistener: { ctrl: true, keys: 50 } },
+                    { text: "Apranga vaikams", onclick: { fn: function(){ CreateTableBySchema( YAHOO.OnBalance.organizations[0].categories[this.index]); } }, keylistener: { ctrl: true, keys: 51 } },
+//                    { text: "Kepures (priedai)", onclick: { fn: function(){ CreateTableBySchema( YAHOO.OnBalance.organizations.categories[this.index]); } }, keylistener: { ctrl: true, keys: 52 } }
+//                        "Avalyne", "Apranga vyrams ir apranga moteris", "Apranga vaikams", {text: "Kepures (priedai)", onclick: { fn: onMenuItemClick } }
+                ]
+            }
+        }
+    ],
     contextMenu: []
 };
-
-function InitializeTable(posId)
-{
-/*
-    gColumnsDefinitions = [
-        { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
-        { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor() },
-        { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
-    ];
-
-    for(var i = 0; i < arDetails.length; i++)
-    {
-        gResultFields[gResultFields.length] = { key: arDetails[i] };
-        gColumnsDefinitions[gColumnsDefinitions.length] = { key: arDetails[i], label: arDetails[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
-    }
-
-//    gColumnsDefinitions[gColumnsDefinitions.length] = {
-//        key: "code",
-//        label: "Code",
-//        sortable: true,
-//        editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true })
-//    };
-
-    gColumnsDefinitions[gColumnsDefinitions.length] = {key: "Delete", label: " ", formatter: function(elCell){
-        elCell.innerHTML = "<img src='http://online-balance.com/images/delete.png' title='delete row' />";
-        elCell.style.cursor = 'pointer';
-    }};
-*/
-}
 
 function isAuthorized()
 {
@@ -58,19 +70,42 @@ function securePage()
 {
     if( !isAuthorized() )
     {
-        alert("Login, please!");
+        console.log("Login, please!");
     }
 }
 
-function CreateTable(posId)
+function CreateTableBySchema(oSchema)
 {
+    console.log("Creating table by schema...");
+    var columnDefinitions = [
+        { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
+        { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
+        { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
+    ];
+    for(var i = 0; i < oSchema.sizes.length; i++)
+    {
+//        gResultFields[gResultFields.length] = { key: arDetails[i] };
+        columnDefinitions[columnDefinitions.length] = { key: oSchema.sizes[i], label: oSchema.sizes[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
+    }
+
+    oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", columnDefinitions, gDataSource, {
+        initialLoad: false,
+        height: "50em"
+    });
+
+    return oTable;
+}
+
+function CreateTable(categoryId)
+{
+    console.log("Creating table for POS #" + categoryId);
     gColumnsDefinitions = [
         { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
         { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
         { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
     ];
     var details = [];
-    switch(posId)
+    switch(categoryId)
     {
         case 100001:
             details = ["35", "36", "37", "38", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "46", "46.5", "47", "48", "49", "49.5", "50", "51", "52", "53", "54", "54.5", "55"];
@@ -96,8 +131,9 @@ function CreateTable(posId)
 function InitializeBalanceGrid()
 {
     securePage();
+    loadMainSchema();
 //    YAHOO.namespace("OnBalance");
-    var posId = 100002;
+    var posId = YAHOO.OnBalance.currentPosId;
     gDataSource = new YAHOO.util.ScriptNodeDataSource("http://online-balance.com/pradmin/get/");
     gResultFields = [
         { key: "name" },
@@ -108,7 +144,6 @@ function InitializeBalanceGrid()
         resultsList: "data",
         field: gResultFields
     }
-    InitializeTable(posId);
     gTable = CreateTable(posId);
 /*
     gTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", gColumnsDefinitions, gDataSource, {
@@ -167,7 +202,7 @@ function InitializeBalanceGrid()
     contextMenu.render();
     contextMenu.clickEvent.subscribe(onContextMenuClick, gTable);
 
-    loadDataToTable(posId);
+//    loadDataToTable(posId);
 
     preparePendingDialog();
 
@@ -366,75 +401,45 @@ function displayPendingChangesDialog(o)
     dlg.show();
 }
 
+/**
+ * Loads from OBS schema - POSes ant theirs categories
+ */
+function loadMainSchema()
+{
+    var posId = YAHOO.OnBalance.currentPosId;
+    var ds = new YAHOO.util.ScriptNodeDataSource("http://localhost:52293/balance/getorganizationstructure/" + posId);
+    ds.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+//    ds.connMethodPost = true;
+    ds.sendRequest("?", {
+        success: function(oRequest, oParsedResponse, oPayload)
+        {
+            console.log("Got main schema:");
+            console.log(oParsedResponse);
+            createApplicationMenu(oParsedResponse[0]);
+            // Clear updated products
+        },
+        failure: function()
+        {
+            console.log("failed to get main schema!");
+        }
+    });
+}
 
+function createApplicationMenu(oSchema)
+{
+    console.log("Creating new appliction menu...");
+    if( YAHOO.OnBalance.oApplicationMenu != null )
+    {
+        YAHOO.OnBalance.oApplicationMenu.destroy();
+    }
 
-//YAHOO.util.Event.addListener(window, "load", function()
-//{
-//    YAHOO.InlineCellEditing = function()
-//    {
-//        var myDataSource = new YAHOO.util.DataSource(YAHOO.OnBalance.products);
-//        var myDataTable = new YAHOO.widget.DataTable("MainBalanceDiv", gColumnsDefinitions, myDataSource, {
-//            initialLoad: true
-//        });
-//
-//        var mySuccessHandler = function()
-//        {
-//            alert("Success");
-////            this.set("sortedBy", null);
-//            this.onDataReturnAppendRows.apply(this, arguments);
-//        };
-//        var myFailureHandler = function()
-//        {
-////            alert("Error!");
-//            this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
-//            this.onDataReturnAppendRows.apply(this, arguments);
-//        };
-//        var callbackObj = {
-//            success: mySuccessHandler,
-//            failure: myFailureHandler,
-//            scope: myDataTable
-//        };
-//
-////        alert("sending...");
-////        myDataSource.sendRequest("?", callbackObj);
-////        alert("Request is sent...");
-//
-//    // Set up editing flow
-//        var highlightEditableCell = function(oArgs)
-//        {
-//            var elCell = oArgs.target;
-//            if(YAHOO.util.Dom.hasClass(elCell, "yui-dt-editable"))
-//            {
-//                this.highlightCell(elCell);
-//            }
-//        };
-//        myDataTable.subscribe("cellMouseoverEvent", highlightEditableCell);
-//        myDataTable.subscribe("cellMouseoutEvent", myDataTable.onEventUnhighlightCell);
-//        myDataTable.subscribe("cellClickEvent", myDataTable.onEventShowCellEditor);
-//        myDataTable.subscribe("cellClickEvent", function(ev){
-//            var target = YAHOO.util.Event.getTarget(ev);
-//            var column = myDataTable.getColumn(target);
-//            if( (column.key == "Delete") && confirm("Do you want to delete?!") )
-//            {
-//                myDataTable.deleteRow(target);
-//            }});
-//        myDataTable.subscribe("cellUpdateEvent", function(record, column, oldData)
-//        {
-//            console.log("updated...");
-//            console.log(record);
-//            onProductChanged(record);
-//        });
-//
-//        var contextMenu = new YAHOO.widget.ContextMenu("OnBalanceContextMenu", {
-//            trigger: myDataTable.getTbodyEl()
-//        });
-//        contextMenu.render();
-////        contextMenu.clickEvent.subscribe(onContextMenuClick, myDataTable);
-//
-//        return {
-//            oDS: myDataSource,
-//            oDT: myDataTable
-//        };
-//    }();
-//
-//});
+    YAHOO.OnBalance.applicationMenu.organizations[0] = oSchema;
+
+    YAHOO.OnBalance.oApplicationMenu = new YAHOO.widget.MenuBar("mymenubar", {
+        lazyload: true,
+        itemdata: YAHOO.OnBalance.applicationMenu
+    });
+    YAHOO.OnBalance.oApplicationMenu.render(document.body);
+
+}
+
