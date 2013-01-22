@@ -12,5 +12,7 @@ OnBalance/ConnectionString.config
 *.bak
 OnBalance/test*.htm
 OnBalance/log4net.xml
+OnBalance/OnBalance.csproj.user
+
 
 
