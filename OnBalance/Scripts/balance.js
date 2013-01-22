@@ -20,8 +20,8 @@ YAHOO.OnBalance = {
     },
     organizations: [
         {
-            name: "GJ Eshop",
-            categories: [
+            Name: "GJ Eshop",
+            Categories: [
                 { name: "Avalyne", id: 1001, sizes: ["33","34","35","35,5","36","36,5","37","37,5","38","38,5","39","40","41","42","42.5","43","44","44.5","45","45,5","46","46.5","47","47,5","48","48,5","49","49.5","50","50,5","51","52","52,5","53","54"] },
                 { name: "Apranga vyrams ir apranga moteris", id: 1002, sizes: ["XXS"," XS"," S"," M"," L"," XL"," XXL"," XXXL"] },
                 { name: "Apranga vaikams", id: 1003, sizes: ["122cm","128","134","140","152","158","164","170","176"] }
@@ -63,7 +63,7 @@ YAHOO.OnBalance = {
 
 function isAuthorized()
 {
-    return YAHOO.OnBalance.uid.length > 0;
+    return (typeof YAHOO.OnBalance.uid === null) || (YAHOO.OnBalance.uid.length > 0);
 }
 
 function securePage()
@@ -132,7 +132,7 @@ function InitializeBalanceGrid()
 {
     securePage();
     loadMainSchema();
-//    YAHOO.namespace("OnBalance");
+//    createApplicationMenu(YAHOO.OnBalance.organizations[0][0]);
     var posId = YAHOO.OnBalance.currentPosId;
     gDataSource = new YAHOO.util.ScriptNodeDataSource("http://online-balance.com/pradmin/get/");
     gResultFields = [
@@ -406,34 +406,65 @@ function displayPendingChangesDialog(o)
  */
 function loadMainSchema()
 {
-    var posId = YAHOO.OnBalance.currentPosId;
-    var ds = new YAHOO.util.ScriptNodeDataSource("http://localhost:52293/balance/getorganizationstructure/" + posId);
-    ds.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
-//    ds.connMethodPost = true;
-    ds.sendRequest("?", {
-        success: function(oRequest, oParsedResponse, oPayload)
-        {
-            console.log("Got main schema:");
-            console.log(oParsedResponse);
-            createApplicationMenu(oParsedResponse[0]);
-            // Clear updated products
-        },
+    var dsCallback = {
         failure: function()
         {
             console.log("failed to get main schema!");
+        },
+        success: function(oRequest, oParsedResponse, oPayload)
+        {
+            console.log("Parsed:");
+            console.log(oParsedResponse);
+            YAHOO.OnBalance.organizations[0].Name = oParsedResponse.meta.Name;
+            YAHOO.OnBalance.organizations[0].Categories = [];
+            for(var i = 0; i < oParsedResponse.results.length; i++)
+            {
+                YAHOO.OnBalance.organizations[0].Categories[i] = {
+                    id: oParsedResponse.results[i].Id,
+                    name: oParsedResponse.results[i].Name,
+                    sizes: oParsedResponse.results[i].Sizes
+                };
+            }
+            console.log("Prepared new organization from schema:");
+            console.log(YAHOO.OnBalance.organizations[0]);
+
+            createApplicationMenu();
         }
-    });
+    };
+    var posId = YAHOO.OnBalance.currentPosId;
+    var ds = new YAHOO.util.ScriptNodeDataSource("http://localhost:52293/balance/getorganizationstructure/" + posId);
+//    var ds = new YAHOO.util.LocalDataSource(jsonData);
+    ds.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+    ds.responseSchema = {
+        resultsList: "Results.Categories",
+        metaFields: {
+            Name: "Results.Name",
+            Id: "Results.Id"
+        }
+    };
+    ds.sendRequest("?", dsCallback);
 }
 
 function createApplicationMenu(oSchema)
 {
-    console.log("Creating new appliction menu...");
-    if( YAHOO.OnBalance.oApplicationMenu != null )
-    {
-        YAHOO.OnBalance.oApplicationMenu.destroy();
-    }
+//    console.log("Creating new appliction menu from schema:");
+//    console.log(oSchema);
+//    if( YAHOO.OnBalance.oApplicationMenu != null )
+//    {
+//        YAHOO.OnBalance.oApplicationMenu.destroy();
+//    }
+//
+    console.log("Build schema from OBS categories:");
+    console.log(YAHOO.OnBalance.organizations[0].Categories);
 
-    YAHOO.OnBalance.applicationMenu.organizations[0] = oSchema;
+    YAHOO.OnBalance.applicationMenu[1].submenu.itemdata = [];
+    for(var i = 0; i < YAHOO.OnBalance.organizations[0].Categories.length; i++)
+    {
+        YAHOO.OnBalance.applicationMenu[1].submenu.itemdata[i] = {
+            text: YAHOO.OnBalance.organizations[0].Categories[i].name,
+            onclick: { fn: function(){ CreateTableBySchema( YAHOO.OnBalance.organizations[0].Categories[this.index]); } }
+        }
+    }
 
     YAHOO.OnBalance.oApplicationMenu = new YAHOO.widget.MenuBar("mymenubar", {
         lazyload: true,

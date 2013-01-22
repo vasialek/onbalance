@@ -82,8 +82,9 @@ namespace OnBalance.Controllers
             });
 
             orgVm.Categories = categories.ToArray();
-            return new JsonpResult{
-                Data = orgVm, 
+            return new JsonpResult
+            {
+                Data = new { Results = orgVm },
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
