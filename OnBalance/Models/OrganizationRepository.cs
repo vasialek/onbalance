@@ -9,11 +9,6 @@ namespace OnBalance.Models
 {
     public class OrganizationRepository : BaseRepository
     {
-        /// <summary>
-        /// Property to work with DB
-        /// </summary>
-        protected DataContext _db = null;
-
         //public OrganizationRepository()
         //    : base(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString())
         //{
@@ -30,14 +25,13 @@ namespace OnBalance.Models
         {
             get
             {
-                return _db.GetTable<Organization>()
-                    .Where(x => x.StatusId != 0);
+                return _dataContext.GetTable<Organization>();
             }
         }
 
         public void Save(Organization model)
         {
-            var db = _db.GetTable<Organization>();
+            var db = _dataContext.GetTable<Organization>();
             db.InsertOnSubmit(model);
             db.Context.SubmitChanges();
         }

@@ -9,6 +9,7 @@ using OnBalance.Models;
 using System.Text;
 using System.Text.RegularExpressions;
 using OnBalance.Helpers;
+using OnBalance.ViewModels.Balance;
 
 namespace OnBalance.Controllers
 {
@@ -29,38 +30,41 @@ namespace OnBalance.Controllers
         //
         // GET: /balance/getorganizationstructure/100002
 
-        public JsonpResult GetOrganizationStructure(int id)
+        public JsonpResult GetOrganizationSchema(int id)
         {
-            ViewModels.Balance.OrganizationStructureViewModel orgVm = new ViewModels.Balance.OrganizationStructureViewModel();
+            Log.InfoFormat("Preparing JSON schema for main page (shops, categories)");
+            OrganizationRepository dbOrg = new OrganizationRepository();
+            OrganizationSchemaViewModel orgVm = new OrganizationSchemaViewModel();
+
             orgVm.Id = 100002;
             orgVm.Name = "GJ";
-            orgVm.ReceivedAt = OnBalance.Helpers.Common.GetTimestamp(DateTime.Now);
+            orgVm.ReceivedAt = Common.GetTimestamp(DateTime.Now);
 
-            var categories = new List<ViewModels.Balance.CategoryStructureViewModel>();
+            var categories = new List<CategoryStructureViewModel>();
             int catId = 1000;
             
-            categories.Add(new ViewModels.Balance.CategoryStructureViewModel
+            categories.Add(new CategoryStructureViewModel
             {
                 Id = ++catId,
                 Name = "Avalyne",
                 Sizes = new string[] { "33", "34", "35", "35,5", "36", "36,5", "37", "37,5", "38", "38,5", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "45,5", "46", "46.5", "47", "47,5", "48", "48,5", "49", "49.5", "50", "50,5", "51", "52", "52,5", "53", "54" }
             });
 
-            categories.Add(new ViewModels.Balance.CategoryStructureViewModel
+            categories.Add(new CategoryStructureViewModel
             {
                 Id = ++catId,
                 Name = "Apranga vyrams ir apranga moteris",
                 Sizes = new string[] { "XXS", " XS", " S", " M", " L", " XL", " XXL", " XXXL" }
             });
 
-            categories.Add(new ViewModels.Balance.CategoryStructureViewModel
+            categories.Add(new CategoryStructureViewModel
             {
                 Id = ++catId,
                 Name = "Apranga vaikams",
                 Sizes = new string[] { "122cm", "128", "134", "140", "152", "158", "164", "170", "176" }
             });
 
-            categories.Add(new ViewModels.Balance.CategoryStructureViewModel
+            categories.Add(new CategoryStructureViewModel
             {
                 Id = ++catId,
                 Name = "Kepures (priedai)",
@@ -74,14 +78,25 @@ namespace OnBalance.Controllers
             //    Sizes = new string[] { "122cm", "128", "134", "140", "152", "158", "164", "170", "176" }
             //});
 
-            categories.Add(new ViewModels.Balance.CategoryStructureViewModel
+            categories.Add(new CategoryStructureViewModel
             {
                 Id = ++catId,
                 Name = "Kamuoliai (kita)",
                 Sizes = new string[] { "1", "2", "3", "4", "5", "6", "7" }
             });
 
+            List<OrganizationViewModel> shops = new List<OrganizationViewModel>();
+            foreach(var item in dbOrg.Organizations.Where(x => x.StatusId == (byte)Status.Approved))
+            {
+                shops.Add(new OrganizationViewModel
+                {
+                    Id = item.Id,
+                    Name = item.Name
+                });
+            }
+
             orgVm.Categories = categories.ToArray();
+            orgVm.Shops = shops;
             return new JsonpResult
             {
                 Data = new { Results = orgVm },

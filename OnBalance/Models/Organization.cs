@@ -8,7 +8,7 @@ using System.Web.Mvc;
 namespace OnBalance.Models
 {
 
-    [Table(Name = "Organization")]
+    [Table(Name = "organization")]
     [Bind]
     public class Organization
     {
@@ -17,7 +17,7 @@ namespace OnBalance.Models
         public int Id;
 
         [Column(Name = "status_id")]
-        public Status StatusId;
+        public byte StatusId;
 
         [Column(Name = "name")]
         public string Name;

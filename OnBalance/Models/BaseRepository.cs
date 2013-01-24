@@ -9,10 +9,14 @@ namespace OnBalance.Models
 {
     public class BaseRepository/* : DataContext */
     {
+        /// <summary>
+        /// Property to work with DB
+        /// </summary>
+        protected DataContext _dataContext = null;
 
         public BaseRepository()
         {
-            //_db = new DataContext(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString());
+            _dataContext = new DataContext(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString());
         }
 
     }

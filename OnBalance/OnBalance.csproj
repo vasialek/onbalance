@@ -111,7 +111,7 @@
     <Compile Include="MyMessages.cs" />
     <Compile Include="ObLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\Balance\OrganizationStructureViewModel.cs" />
+    <Compile Include="ViewModels\Balance\OrganizationSchemaViewModel.cs" />
     <Compile Include="ViewModels\PendingChangesViewModel.cs" />
     <Compile Include="ViewModels\Products\ProductsInPosViewModel.cs" />
     <Compile Include="ViewModels\SizeConvertorViewModel.cs" />

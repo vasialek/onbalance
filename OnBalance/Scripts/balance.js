@@ -8,15 +8,16 @@ var gColumnsDefinitions = [];
 YAHOO.OnBalance = {
     uid: "",
     currentPosId: 100002,
+    currentCategoryId: 0,
     localChanges: [],
     availableCellColors: [],
     products: [],
     newProduct: {
         name: "",
         code: "",
-        price_minor: 0,
+        price_minor: 0
         // Sizes
-        35: 0, 36: 0, 37: 0, 38: 0, 39: 0, 40: 0, 41: 0, 42: 0, 42.5: 0, 43: 0, 44: 0, 44.5: 0, 45: 0, 46: 0, 46.5: 0, 47: 0, 48: 0, 49: 0, 49.5: 0, 50: 0, 51: 0, 52: 0, 53: 0, 54: 0, 54.5: 0, 55: 0
+//        35: 0, 36: 0, 37: 0, 38: 0, 39: 0, 40: 0, 41: 0, 42: 0, 42.5: 0, 43: 0, 44: 0, 44.5: 0, 45: 0, 46: 0, 46.5: 0, 47: 0, 48: 0, 49: 0, 49.5: 0, 50: 0, 51: 0, 52: 0, 53: 0, 54: 0, 54.5: 0, 55: 0
     },
     organizations: [
         {
@@ -56,10 +57,23 @@ YAHOO.OnBalance = {
 //                        "Avalyne", "Apranga vyrams ir apranga moteris", "Apranga vaikams", {text: "Kepures (priedai)", onclick: { fn: onMenuItemClick } }
                 ]
             }
+        },
+        {
+            text: "Pending changes"
         }
     ],
     contextMenu: []
 };
+
+/**
+ * Entry point
+ */
+function onPageLoaded()
+{
+    loadMainSchema(function(){
+        InitializeBalanceGrid();
+    });
+}
 
 function isAuthorized()
 {
@@ -96,6 +110,24 @@ function CreateTableBySchema(oSchema)
     return oTable;
 }
 
+/**
+ * Returns array of sizes for specified category
+ * @param categoryId int
+ * @return Array
+ */
+function getDetailsForCategory(categoryId)
+{
+    for(var i = 0; i < YAHOO.OnBalance.organizations[0].Categories.length; i++)
+    {
+        if( YAHOO.OnBalance.organizations[0].Categories[i].id == categoryId )
+        {
+            return YAHOO.OnBalance.organizations[0].Categories[i].sizes;
+        }
+    }
+
+    return [];
+}
+
 function CreateTable(categoryId)
 {
     console.log("Creating table for POS #" + categoryId);
@@ -104,16 +136,16 @@ function CreateTable(categoryId)
         { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
         { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
     ];
-    var details = [];
-    switch(categoryId)
-    {
-        case 100001:
-            details = ["35", "36", "37", "38", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "46", "46.5", "47", "48", "49", "49.5", "50", "51", "52", "53", "54", "54.5", "55"];
-            break;
-        case 100002:
-            details = ["122", "128", "134", "140", "152", "158", "164", "170", "176"];
-            break;
-    }
+    var details = getDetailsForCategory(categoryId);
+//    switch(categoryId)
+//    {
+//        case 100001:
+//            details = ["35", "36", "37", "38", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "46", "46.5", "47", "48", "49", "49.5", "50", "51", "52", "53", "54", "54.5", "55"];
+//            break;
+//        case 100002:
+//            details = ["122", "128", "134", "140", "152", "158", "164", "170", "176"];
+//            break;
+//    }
     for(var i = 0; i < details.length; i++)
     {
         gResultFields[gResultFields.length] = { key: arDetails[i] };
@@ -131,9 +163,9 @@ function CreateTable(categoryId)
 function InitializeBalanceGrid()
 {
     securePage();
-    loadMainSchema();
 //    createApplicationMenu(YAHOO.OnBalance.organizations[0][0]);
     var posId = YAHOO.OnBalance.currentPosId;
+    YAHOO.OnBalance.currentCategoryId = YAHOO.OnBalance.organizations[0].Categories[0].id;
     gDataSource = new YAHOO.util.ScriptNodeDataSource("http://online-balance.com/pradmin/get/");
     gResultFields = [
         { key: "name" },
@@ -196,7 +228,8 @@ function InitializeBalanceGrid()
         };
     });
     var contextMenu = new YAHOO.widget.ContextMenu("OnBalanceContextMenu", {
-        trigger: gTable.getTbodyEl()
+        trigger: document
+//        trigger: gTable.getTbodyEl()
     });
     contextMenu.addItems(YAHOO.OnBalance.contextMenu);
     contextMenu.render();
@@ -209,8 +242,13 @@ function InitializeBalanceGrid()
     // Add product button
     YAHOO.util.Event.addListener("AddProductButton", "click",function ()
     {
-        console.log("Adding new product...");
+        console.log("Adding new product for category #" + YAHOO.OnBalance.currentCategoryId);
         var record = YAHOO.widget.DataTable._cloneObject(YAHOO.OnBalance.newProduct);
+        var details = getDetailsForCategory(YAHOO.OnBalance.currentCategoryId);
+        for(var i = 0; i < details.length; i++)
+        {
+            record[details[i]] = 0;
+        }
         record.row = record.row + 1;
         gTable.addRow(record);
     },this, true);
@@ -240,11 +278,11 @@ function preparePendingDialog()
     YAHOO.util.Event.addListener("hide", "click", YAHOO.OnBalance.PendingDialog.hide, YAHOO.OnBalance.PendingDialog, true);
 }
 
-function loadDataToTable(posId)
+function loadDataToTable(posId, categoryId)
 {
-    gTable = CreateTable(posId);
+    gTable = CreateTable(categoryId);
     gTable.load({
-        request: "?posid=" + posId
+        request: "?posid=" + posId + "&categoryid=" + categoryId
 //        callback: {
 //            failure: function()
 //            {
@@ -404,10 +442,10 @@ function displayPendingChangesDialog(o)
 /**
  * Loads from OBS schema - POSes ant theirs categories
  */
-function loadMainSchema()
+function loadMainSchema(successCallback)
 {
     var dsCallback = {
-        failure: function()
+        failure: function(oRequest, oParsedResponse, oPayload)
         {
             console.log("failed to get main schema!");
         },
@@ -429,11 +467,14 @@ function loadMainSchema()
             console.log(YAHOO.OnBalance.organizations[0]);
 
             createApplicationMenu();
+
+            console.log("Calling success loaded page schema callback...");
+            successCallback();
         }
     };
     var posId = YAHOO.OnBalance.currentPosId;
-    var ds = new YAHOO.util.ScriptNodeDataSource("http://localhost:52293/balance/getorganizationstructure/" + posId);
-//    var ds = new YAHOO.util.LocalDataSource(jsonData);
+//    var ds = new YAHOO.util.ScriptNodeDataSource("http://localhost:52293/balance/getorganizationschema/" + posId);
+    var ds = new YAHOO.util.ScriptNodeDataSource("http://www.online-balance.com/balance/getorganizationschema/" + posId);
     ds.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
     ds.responseSchema = {
         resultsList: "Results.Categories",
@@ -462,7 +503,13 @@ function createApplicationMenu(oSchema)
     {
         YAHOO.OnBalance.applicationMenu[1].submenu.itemdata[i] = {
             text: YAHOO.OnBalance.organizations[0].Categories[i].name,
-            onclick: { fn: function(){ CreateTableBySchema( YAHOO.OnBalance.organizations[0].Categories[this.index]); } }
+            onclick: { fn: function(){
+                console.log("Clicked on category at position: " + this.index);
+                YAHOO.OnBalance.currentCategoryId = YAHOO.OnBalance.organizations[0].Categories[this.index].id;
+//                CreateTableBySchema(YAHOO.OnBalance.organizations[0].Categories[this.index]);
+                gTable = CreateTable(YAHOO.OnBalance.currentCategoryId);
+                console.log(YAHOO.OnBalance);
+            }}
         }
     }
 
