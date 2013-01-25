@@ -9,6 +9,12 @@ YAHOO.OnBalance = {
     uid: "",
     currentPosId: 100002,
     currentCategoryId: 0,
+//    baseUrl: "http://www.online-balance.com/",
+    baseUrl: "http://localhost:52293/",
+    uiElements: {
+        // Displays current path GJ->POS1
+        lblPath: null
+    },
     localChanges: [],
     availableCellColors: [],
     products: [],
@@ -47,19 +53,32 @@ YAHOO.OnBalance = {
         },
         {
             text: "Categories",
-            submenu: {
-                id: "MenuCategories",
-                itemdata: [
-                    { text: "Avalyne", onclick: { fn: function(){ console.log(YAHOO.OnBalance.organizations); CreateTableBySchema( YAHOO.OnBalance.organizations[0].categories[this.index]); } }, keylistener: { ctrl: true, keys: 49 } },
-                    { text: "Apranga vyrams ir apranga moteris", onclick: { fn: function(){ CreateTableBySchema( YAHOO.OnBalance.organizations[0].categories[this.index]); } }, keylistener: { ctrl: true, keys: 50 } },
-                    { text: "Apranga vaikams", onclick: { fn: function(){ CreateTableBySchema( YAHOO.OnBalance.organizations[0].categories[this.index]); } }, keylistener: { ctrl: true, keys: 51 } },
-//                    { text: "Kepures (priedai)", onclick: { fn: function(){ CreateTableBySchema( YAHOO.OnBalance.organizations.categories[this.index]); } }, keylistener: { ctrl: true, keys: 52 } }
-//                        "Avalyne", "Apranga vyrams ir apranga moteris", "Apranga vaikams", {text: "Kepures (priedai)", onclick: { fn: onMenuItemClick } }
-                ]
-            }
+            submenu: { id: "MenuCategories", itemdata: []}
         },
         {
-            text: "Pending changes"
+            text: "Actions",
+            submenu: {
+                id: "MenuActions",
+                itemdata: [
+                    {
+                        text: "Approve changes...",
+                        onclick: {
+                            fn: function(){
+                                console.log("Approve changes is clicked");
+                            }
+                        }
+                    },
+                    {
+                        text: "Refresh",
+                        onclick: {
+                            fn: function(){
+                                console.log("Refresh is clicked");
+                                loadDataToTable(YAHOO.OnBalance.currentPosId, YAHOO.OnBalance.currentCategoryId);
+                            }
+                        }
+                    }
+                ]
+            }
         }
     ],
     contextMenu: []
@@ -71,7 +90,7 @@ YAHOO.OnBalance = {
 function onPageLoaded()
 {
     loadMainSchema(function(){
-        InitializeBalanceGrid();
+        initializeBalanceGrid();
     });
 }
 
@@ -88,7 +107,7 @@ function securePage()
     }
 }
 
-function CreateTableBySchema(oSchema)
+function createTableBySchema(oSchema)
 {
     console.log("Creating table by schema...");
     var columnDefinitions = [
@@ -110,6 +129,16 @@ function CreateTableBySchema(oSchema)
     return oTable;
 }
 
+function displayCurrentPath()
+{
+    console.log("Dislaying current path...");
+    if( YAHOO.OnBalance.uiElements.lblPath != null )
+    {
+        var c = getCategoryById(YAHOO.OnBalance.currentCategoryId);
+        YAHOO.OnBalance.uiElements.lblPath.innerText = c == null ? "GJ" : c.name;
+    }
+}
+
 /**
  * Returns array of sizes for specified category
  * @param categoryId int
@@ -117,18 +146,29 @@ function CreateTableBySchema(oSchema)
  */
 function getDetailsForCategory(categoryId)
 {
+    var category = getCategoryById(categoryId);
+    return category == null ? [] : category.sizes;
+}
+
+/**
+ * Returns category schema by ID or null
+ * @param categoryId int
+ * @return {*}
+ */
+function getCategoryById(categoryId)
+{
     for(var i = 0; i < YAHOO.OnBalance.organizations[0].Categories.length; i++)
     {
         if( YAHOO.OnBalance.organizations[0].Categories[i].id == categoryId )
         {
-            return YAHOO.OnBalance.organizations[0].Categories[i].sizes;
+            return YAHOO.OnBalance.organizations[0].Categories[i];
         }
     }
 
-    return [];
+    return null;
 }
 
-function CreateTable(categoryId)
+function createTable(categoryId)
 {
     console.log("Creating table for POS #" + categoryId);
     gColumnsDefinitions = [
@@ -160,13 +200,17 @@ function CreateTable(categoryId)
     return oTable;
 }
 
-function InitializeBalanceGrid()
+function initializeBalanceGrid()
 {
     securePage();
 //    createApplicationMenu(YAHOO.OnBalance.organizations[0][0]);
     var posId = YAHOO.OnBalance.currentPosId;
     YAHOO.OnBalance.currentCategoryId = YAHOO.OnBalance.organizations[0].Categories[0].id;
-    gDataSource = new YAHOO.util.ScriptNodeDataSource("http://online-balance.com/pradmin/get/");
+
+    // Set usefull UI elements
+    YAHOO.OnBalance.uiElements.lblPath = document.getElementById("CurrentPath");
+
+    gDataSource = new YAHOO.util.ScriptNodeDataSource(YAHOO.OnBalance.baseUrl + "balance/get/");
     gResultFields = [
         { key: "name" },
         { key: "code" },
@@ -176,7 +220,7 @@ function InitializeBalanceGrid()
         resultsList: "data",
         field: gResultFields
     }
-    gTable = CreateTable(posId);
+    gTable = createTable(posId);
 /*
     gTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", gColumnsDefinitions, gDataSource, {
         initialLoad: false,
@@ -228,8 +272,8 @@ function InitializeBalanceGrid()
         };
     });
     var contextMenu = new YAHOO.widget.ContextMenu("OnBalanceContextMenu", {
-        trigger: document
-//        trigger: gTable.getTbodyEl()
+//        trigger: document
+        trigger: gTable.getTbodyEl()
     });
     contextMenu.addItems(YAHOO.OnBalance.contextMenu);
     contextMenu.render();
@@ -252,6 +296,8 @@ function InitializeBalanceGrid()
         record.row = record.row + 1;
         gTable.addRow(record);
     },this, true);
+
+    displayCurrentPath();
 }
 
 function preparePendingDialog()
@@ -280,7 +326,7 @@ function preparePendingDialog()
 
 function loadDataToTable(posId, categoryId)
 {
-    gTable = CreateTable(categoryId);
+    gTable = createTable(categoryId);
     gTable.load({
         request: "?posid=" + posId + "&categoryid=" + categoryId
 //        callback: {
@@ -474,7 +520,7 @@ function loadMainSchema(successCallback)
     };
     var posId = YAHOO.OnBalance.currentPosId;
 //    var ds = new YAHOO.util.ScriptNodeDataSource("http://localhost:52293/balance/getorganizationschema/" + posId);
-    var ds = new YAHOO.util.ScriptNodeDataSource("http://www.online-balance.com/balance/getorganizationschema/" + posId);
+    var ds = new YAHOO.util.ScriptNodeDataSource(YAHOO.OnBalance.baseUrl + "balance/getorganizationschema/" + posId);
     ds.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
     ds.responseSchema = {
         resultsList: "Results.Categories",
@@ -506,9 +552,10 @@ function createApplicationMenu(oSchema)
             onclick: { fn: function(){
                 console.log("Clicked on category at position: " + this.index);
                 YAHOO.OnBalance.currentCategoryId = YAHOO.OnBalance.organizations[0].Categories[this.index].id;
-//                CreateTableBySchema(YAHOO.OnBalance.organizations[0].Categories[this.index]);
-                gTable = CreateTable(YAHOO.OnBalance.currentCategoryId);
-                console.log(YAHOO.OnBalance);
+//                createTableBySchema(YAHOO.OnBalance.organizations[0].Categories[this.index]);
+                gTable = createTable(YAHOO.OnBalance.currentCategoryId);
+//                console.log(YAHOO.OnBalance);
+                displayCurrentPath();
             }}
         }
     }

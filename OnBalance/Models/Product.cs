@@ -51,7 +51,10 @@ namespace OnBalance.Models
 
         public Dictionary<string, int> GetQuantityForAllSizes()
         {
-            return new Dictionary<string, int>();
+            Dictionary<string, int> ar = new Dictionary<string, int>();
+            var sizes = new ProductRepository().GetAvailableSizes(this.category_id);
+            sizes.ToList().ForEach(x => ar.Add(x, 0));
+            return ar;
         }
 
     }

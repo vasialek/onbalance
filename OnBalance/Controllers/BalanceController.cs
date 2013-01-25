@@ -21,10 +21,47 @@ namespace OnBalance.Controllers
 
         public ActionResult Get()
         {
-            string token = Request["_token"];
-            return Json(new{
-                Status = 1
-            }, JsonRequestBehavior.AllowGet);
+            // ID of POS must be!
+            int posId = int.Parse(Request["posid"]);
+            Log.InfoFormat("Loading products for POS ID #{0}...", posId);
+
+            int categoryId = 0;
+            if( int.TryParse(Request["categoryid"], out categoryId) )
+            {
+                Log.InfoFormat("  Applying filter by category ID: {0}", categoryId);
+            }
+
+            ProductRepository db = new ProductRepository();
+            PosRepository dbPos = new PosRepository();
+
+            StringBuilder sbMain = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
+            var products = db.Items
+                .Where(x => x.pos_id == posId && x.status_id == (byte)Status.Approved);
+            if( categoryId > 0 )
+            {
+                //products = products.Where(x => x.category_id == categoryId);
+            }
+            products = products.Take(200);
+            Log.InfoFormat("Got {0} products for POS ID #{1}", products == null ? "NULL" : products.Count().ToString(), posId);
+            //var shops = dbPos.Items.ToList();
+            string callback = Request["callback"];
+
+            // Returns JSON array of all products for specified POS
+
+            foreach(var p in products)
+            {
+
+                sb.Clear();
+                foreach(var kvp in p.GetQuantityForAllSizes())
+                {
+                    sb.AppendFormat(", '{0}': {1}", kvp.Key, kvp.Value);
+                }
+
+                sbMain.AppendFormat("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3} {4} }},", p.name, p.internal_code, p.price, 0, sb.ToString());
+            }
+
+            return Content(string.Format("{0}({{'data': [ {1} ]}})", callback, sbMain.ToString()));
         }
 
         //
@@ -35,6 +72,7 @@ namespace OnBalance.Controllers
             Log.InfoFormat("Preparing JSON schema for main page (shops, categories)");
             OrganizationRepository dbOrg = new OrganizationRepository();
             OrganizationSchemaViewModel orgVm = new OrganizationSchemaViewModel();
+            ProductRepository dbProduct = new ProductRepository();
 
             orgVm.Id = 100002;
             orgVm.Name = "GJ";
@@ -47,28 +85,28 @@ namespace OnBalance.Controllers
             {
                 Id = ++catId,
                 Name = "Avalyne",
-                Sizes = new string[] { "33", "34", "35", "35,5", "36", "36,5", "37", "37,5", "38", "38,5", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "45,5", "46", "46.5", "47", "47,5", "48", "48,5", "49", "49.5", "50", "50,5", "51", "52", "52,5", "53", "54" }
+                Sizes = dbProduct.GetAvailableSizes(catId)
             });
 
             categories.Add(new CategoryStructureViewModel
             {
                 Id = ++catId,
                 Name = "Apranga vyrams ir apranga moteris",
-                Sizes = new string[] { "XXS", " XS", " S", " M", " L", " XL", " XXL", " XXXL" }
+                Sizes = dbProduct.GetAvailableSizes(catId)
             });
 
             categories.Add(new CategoryStructureViewModel
             {
                 Id = ++catId,
                 Name = "Apranga vaikams",
-                Sizes = new string[] { "122cm", "128", "134", "140", "152", "158", "164", "170", "176" }
+                Sizes = dbProduct.GetAvailableSizes(catId)
             });
 
             categories.Add(new CategoryStructureViewModel
             {
                 Id = ++catId,
                 Name = "Kepures (priedai)",
-                Sizes = new string[] { "OSFC", "OSFY", "OSFW", "OSFM", "OSFL", "MISC" }
+                Sizes = dbProduct.GetAvailableSizes(catId)
             });
 
             //categories.Add(new ViewModels.Balance.CategoryStructureViewModel
@@ -82,7 +120,7 @@ namespace OnBalance.Controllers
             {
                 Id = ++catId,
                 Name = "Kamuoliai (kita)",
-                Sizes = new string[] { "1", "2", "3", "4", "5", "6", "7" }
+                Sizes = dbProduct.GetAvailableSizes(catId)
             });
 
             List<OrganizationViewModel> shops = new List<OrganizationViewModel>();
