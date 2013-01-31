@@ -65,6 +65,7 @@ YAHOO.OnBalance = {
                         onclick: {
                             fn: function(){
                                 console.log("Approve changes is clicked");
+                                displayPendingChangesDialog(null);
                             }
                         }
                     },
@@ -475,14 +476,55 @@ function formatLocalChangesForSubmit()
 function displayPendingChangesDialog(o)
 {
     console.log("Displaying pending changes...");
-    var dlg = YAHOO.OnBalance.PendingDialog;
-    var s = YAHOO.OnBalance.localChanges.length > 0 ? "" : "@OnBalance.MyMessages.Balancer.NoPendingLocalChanges";
-    for( var i = 0; i < YAHOO.OnBalance.localChanges.length; i++ )
-    {
-        s += "<label>" + YAHOO.OnBalance.localChanges[i].name + ", " + YAHOO.OnBalance.localChanges[i].price + "</label>";
-    }
-    document.getElementById("PendingChangesDiv").innerHTML = formatLocalChangesForSubmit();
-    dlg.show();
+    var columnDefinitions = [
+        { label: "Approve", formatter: "checkbox"/*, editor: new YAHOO.widget.Checkbox()*/},
+        { key: "pr", label: "Price" },
+        { key: "name", label: "Name" }
+    ];
+
+    var oDsCallback = {
+        success: function(oRequest, oParsedResponse, oPayload)
+        {
+            console.log("Got data from server...");
+        },
+        failure: function(oRequest, oParsedResponse, oPayload)
+        {
+            alert("Error getting data!");
+        }
+    };
+
+    var oDataSource = new YAHOO.util.ScriptNodeDataSource("http://gjsportland.com/index.php/lt/balance/get/", oDsCallback);
+//    oDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+    oDataSource.responseSchema = {
+        //results: "",
+        fields: ["uid", "code", "pr", "posid", "name", "sizes"]
+    };
+
+    oTable = new YAHOO.widget.DataTable("PendingChangesTable", columnDefinitions, oDataSource, {
+        caption: "Pending changes",
+        height: "5em",
+        initialLoad: {
+            request: "?_token=123456"
+        }
+    });
+
+    var panel1 = new YAHOO.widget.Dialog("panel1", {
+        visible: false,
+        close: true,
+        fixedcenter: true,
+        buttons: [
+            { text: "Approve", handler: function(){
+                console.log("Approving pending changes...");
+                this.cancel();
+            } },
+            { text: "Cancel", isDefault: true, handler: function(){
+                console.log("Cancelling pending changes...");
+                this.cancel();
+            } }
+        ]
+    });
+    panel1.render();
+    panel1.show();
 }
 
 /**
