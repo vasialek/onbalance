@@ -9,8 +9,8 @@ YAHOO.OnBalance = {
     uid: "",
     currentPosId: 100002,
     currentCategoryId: 0,
-//    baseUrl: "http://www.online-balance.com/",
-    baseUrl: "http://localhost:52293/",
+    baseUrl: "http://www.online-balance.com/",
+//    baseUrl: "http://localhost:52293/",
     uiElements: {
         // Displays current path GJ->POS1
         lblPath: null
@@ -106,6 +106,20 @@ function securePage()
     {
         console.log("Login, please!");
     }
+}
+
+function createToolbar()
+{
+    var tbRed = new YAHOO.widget.Button({ label:"Red", id:"idBtnRed", container:"idToolbar", title:'Make red' });
+    tbRed.addClass('btn_red');
+    tbRed.on("click", function(){alert("Red...");}, null/*myDT*/);
+    var tbOrange = new YAHOO.widget.Button({ label:"Orange", id:"idBtnRed", container:"idToolbar", title:'Make Orange' });
+    tbOrange.addClass('btn_red');
+    tbOrange.on("click", function(){alert("Orange...");}, null/*myDT*/);
+    var tbGreen = new YAHOO.widget.Button({ label:"Green", id:"idBtnGreen", container:"idToolbar", title:'Make Green' });
+    tbGreen.addClass('btn_red');
+    tbGreen.on("click", function(){alert("Green...");}, null/*myDT*/);
+
 }
 
 function createTableBySchema(oSchema)
@@ -222,6 +236,8 @@ function initializeBalanceGrid()
         field: gResultFields
     }
     gTable = createTable(posId);
+
+    createToolbar();
 /*
     gTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", gColumnsDefinitions, gDataSource, {
         initialLoad: false,
