@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Balance System</title>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css" />
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/datatable/assets/skins/sam/datatable.css">
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/menu/assets/skins/sam/menu.css">
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.9.0/build/button/assets/skins/sam/button.css">
+    <!--<link href="http://www.online-balance.com/css/onbalance.css" rel="stylesheet" type="text/css" />-->
+    <script src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+    <script src="http://online-balance.com/scripts/balance.js"></script>
+    <!--<script src="../onbalance/OnBalance/Scripts/balance.js"></script>-->
+
+    <style type="text/css">
+        .yui-skin-sam tr.yui-dt-odd.red,
+        .yui-skin-sam tr.yui-dt-even.red
+        {
+            background-color: #f00;
+        }
+        .yui-skin-sam tr.yui-dt-odd.green,
+        .yui-skin-sam tr.yui-dt-even.green
+        {
+            background-color: #0f0;
+        }
+        .yui-skin-sam tr.yui-dt-odd.blue,
+        .yui-skin-sam tr.yui-dt-even.blue
+        {
+            background-color: #00f;
+        }
+        .yui-dt table
+        {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body class="yui-skin-sam">
+
+    <div id="PendingChangesTable" style="width: 30em;"></div>
+
+	<!-- <div id="CurrentPath">GJ</div> -->
+	<fieldset>
+		<span class="yui-button yui-push-button">
+			<span class="first-child">
+				<button>Add</button>
+			</span>
+		</span>
+		<span class="yui-button yui-push-button">
+			<span class="first-child">
+				<button onclick="alert('No row is selected!');">Delete</button>
+			</span>
+		</span>
+		<span>&nbsp;&nbsp;&nbsp;</span>
+		<span class="yui-button yui-push-button">
+			<span class="first-child">
+				<button onclick="alert('No cell is selected!');" style="color: #f00;">Red</button>
+			</span>
+		</span>
+		<span class="yui-button yui-push-button">
+			<span class="first-child">
+				<button onclick="alert('No cell is selected!');" style="color: #f93;">Orange</button>
+			</span>
+		</span>
+		<span class="yui-button yui-push-button">
+			<span class="first-child">
+				<button onclick="alert('No cell is selected!');" style="color: #0f0;">Green</button>
+			</span>
+		</span>
+	</fieldset>
+
+    <div id="MainBalanceDiv"></div>
+    <div id="OnBalanceContextMenu"></div>
+
+
+
+<script type="text/javascript">
+
+    window.onload = function()
+    {
+        var loader = new YAHOO.util.YUILoader({
+            require: ["datatable", "menu", "datasource", "json", "container", "connection", "button"]
+            , onSuccess: function()
+            {
+                onPageLoaded();
+            }
+        });
+
+        loader.insert();
+
+    }
+
+</script>
+
+</body>
+</html>
