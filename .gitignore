@@ -5,12 +5,13 @@ doc/jsdatagrids/
 OnBalance/bin/
 OnBalance/obj/
 OnBalance/Scripts/yui/
+OnBalance/Scripts/test*.*
 OnBalance/App_Data/
 OnBalance/logs/
 OnBalance/ConnectionString.config
 *.sln
 *.bak
-OnBalance/test*.htm
+OnBalance/test*.*
 OnBalance/log4net.xml
 OnBalance/OnBalance.csproj.user
 

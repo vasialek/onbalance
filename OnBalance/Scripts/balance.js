@@ -122,28 +122,6 @@ function createToolbar()
 
 }
 
-function createTableBySchema(oSchema)
-{
-    console.log("Creating table by schema...");
-    var columnDefinitions = [
-        { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
-        { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
-        { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
-    ];
-    for(var i = 0; i < oSchema.sizes.length; i++)
-    {
-//        gResultFields[gResultFields.length] = { key: arDetails[i] };
-        columnDefinitions[columnDefinitions.length] = { key: oSchema.sizes[i], label: oSchema.sizes[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
-    }
-
-    oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", columnDefinitions, gDataSource, {
-        initialLoad: false,
-        height: "50em"
-    });
-
-    return oTable;
-}
-
 function displayCurrentPath()
 {
     console.log("Dislaying current path...");
@@ -186,31 +164,57 @@ function getCategoryById(categoryId)
 function createTable(categoryId)
 {
     console.log("Creating table for POS #" + categoryId);
-    gColumnsDefinitions = [
+    arColumnsDefinitions = [
         { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
         { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
         { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
     ];
     var details = getDetailsForCategory(categoryId);
-//    switch(categoryId)
-//    {
-//        case 100001:
-//            details = ["35", "36", "37", "38", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "46", "46.5", "47", "48", "49", "49.5", "50", "51", "52", "53", "54", "54.5", "55"];
-//            break;
-//        case 100002:
-//            details = ["122", "128", "134", "140", "152", "158", "164", "170", "176"];
-//            break;
-//    }
     for(var i = 0; i < details.length; i++)
     {
         gResultFields[gResultFields.length] = { key: arDetails[i] };
-        gColumnsDefinitions[gColumnsDefinitions.length] = { key: details[i], label: details[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
+        arColumnsDefinitions[arColumnsDefinitions.length] = { key: details[i], label: details[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
     }
 
-    oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", gColumnsDefinitions, gDataSource, {
+    oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", arColumnsDefinitions, gDataSource, {
         initialLoad: false,
         height: "50em"
     });
+
+    console.log("Created table:");
+    console.log(oTable);
+
+    oTable.subscribe("cellMouseoverEvent", highlightEditableCell);
+    oTable.subscribe("cellClickEvent", oTable.onEventShowCellEditor); 
+
+    var onContextMenuClick = function(eventType, oArgs, myDataTable)
+    {
+        // Extract which TR element triggered the context menu
+        var elRow = this.contextEventTarget;
+        // Index of clicked
+        var task = oArgs[1];
+        elRow = myDataTable.getTrEl(elRow);
+        var styles = ["red", "green", "darkyellow", "cyan", "blue"];
+        styles.forEach(function(el, index){
+            YAHOO.util.Dom.removeClass(elRow, el);
+        });
+        YAHOO.util.Dom.addClass(elRow, styles[task.index]);
+    };
+
+    var styles = ["red", "green", "darkyellow", "cyan", "blue"];
+    YAHOO.OnBalance.contextMenu = [];
+    styles.forEach(function(el, index){
+        YAHOO.OnBalance.contextMenu[YAHOO.OnBalance.contextMenu.length] = {
+            text: "<span class='cm_" + el + "'>" + el + "</span>"
+        };
+    });
+    var contextMenu = new YAHOO.widget.ContextMenu("OnBalanceContextMenu", {
+//        trigger: document
+        trigger: oTable.getTbodyEl()
+    });
+    contextMenu.addItems(YAHOO.OnBalance.contextMenu);
+    contextMenu.render();
+    contextMenu.clickEvent.subscribe(onContextMenuClick, oTable);
 
     return oTable;
 }
@@ -235,15 +239,12 @@ function initializeBalanceGrid()
         resultsList: "data",
         field: gResultFields
     }
+    
+    createToolbar();
+
+/*
     gTable = createTable(posId);
 
-    createToolbar();
-/*
-    gTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", gColumnsDefinitions, gDataSource, {
-        initialLoad: false,
-        height: "50em"
-    });
-*/
     gTable.subscribe("cellMouseoverEvent", highlightEditableCell);
     gTable.subscribe("cellMouseoutEvent", gTable.onEventUnhighlightCell);
     gTable.subscribe("cellClickEvent", gTable.onEventShowCellEditor);
@@ -258,50 +259,11 @@ function initializeBalanceGrid()
     {
         onProductChanged(record);
     });
-    gTable.on("initEvent",function()
-    {
-//        gTable.setAttributes({width: "100%"},true);
-//        alert("100%");
-    });
-
-    var onContextMenuClick = function(eventType, oArgs, myDataTable)
-    {
-        // Extract which TR element triggered the context menu
-        var elRow = this.contextEventTarget;
-        // Index of clicked
-        var task = oArgs[1];
-        console.log("Task:");
-        console.log(task);
-        elRow = myDataTable.getTrEl(elRow);
-        console.log("El row:");
-        console.log(elRow);
-        var styles = ["red", "green", "darkyellow", "cyan", "blue"];
-        styles.forEach(function(el, index){
-            YAHOO.util.Dom.removeClass(elRow, el);
-        });
-        YAHOO.util.Dom.addClass(elRow, styles[task.index]);
-    };
-
-    var styles = ["red", "green", "darkyellow", "cyan", "blue"];
-    styles.forEach(function(el, index){
-        YAHOO.OnBalance.contextMenu[YAHOO.OnBalance.contextMenu.length] = {
-            text: "<span class='cm_" + el + "'>" + el + "</span>"
-        };
-    });
-    var contextMenu = new YAHOO.widget.ContextMenu("OnBalanceContextMenu", {
-//        trigger: document
-        trigger: gTable.getTbodyEl()
-    });
-    contextMenu.addItems(YAHOO.OnBalance.contextMenu);
-    contextMenu.render();
-    contextMenu.clickEvent.subscribe(onContextMenuClick, gTable);
-
-//    loadDataToTable(posId);
-
+*/
     preparePendingDialog();
 
     // Add product button
-    YAHOO.util.Event.addListener("AddProductButton", "click",function ()
+    YAHOO.util.Event.addListener("AddProductButton", "click", function ()
     {
         console.log("Adding new product for category #" + YAHOO.OnBalance.currentCategoryId);
         var record = YAHOO.widget.DataTable._cloneObject(YAHOO.OnBalance.newProduct);
@@ -312,7 +274,7 @@ function initializeBalanceGrid()
         }
         record.row = record.row + 1;
         gTable.addRow(record);
-    },this, true);
+    }, this, true);
 
     displayCurrentPath();
 }
@@ -610,7 +572,6 @@ function createApplicationMenu(oSchema)
             onclick: { fn: function(){
                 console.log("Clicked on category at position: " + this.index);
                 YAHOO.OnBalance.currentCategoryId = YAHOO.OnBalance.organizations[0].Categories[this.index].id;
-//                createTableBySchema(YAHOO.OnBalance.organizations[0].Categories[this.index]);
                 gTable = createTable(YAHOO.OnBalance.currentCategoryId);
 //                console.log(YAHOO.OnBalance);
                 displayCurrentPath();
