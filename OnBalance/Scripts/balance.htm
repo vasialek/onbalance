@@ -10,10 +10,14 @@
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.9.0/build/button/assets/skins/sam/button.css">
     <!--<link href="http://www.online-balance.com/css/onbalance.css" rel="stylesheet" type="text/css" />-->
     <script src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
-    <script src="http://online-balance.com/scripts/balance.js"></script>
-    <!-- <script src="balance.js"></script> -->
+    <!--<script src="http://online-balance.com/scripts/balance.js"></script>-->
+     <script src="balance.js"></script>
 
     <style type="text/css">
+        .yui-layout
+        {
+            background: #fff;
+        }
         .yui-skin-sam tr.yui-dt-odd.red,
         .yui-skin-sam tr.yui-dt-even.red
         {
@@ -36,40 +40,57 @@
     </style>
 </head>
 
-<body class="yui-skin-sam">
+<body class="yui-skin-sam" style="margin: 0;">
 
-	<div id="panel1">
+    <div id="TopDiv">
+        <fieldset id="idToolbar" class="myToolbar">
+            <span id="CurrentPath">GJ</span>
+        </fieldset>
+    </div>
+    <div id="CenterDiv">
+        <div id="MainBalanceDiv"></div>
+    </div>
+    <div id="BottomDiv"><span id="DivStatus">Status : </span></div>
+
+
+    <div id="panel1">
 		<div class="bd">
 			<div id="PendingChangesTable" style="width: 30em;"></div>
 		</div>
 	</div>
 
-	<!-- <div id="CurrentPath">GJ</div> -->
-	<fieldset>
-		<span class="yui-button yui-push-button">
-			<span class="first-child">
-				<button id="AddProductButton">Add</button>
-			</span>
-		</span>
-		<span>&nbsp;&nbsp;&nbsp;</span>
-		<span class="yui-button yui-push-button">
-			<span class="first-child">
-				<button onclick="alert('No cell is selected!');" style="color: #f00;">Red</button>
-			</span>
-		</span>
-		<span class="yui-button yui-push-button">
-			<span class="first-child">
-				<button onclick="alert('No cell is selected!');" style="color: #f93;">Orange</button>
-			</span>
-		</span>
-		<span class="yui-button yui-push-button">
-			<span class="first-child">
-				<button onclick="alert('No cell is selected!');" style="color: #0f0;">Green</button>
-			</span>
-		</span>
-	</fieldset>
 
-    <div id="MainBalanceDiv"></div>
+        <!--<div style="display: table-row;">-->
+            <!--<div style="display: table-cell; width: 30em; padding-left: 1em;">-->
+                <!--<h4 id="CurrentPath">GJ</h4>-->
+            <!--</div>-->
+            <!--<div style="display: table-cell; text-align: right;"><span id="PositionDiv">1:2</span></div>-->
+        <!--</div>-->
+	<!--<fieldset>-->
+		<!--<span class="yui-button yui-push-button">-->
+			<!--<span class="first-child">-->
+				<!--<button id="AddProductButton">Add</button>-->
+			<!--</span>-->
+		<!--</span>-->
+		<!--<span>&nbsp;&nbsp;&nbsp;</span>-->
+		<!--<span class="yui-button yui-push-button">-->
+			<!--<span class="first-child">-->
+				<!--<button onclick="alert('No cell is selected!');" style="color: #f00;">Red</button>-->
+			<!--</span>-->
+		<!--</span>-->
+		<!--<span class="yui-button yui-push-button">-->
+			<!--<span class="first-child">-->
+				<!--<button onclick="alert('No cell is selected!');" style="color: #f93;">Orange</button>-->
+			<!--</span>-->
+		<!--</span>-->
+		<!--<span class="yui-button yui-push-button">-->
+			<!--<span class="first-child">-->
+				<!--<button onclick="alert('No cell is selected!');" style="color: #0f0;">Green</button>-->
+			<!--</span>-->
+		<!--</span>-->
+	<!--</fieldset>-->
+
+    <!--<div id="MainBalanceDiv"></div>-->
     <div id="OnBalanceContextMenu"></div>
 
 
@@ -79,10 +100,25 @@
     window.onload = function()
     {
         var loader = new YAHOO.util.YUILoader({
-            require: ["datatable", "menu", "datasource", "json", "container", "connection", "button"]
+            require: ["datatable", "menu", "datasource", "json", "container", "connection", "button", "layout"]
             , onSuccess: function()
             {
-                onPageLoaded();
+
+                var layout = new YAHOO.widget.Layout({
+                    units : [
+                        {position: "top", body: "TopDiv", height: 50, gutter: "0 0 0 0" },
+                        {position: "center", body: "CenterDiv", scroll: true, gutter: "0 0 0 0" },
+                        {position: "bottom", body: "BottomDiv", height: 30, gutter: "0 0 0 0"}
+                    ]
+                });
+
+                layout.on('render', function(){
+                    onPageLoaded();
+                });
+
+                layout.render();
+
+//                onPageLoaded();
             }
         });
 

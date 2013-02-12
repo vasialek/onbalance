@@ -15,6 +15,7 @@ YAHOO.OnBalance = {
         // Displays current path GJ->POS1
         lblPath: null
     },
+    selectedCell: null,
     localChanges: [],
     availableCellColors: [],
     products: [],
@@ -118,7 +119,7 @@ function createToolbar()
     tbOrange.on("click", function(){alert("Orange...");}, null/*myDT*/);
     var tbGreen = new YAHOO.widget.Button({ label:"Green", id:"idBtnGreen", container:"idToolbar", title:'Make Green' });
     tbGreen.addClass('btn_red');
-    tbGreen.on("click", function(){alert("Green...");}, null/*myDT*/);
+    tbGreen.on("click", function(){YAHOO.OnBalance.selectedCell.innerHTML = "Green";}, null/*myDT*/);
 
 }
 
@@ -173,19 +174,46 @@ function createTable(categoryId)
     for(var i = 0; i < details.length; i++)
     {
         gResultFields[gResultFields.length] = { key: arDetails[i] };
-        arColumnsDefinitions[arColumnsDefinitions.length] = { key: details[i], label: details[i], editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber}) };
+        arColumnsDefinitions[arColumnsDefinitions.length] = {
+            key: details[i],
+            label: details[i],
+            editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber})
+        };
     }
 
     oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", arColumnsDefinitions, gDataSource, {
+//    oTable = new YAHOO.widget.DataTable("MainBalanceDiv", arColumnsDefinitions, gDataSource, {
         initialLoad: false,
-        height: "50em"
+        height: "50em",
+        selectionMode: "cell"
     });
 
     console.log("Created table:");
     console.log(oTable);
 
-    oTable.subscribe("cellMouseoverEvent", highlightEditableCell);
-    oTable.subscribe("cellClickEvent", oTable.onEventShowCellEditor); 
+//    oTable.subscribe("cellMouseoverEvent", highlightEditableCell);
+
+    // Show editor on double click
+    oTable.subscribe("cellDblclickEvent", oTable.onEventShowCellEditor);
+
+    // Remember selected cell on click
+    oTable.subscribe("cellClickEvent", function(oArgs){
+        console.log("Cell is clicked...");
+        var target = YAHOO.util.Event.getTarget(oArgs);
+        var column = this.getColumn(target);
+        var record = this.getRecord(target);
+        var cell = this.getTdEl({
+            record: record,
+            column: column
+        });
+
+        this.unselectAllCells();
+        this.unselectAllRows();
+
+        this.selectCell(target);
+        YAHOO.OnBalance.selectedCell = cell;
+//        YAHOO.util.Dom.get("DivStatus").innerHTML = column + "" + record;
+    });
 
     var onContextMenuClick = function(eventType, oArgs, myDataTable)
     {
