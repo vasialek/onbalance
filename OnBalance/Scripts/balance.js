@@ -1,4 +1,4 @@
-﻿﻿var gTable;
+﻿var gTable;
 var gDataSource;
 var gResultFields = [];
 var arDetails = ["35", "36", "37", "38", "39", "40", "41", "42", "42.5", "43", "44", "44.5", "45", "46", "46.5", "47", "48", "49", "49.5", "50", "51", "52", "53", "54", "54.5", "55"];
@@ -13,7 +13,14 @@ YAHOO.OnBalance = {
 //    baseUrl: "http://localhost:52293/",
     uiElements: {
         // Displays current path GJ->POS1
-        lblPath: null
+        lblPath: null,
+        // Array with possible cell formats
+        cellStateStyles: [
+            { name: "Good", cssClass: "bg-darkgreen", id: "stateGood" },
+            { name: "Bad", cssClass: "bg-red", id: "stateBad" },
+            { name: "Poor", cssClass: "bg-orangered", id: "statePoor" },
+            { name: "Important", cssClass: "bg-darkorange", id: "stateImportant" }
+        ]
     },
     selectedCell: null,
     localChanges: [],
@@ -111,16 +118,25 @@ function securePage()
 
 function createToolbar()
 {
-    var tbRed = new YAHOO.widget.Button({ label:"Red", id:"idBtnRed", container:"idToolbar", title:'Make red' });
-    tbRed.addClass('btn_red');
-    tbRed.on("click", function(){alert("Red...");}, null/*myDT*/);
-    var tbOrange = new YAHOO.widget.Button({ label:"Orange", id:"idBtnRed", container:"idToolbar", title:'Make Orange' });
-    tbOrange.addClass('btn_red');
-    tbOrange.on("click", function(){alert("Orange...");}, null/*myDT*/);
-    var tbGreen = new YAHOO.widget.Button({ label:"Green", id:"idBtnGreen", container:"idToolbar", title:'Make Green' });
-    tbGreen.addClass('btn_red');
-    tbGreen.on("click", function(){YAHOO.OnBalance.selectedCell.innerHTML = "Green";}, null/*myDT*/);
-
+    console.log("Creating toolbar:");
+    YAHOO.OnBalance.uiElements.cellStateStyles.forEach(function(style, index){
+        console.log(style);
+        var btn = new YAHOO.widget.Button({
+            container: "idToolbar",
+            label: style.name,
+            title: style.name
+        }).on("click", function(){
+                console.log("Making cell formatted:" + style.cssClass);
+                if( YAHOO.OnBalance.selectedCell != null )
+                {
+                    YAHOO.OnBalance.uiElements.cellStateStyles.forEach(function(s, i){
+                        YAHOO.util.Dom.removeClass(YAHOO.OnBalance.selectedCell, s.cssClass);
+                    });
+                    YAHOO.util.Dom.removeClass(YAHOO.OnBalance.selectedCell, "dt-selected");
+                    YAHOO.util.Dom.addClass(YAHOO.OnBalance.selectedCell, style.cssClass);
+                }
+            });
+    });
 }
 
 function displayCurrentPath()
@@ -237,7 +253,6 @@ function createTable(categoryId)
         };
     });
     var contextMenu = new YAHOO.widget.ContextMenu("OnBalanceContextMenu", {
-//        trigger: document
         trigger: oTable.getTbodyEl()
     });
     contextMenu.addItems(YAHOO.OnBalance.contextMenu);

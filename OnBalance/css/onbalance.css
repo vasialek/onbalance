@@ -221,6 +221,11 @@ a
     padding-left: 5px;
 }
 
+.bg-green
+{
+    background-color: #006400;
+}
+
 .cm_red
 {
     color: #f00;
