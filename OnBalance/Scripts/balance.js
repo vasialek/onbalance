@@ -119,6 +119,12 @@ function securePage()
 function createToolbar()
 {
     console.log("Creating toolbar:");
+    var btnAdd = new YAHOO.widget.Button({
+        container: "idToolbar",
+        title: "Add product",
+        label: "Add product",
+        id: "AddProductButton"
+    });
     YAHOO.OnBalance.uiElements.cellStateStyles.forEach(function(style, index){
         console.log(style);
         var btn = new YAHOO.widget.Button({
@@ -198,7 +204,6 @@ function createTable(categoryId)
     }
 
     oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", arColumnsDefinitions, gDataSource, {
-//    oTable = new YAHOO.widget.DataTable("MainBalanceDiv", arColumnsDefinitions, gDataSource, {
         initialLoad: false,
         height: "50em",
         selectionMode: "cell"
