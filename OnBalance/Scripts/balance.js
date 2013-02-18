@@ -188,9 +188,9 @@ function createTable(categoryId)
 {
     console.log("Creating table for POS #" + categoryId);
     arColumnsDefinitions = [
-        { key: "name", label: "Name", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
-        { key: "price_minor", label: "Price", sortable: true, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
-        { key: "code", label: "Code", sortable: true, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
+        { key: "name", label: "Name", sortable: true, width: 200, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
+        { key: "price_minor", label: "Price", sortable: true, width: 100, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
+        { key: "code", label: "Code", sortable: true, width: 100, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
     ];
     var details = getDetailsForCategory(categoryId);
     for(var i = 0; i < details.length; i++)
@@ -199,11 +199,14 @@ function createTable(categoryId)
         arColumnsDefinitions[arColumnsDefinitions.length] = {
             key: details[i],
             label: details[i],
+            width: 25,
+            maxAutoWidth: 30,
             editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber})
         };
     }
 
     oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", arColumnsDefinitions, gDataSource, {
+    //oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", arColumnsDefinitions, gDataSource, {
         initialLoad: false,
         height: "50em",
         selectionMode: "cell"
@@ -213,6 +216,11 @@ function createTable(categoryId)
     console.log(oTable);
 
 //    oTable.subscribe("cellMouseoverEvent", highlightEditableCell);
+
+    // Enables row highlighting
+    oTable.subscribe("rowMouseoverEvent", oTable.onEventHighlightRow);
+    oTable.subscribe("rowMouseoutEvent", oTable.onEventUnhighlightRow);
+
 
     // Show editor on double click
     oTable.subscribe("cellDblclickEvent", oTable.onEventShowCellEditor);
