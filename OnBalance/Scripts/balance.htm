@@ -10,8 +10,8 @@
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.9.0/build/button/assets/skins/sam/button.css">
     <!-- <link href="http://www.online-balance.com/css/onbalance.css" rel="stylesheet" type="text/css" /> -->
     <script src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
-    <script src="http://online-balance.com/scripts/balance.js"></script>
-    <!-- <script src="balance.js"></script> -->
+    <!--<script src="http://online-balance.com/scripts/balance.js"></script>-->
+     <script src="balance.js"></script>
 
     <style type="text/css">
         .yui-layout
@@ -60,11 +60,17 @@
     <div id="BottomDiv"><span id="DivStatus">Status : </span></div>
 
 
-    <div id="panel1">
+    <div id="RemoteChangesDialog" style="width: 30em;">
+        <div class="hd">Remote changes</div>
 		<div class="bd">
-			<div id="PendingChangesTable" style="width: 30em;"></div>
+			<div id="RemoteChangesTable"></div>
 		</div>
 	</div>
+    <div id="LocalChangesDialog" style="width: 30em;">
+        <div class="hd">Local changes</div>
+        <div class="bd">
+        </div>
+    </div>
 
 
     <div id="OnBalanceContextMenu"></div>

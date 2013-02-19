@@ -73,7 +73,15 @@ YAHOO.OnBalance = {
                         onclick: {
                             fn: function(){
                                 console.log("Approve changes is clicked");
-                                displayPendingChangesDialog(null);
+                                displayRemoteChangesDialog(null);
+                            }
+                        }
+                    },
+                    {
+                        text: "Local changes...",
+                        onclick: {
+                            fn: function(){
+                                displayLocalChangesDialog();
                             }
                         }
                     },
@@ -188,8 +196,8 @@ function createTable(categoryId)
 {
     console.log("Creating table for POS #" + categoryId);
     arColumnsDefinitions = [
-        { key: "name", label: "Name", sortable: true, width: 200, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
-        { key: "price_minor", label: "Price", sortable: true, width: 100, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
+        { key: "name", label: "Name", sortable: true, width: 150, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
+        { key: "price_minor", label: "Price", sortable: true, width: 80, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
         { key: "code", label: "Code", sortable: true, width: 100, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
     ];
     var details = getDetailsForCategory(categoryId);
@@ -206,7 +214,6 @@ function createTable(categoryId)
     }
 
     oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", arColumnsDefinitions, gDataSource, {
-    //oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", arColumnsDefinitions, gDataSource, {
         initialLoad: false,
         height: "50em",
         selectionMode: "cell"
@@ -220,6 +227,11 @@ function createTable(categoryId)
     // Enables row highlighting
     oTable.subscribe("rowMouseoverEvent", oTable.onEventHighlightRow);
     oTable.subscribe("rowMouseoutEvent", oTable.onEventUnhighlightRow);
+
+    oTable.subscribe("cellUpdateEvent", function(record, column, oldData)
+    {
+        onProductChanged(record);
+    });
 
 
     // Show editor on double click
@@ -347,7 +359,7 @@ function preparePendingDialog()
         visible: false,
         constraintoviewport: true,
         buttons: [
-            { text:"Submit", handler: handlePendingSubmit, isDefault: true },
+            { text:"Submit", handler: function(){ alert("Confirming remote changes!");}, isDefault: true },
             { text:"Cancel", handler: handlePendingCancel }
         ]});
 
@@ -355,7 +367,7 @@ function preparePendingDialog()
     YAHOO.OnBalance.PendingDialog.render();
 
     var buttons = document.getElementsByClassName("ShowRemotePending");
-    YAHOO.util.Event.addListener(buttons, "click", displayPendingChangesDialog, YAHOO.OnBalance.PendingDialog, true);
+    YAHOO.util.Event.addListener(buttons, "click", displayRemoteChangesDialog, YAHOO.OnBalance.PendingDialog, true);
     YAHOO.util.Event.addListener("hide", "click", YAHOO.OnBalance.PendingDialog.hide, YAHOO.OnBalance.PendingDialog, true);
 }
 
@@ -433,7 +445,7 @@ function highlightEditableCell(oArgs)
 }
 
 // Define various event handlers for pending changes Dialog
-function handlePendingSubmit()
+function submitLocalChanges()
 {
     var s = "?_token=123456";
     var name;
@@ -453,6 +465,7 @@ function handlePendingSubmit()
         //s += "&[" + i + "].InternalCode=" + YAHOO.OnBalance.localChanges[i].code;
     }
     console.log("Sending updates to: " + s);
+    return;
 
     //var dsScriptNode = new YAHOO.util.ScriptNodeDataSource("http://localhost:49630/balance/dosend/");
 	var dsScriptNode = new YAHOO.util.ScriptNodeDataSource("http://gjsportland.com/index.php/lt/balance/dosend/");
@@ -507,7 +520,35 @@ function formatLocalChangesForSubmit()
     return s;
 }
 
-function displayPendingChangesDialog(o)
+function displayLocalChangesDialog()
+{
+    var dlg = new YAHOO.widget.Dialog("LocalChangesDialog", {
+        visible: false,
+        close: true,
+        fixedcenter: true,
+        buttons: [
+            {
+                text: "Approve", handler: function()
+                {
+                    console.log("Approving local changes...");
+                    submitLocalChanges();
+                    this.cancel();
+                }
+            },
+            { text: "Cancel", isDefault: true, handler: function()
+                {
+                    console.log("Cancelling local changes...");
+                    this.cancel();
+                }
+            }
+        ]
+    });
+    dlg.setBody(formatLocalChangesForSubmit());
+    dlg.render();
+    dlg.show();
+}
+
+function displayRemoteChangesDialog(o)
 {
     console.log("Displaying pending changes...");
     var columnDefinitions = [
@@ -534,7 +575,7 @@ function displayPendingChangesDialog(o)
         fields: ["uid", "code", "pr", "posid", "name", "sizes"]
     };
 
-    oTable = new YAHOO.widget.DataTable("PendingChangesTable", columnDefinitions, oDataSource, {
+    oTable = new YAHOO.widget.DataTable("RemoteChangesTable", columnDefinitions, oDataSource, {
         caption: "Pending changes",
         height: "5em",
         initialLoad: {
@@ -542,7 +583,7 @@ function displayPendingChangesDialog(o)
         }
     });
 
-    var panel1 = new YAHOO.widget.Dialog("panel1", {
+    var RemoteChangesDialog = new YAHOO.widget.Dialog("RemoteChangesDialog", {
         visible: false,
         close: true,
         fixedcenter: true,
@@ -557,8 +598,8 @@ function displayPendingChangesDialog(o)
             } }
         ]
     });
-    panel1.render();
-    panel1.show();
+    RemoteChangesDialog.render();
+    RemoteChangesDialog.show();
 }
 
 /**
