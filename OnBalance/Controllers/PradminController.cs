@@ -36,7 +36,7 @@ namespace OnBalance.Controllers
             productsList.Pos = new PosRepository().Items.SingleOrDefault(x => x.Id == id);
             if( productsList.Pos == null )
             {
-                Log.ErrorFormat("Trying to list products in non-existing POS #{0}!", id);
+                ErrorFormat("Trying to list products in non-existing POS #{0}!", id);
                 return HttpNotFound();
             }
 
@@ -48,7 +48,7 @@ namespace OnBalance.Controllers
             }
             int offset = (page - 1) * perPage;
 
-            Log.InfoFormat("Displaying list of products in POS #{0}, skipping {1}, taking {2} products", id, offset, perPage);
+            InfoFormat("Displaying list of products in POS #{0}, skipping {1}, taking {2} products", id, offset, perPage);
             productsList.Products = new ProductRepository().GetLastInPos(id, offset, perPage)
                 .OrderBy(x => x.id)
                 .ToList();
@@ -65,7 +65,7 @@ namespace OnBalance.Controllers
             ProductRepository db = new ProductRepository();
             PosRepository dbPos = new PosRepository();
 
-            Log.InfoFormat("Selecting products for POS #{0}", id);
+            InfoFormat("Selecting products for POS #{0}", id);
             pb.Products = db.Items
                 .Where(x => x.pos_id == id && x.status_id == (byte)Status.Approved)
                 .Take(100)
@@ -81,7 +81,7 @@ namespace OnBalance.Controllers
         {
             // ID of POS must be!
             int posId = int.Parse(Request["posid"]);
-            Log.InfoFormat("Loading products for POS ID #{0}...", posId);
+            InfoFormat("Loading products for POS ID #{0}...", posId);
 
             ProductRepository db = new ProductRepository();
             PosRepository dbPos = new PosRepository();
@@ -92,7 +92,7 @@ namespace OnBalance.Controllers
                 .Where(x => x.pos_id == posId && x.status_id == (byte)Status.Approved)
                 .Take(200)
                 .ToList();
-            Log.InfoFormat("Got {0} products for POS ID #{1}", products == null ? "NULL" : products.Count.ToString(), posId);
+            InfoFormat("Got {0} products for POS ID #{1}", products == null ? "NULL" : products.Count.ToString(), posId);
             //var shops = dbPos.Items.ToList();
             string callback = Request["callback"];
 

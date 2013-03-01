@@ -23,12 +23,12 @@ namespace OnBalance.Controllers
         {
             // ID of POS must be!
             int posId = int.Parse(Request["posid"]);
-            Log.InfoFormat("Loading products for POS ID #{0}...", posId);
+            InfoFormat("Loading products for POS ID #{0}...", posId);
 
             int categoryId = 0;
             if( int.TryParse(Request["categoryid"], out categoryId) )
             {
-                Log.InfoFormat("  Applying filter by category ID: {0}", categoryId);
+                InfoFormat("  Applying filter by category ID: {0}", categoryId);
             }
 
             ProductRepository db = new ProductRepository();
@@ -43,7 +43,7 @@ namespace OnBalance.Controllers
                 //products = products.Where(x => x.category_id == categoryId);
             }
             products = products.Take(200);
-            Log.InfoFormat("Got {0} products for POS ID #{1}", products == null ? "NULL" : products.Count().ToString(), posId);
+            InfoFormat("Got {0} products for POS ID #{1}", products == null ? "NULL" : products.Count().ToString(), posId);
             //var shops = dbPos.Items.ToList();
             string callback = Request["callback"];
 
@@ -69,7 +69,7 @@ namespace OnBalance.Controllers
 
         public JsonpResult GetOrganizationSchema(int id)
         {
-            Log.InfoFormat("Preparing JSON schema for main page (shops, categories)");
+            InfoFormat("Preparing JSON schema for main page (shops, categories)");
             OrganizationRepository dbOrg = new OrganizationRepository();
             OrganizationSchemaViewModel orgVm = new OrganizationSchemaViewModel();
             ProductRepository dbProduct = new ProductRepository();
@@ -154,10 +154,10 @@ namespace OnBalance.Controllers
             try
             {
                 string getBalanceUrl = "http://gjsportland.com/index.php/lt/balance/get?_token=12345";
-                Log.InfoFormat("Going to download changes from POS: {0}", getBalanceUrl);
+                InfoFormat("Going to download changes from POS: {0}", getBalanceUrl);
                 WebClient wc = new WebClient();
                 string resp = wc.DownloadString(getBalanceUrl);
-                Log.DebugFormat("Changes: {0}", resp);
+                DebugFormat("Changes: {0}", resp);
                 Regex rx = new Regex(@"(\{)([^}]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
                 // ("uid"\:")([^""]+)([\"\,\ ]*)(code\"\:\")([^"]+)([\"\,\ ]*)(pr\"\:)(\d+)([,"\s]+)(posid"\:)(\d+)([\"\,\ ]*)(name\"\:\")([^"]+)
                 Regex regex = new Regex(@"(""uid""\:"")([^""""]+)([\""\,\ ]*)(code\""\:\"")([^""]+)([\""\,\ ]*)(pr\""\:)(\d+)([,""\s]+)(posid""\:)(\d+)([\""\,\ ]*)(name\""\:\"")([^""]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Singleline);
@@ -227,11 +227,11 @@ namespace OnBalance.Controllers
         {
             try
             {
-                Log.InfoFormat("Balance/DoSend [{0}] was called...", Request.HttpMethod);
-                Log.InfoFormat("Got {0} items to post to POS...", items == null ? -1 : items.Length);
+                InfoFormat("Balance/DoSend [{0}] was called...", Request.HttpMethod);
+                InfoFormat("Got {0} items to post to POS...", items == null ? -1 : items.Length);
                 foreach(string key in Request.Form.AllKeys)
                 {
-                    Log.DebugFormat("  {0}: {1}", key, Request.Form[key]);
+                    DebugFormat("  {0}: {1}", key, Request.Form[key]);
                 }
                 string callback = Request["callback"] as string;
                 PostBalanceViewModel bal = new PostBalanceViewModel();
@@ -267,7 +267,7 @@ namespace OnBalance.Controllers
 
             } catch(Exception ex)
             {
-                Log.Error("Error sending local changes to POS!", ex);
+                Error("Error sending local changes to POS!", ex);
                 throw ex;
             }
         }
@@ -295,14 +295,14 @@ namespace OnBalance.Controllers
         {
             var dbProducts = new ProductRepository();
             var dbBalanceItems = new BalanceItemRepository();
-            Log.InfoFormat("Going to confirm updated product ID #{0} from POS", id);
+            InfoFormat("Going to confirm updated product ID #{0} from POS", id);
             var item = dbBalanceItems.Items.SingleOrDefault(x => x.Id == id);
             if(item == null)
             {
                 return HttpNotFound();
             }
 
-            Log.InfoFormat("Searching for product with code: [{0}]", item.InternalCode);
+            InfoFormat("Searching for product with code: [{0}]", item.InternalCode);
             var product = dbProducts.Items.SingleOrDefault(x => x.internal_code == item.InternalCode);
             if(product == null)
             {
@@ -314,7 +314,7 @@ namespace OnBalance.Controllers
                 product.name = item.ProductName;
             }
             product.price = item.Price;
-            Log.InfoFormat("Going to save changes from POS to Online Balance System DB...");
+            InfoFormat("Going to save changes from POS to Online Balance System DB...");
             dbProducts.Update(product);
 
             item.StatusId = (byte)Status.Completed;

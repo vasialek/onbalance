@@ -36,7 +36,7 @@ namespace OnBalance.Controllers
         {
             if(ModelState.IsValid)
             {
-                Log.InfoFormat("Trying to log as user {0}, providing pasword length of {1}", model.Username, model.Password.Length);
+                InfoFormat("Trying to log as user {0}, providing pasword length of {1}", model.Username, model.Password.Length);
                 if(Membership.ValidateUser(model.Username, model.Password))
                 {
                     FormsAuthentication.SetAuthCookie(model.Username, false);
