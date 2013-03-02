@@ -82,5 +82,10 @@ namespace OnBalance.Models
                 .Skip(offset)
                 .Take(perPage);
         }
+
+        internal void SubmitChanges()
+        {
+            _dataContext.SubmitChanges();
+        }
     }
 }

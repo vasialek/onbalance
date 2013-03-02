@@ -6,7 +6,7 @@
     @Html.LabelFor(model => model.status_id)
 </div>
 <div class="editor-field">
-    @Html.EditorFor(model => model.status_id)
+    @Html.StatusDropDownList((OnBalance.Status)Model.status_id)
     @Html.ValidationMessageFor(model => model.status_id)
 </div>
 
@@ -57,3 +57,9 @@
     @Html.EditorFor(model => model.created_at)
     @Html.ValidationMessageFor(model => model.created_at)
 </div>
+
+@foreach(var s in Model.ProductDetails)
+{
+    int idx = Model.ProductDetails.IndexOf(s);
+    <div style="padding-left: 20px;">@Html.EditorFor(x => Model.ProductDetails[idx])</div>
+}

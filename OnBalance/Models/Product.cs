@@ -5,6 +5,20 @@ using System.Web;
 
 namespace OnBalance.Models
 {
+    partial class ProductDetail
+    {
+        partial void OnCreated()
+        {
+            this.updated_at = DateTime.Now;
+            this.created_at = DateTime.Now;
+        }
+
+        partial void OnidChanged()
+        {
+            this.updated_at = DateTime.Now;
+        }
+    }
+
     partial class Product
     {
 

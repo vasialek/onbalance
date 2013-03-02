@@ -11,18 +11,6 @@
 
     @Html.EditorForModel()
 
-    @Model.ProductDetails.Count
-
-    @*foreach(var item in Model.Details.Where(x => x.parameter_name == "size"))
-    {
-        int idx = Model.Details.IndexOf(item);
-        ViewData.TemplateInfo.HtmlFieldPrefix = "Product";
-        <div style="padding-left: 2em;">
-            @Html.Hidden("Index", idx)
-            @Html.EditorFor(x => Model.Details[idx], "ProductDetail")
-        </div>
-    }*@
-
     <input type="submit" value="@OnBalance.MyMessages.ButtonText.Save" />
     
 }

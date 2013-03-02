@@ -286,6 +286,7 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Edit(int id)
         {
+            InfoFormat("Editing product with ID #{0}", id);
             ProductRepository db = new ProductRepository();
             Product model = db.GetById(id);
 
@@ -302,7 +303,10 @@ namespace OnBalance.Controllers
             if( ModelState.IsValid )
             {
                 ProductRepository db = new ProductRepository();
-                db.Update(model);
+                model = db.Items.SingleOrDefault(x => x.id == model.id);
+                UpdateModel<Product>(model);
+                //db.Update(model);
+                db.SubmitChanges();
                 return RedirectToAction("Edit", new { id = model.id });
             }
 

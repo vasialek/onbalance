@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Text;
+using System.ComponentModel;
 
 namespace OnBalance.Helpers
 {
@@ -13,6 +14,16 @@ namespace OnBalance.Helpers
         /// Unix epoch start, used for timestamp calculations
         /// </summary>
         private static DateTime m_unixStart = new DateTime(1970, 1, 1, 0, 0, 0);
+
+        public static Dictionary<string, object> DynamicObjectToDictionary(object o)
+        {
+            Dictionary<string, object> ar = new Dictionary<string, object>();
+            foreach(PropertyDescriptor pd in TypeDescriptor.GetProperties(o))
+            {
+                ar[pd.Name] = pd.GetValue(o);
+            }
+            return ar;
+        }
 
         /// <summary>
         /// Converts DateTime value to Unix timestamp

@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
+    <Compile Include="Helpers\AvHtmlHelper.cs" />
     <Compile Include="Models\BalanceItem.cs" />
     <Compile Include="Models\BalanceItemRepository.cs" />
     <Compile Include="Models\BaseModel.cs" />
@@ -144,6 +145,7 @@
     <Content Include="images\import.png" />
     <Content Include="images\increase.gif" />
     <Content Include="images\logo.png" />
+    <Content Include="images\productadmin.png" />
     <Content Include="images\sidemenu-repeat-hover.jpg" />
     <Content Include="images\sidemenu-repeat.jpg" />
     <Content Include="images\view.png" />
