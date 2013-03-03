@@ -9,19 +9,11 @@ namespace OnBalance.Models
 {
     public class OrganizationRepository : BaseRepository
     {
-        //public OrganizationRepository()
-        //    : base(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString())
-        //{
 
-        //}
-
-        //public OrganizationRepository(string connectionString)
-        //    : base(connectionString)
-        //{
-
-        //}
-
-        public IQueryable<Organization> Organizations
+        /// <summary>
+        /// Gets list of all items
+        /// </summary>
+        public IQueryable<Organization> Items
         {
             get
             {
@@ -36,5 +28,10 @@ namespace OnBalance.Models
             db.Context.SubmitChanges();
         }
 
+
+        public void SubmitChanges()
+        {
+            _dataContext.SubmitChanges();
+        }
     }
 }

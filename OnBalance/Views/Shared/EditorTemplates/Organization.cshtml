@@ -1,8 +1,11 @@
 ﻿@model OnBalance.Models.Organization
 
+@Html.HiddenFor(x => x.Id)
+
 <div class="editor-label">@Html.LabelFor(x => x.StatusId)</div>
 <div class="editor-field">
-    @Html.EditorFor(x => x.StatusId, "Enum")
+    @Html.StatusDropDownList((OnBalance.Status)Model.StatusId, "StatusId")
+    @*@Html.EditorFor(x => x.StatusId, "Enum")*@
     @Html.ValidationMessageFor(x => x.StatusId)
 </div>
 

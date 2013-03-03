@@ -1,4 +1,28 @@
 ﻿@model OnBalance.Models.Product
+           
+@{
+    
+    List<SelectListItem> shops = new List<SelectListItem>
+    {
+        new SelectListItem
+        {
+            Text = "Choose",
+            Value = "0",
+            Selected = true
+        }
+    };
+
+    new OnBalance.Models.OrganizationRepository()
+        .Organizations
+        .ToList()
+        .ForEach(x => shops.Add(new SelectListItem
+        {
+            Text = x.Name,
+            Value = x.Id.ToString(),
+            Selected = x.Equals(Model.pos_id)
+        }));
+    
+}
 
 @Html.HiddenFor(model => model.id)
 
@@ -14,7 +38,7 @@
     @Html.LabelFor(model => model.pos_id)
 </div>
 <div class="editor-field">
-    @Html.EditorFor(model => model.pos_id)
+    @Html.DropDownListFor(x => x.pos_id, shops)
     @Html.ValidationMessageFor(model => model.pos_id)
 </div>
 

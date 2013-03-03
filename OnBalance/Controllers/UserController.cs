@@ -74,7 +74,7 @@ namespace OnBalance.Controllers
         public ActionResult Dashboard()
         {
             var dashboard = new DashboardViewModel();
-            dashboard.Shops = new PosRepository().Items.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
+            dashboard.Shops = new OrganizationRepository().Items.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
             dashboard.Imports = new List<Task>()
             {
                 new Task{ Type = Task.TypeId.Import, Status = Status.Pending }

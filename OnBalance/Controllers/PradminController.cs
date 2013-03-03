@@ -23,7 +23,7 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return List(new PosRepository().Items.First().Id);
+            return List(new OrganizationRepository().Items.First().Id);
         }
 
         //
@@ -33,7 +33,7 @@ namespace OnBalance.Controllers
         public ActionResult List(int id)
         {
             ProductsInPosViewModel productsList = new ProductsInPosViewModel();
-            productsList.Pos = new PosRepository().Items.SingleOrDefault(x => x.Id == id);
+            productsList.Pos = new OrganizationRepository().Items.SingleOrDefault(x => x.Id == id);
             if( productsList.Pos == null )
             {
                 ErrorFormat("Trying to list products in non-existing POS #{0}!", id);
@@ -63,7 +63,7 @@ namespace OnBalance.Controllers
         {
             ProductsInPosViewModel pb = new ProductsInPosViewModel();
             ProductRepository db = new ProductRepository();
-            PosRepository dbPos = new PosRepository();
+            OrganizationRepository dbPos = new OrganizationRepository();
 
             InfoFormat("Selecting products for POS #{0}", id);
             pb.Products = db.Items
@@ -84,7 +84,7 @@ namespace OnBalance.Controllers
             InfoFormat("Loading products for POS ID #{0}...", posId);
 
             ProductRepository db = new ProductRepository();
-            PosRepository dbPos = new PosRepository();
+            OrganizationRepository dbPos = new OrganizationRepository();
 
             StringBuilder sbMain = new StringBuilder();
             StringBuilder sb = new StringBuilder();

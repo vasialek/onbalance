@@ -1,0 +1,17 @@
+﻿@model OnBalance.Models.Organization
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Point Of Service @Model.Name</h2>
+
+@using(Html.BeginForm())
+{
+    @Html.EditorForModel()
+
+    <input type="submit" value="Update" />
+    @Html.ActionLink("Back to POS list", "list")
+}
+

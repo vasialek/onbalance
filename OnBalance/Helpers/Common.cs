@@ -15,6 +15,16 @@ namespace OnBalance.Helpers
         /// </summary>
         private static DateTime m_unixStart = new DateTime(1970, 1, 1, 0, 0, 0);
 
+        public static Dictionary<string, object> DynamicObjectToDictionaryInsensitive(object o)
+        {
+            Dictionary<string, object> ar = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            foreach(PropertyDescriptor pd in TypeDescriptor.GetProperties(o))
+            {
+                ar[pd.Name] = pd.GetValue(o);
+            }
+            return ar;
+        }
+
         public static Dictionary<string, object> DynamicObjectToDictionary(object o)
         {
             Dictionary<string, object> ar = new Dictionary<string, object>();

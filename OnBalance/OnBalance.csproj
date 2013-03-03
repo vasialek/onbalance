@@ -90,10 +90,16 @@
       <DependentUpon>ObLog.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\ObLogRepository.cs" />
-    <Compile Include="Models\Organization.cs" />
+    <Compile Include="Models\Organization.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>Organization.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Organization.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Organization.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Models\OrganizationRepository.cs" />
-    <Compile Include="Models\Pos.cs" />
-    <Compile Include="Models\PosRepository.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Product.designer.cs">
       <DependentUpon>Product.dbml</DependentUpon>
@@ -124,6 +130,14 @@
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>ObLog.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\Organization.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Organization.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\Organization.dbml.layout">
+      <DependentUpon>Organization.dbml</DependentUpon>
     </None>
     <None Include="Models\Product.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
@@ -159,6 +173,7 @@
     <Content Include="Views\Shared\DisplayTemplates\ProductDetail.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Product.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ProductDetail.cshtml" />
+    <Content Include="Views\Pos\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConnectionString.config">

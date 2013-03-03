@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc.Html;
 using OnBalance.Helpers;
 using OnBalance;
+using System.Globalization;
 
 namespace System.Web.Mvc
 {
@@ -29,7 +30,12 @@ namespace System.Web.Mvc
             UrlHelper urlHelper = ((Controller)htmlHelper.ViewContext.Controller).Url;
             TagBuilder img = new TagBuilder("img");
             // Merge provided image attributes (in object) with image attributes
-            img.MergeAttributes(Common.DynamicObjectToDictionary(htmlImageAttributes), true);
+            var attributes = Common.DynamicObjectToDictionaryInsensitive(htmlImageAttributes);
+            if( (attributes != null) && !attributes.Keys.Contains("title"))
+            {
+                attributes["title"] = alt;
+            }
+            img.MergeAttributes(attributes, true);
             img.MergeAttribute("src", imageSrc, true);
             img.MergeAttribute("alt", alt, true);
 

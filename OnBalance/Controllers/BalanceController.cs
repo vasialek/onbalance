@@ -32,7 +32,7 @@ namespace OnBalance.Controllers
             }
 
             ProductRepository db = new ProductRepository();
-            PosRepository dbPos = new PosRepository();
+            OrganizationRepository dbPos = new OrganizationRepository();
 
             StringBuilder sbMain = new StringBuilder();
             StringBuilder sb = new StringBuilder();
@@ -124,7 +124,7 @@ namespace OnBalance.Controllers
             });
 
             List<OrganizationViewModel> shops = new List<OrganizationViewModel>();
-            foreach(var item in dbOrg.Organizations.Where(x => x.StatusId == (byte)Status.Approved))
+            foreach(var item in dbOrg.Items.Where(x => x.StatusId == (byte)Status.Approved))
             {
                 shops.Add(new OrganizationViewModel
                 {
@@ -329,7 +329,7 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return List(new OrganizationRepository().Organizations.FirstOrDefault().Id);
+            return List(new OrganizationRepository().Items.FirstOrDefault().Id);
         }
 
         //

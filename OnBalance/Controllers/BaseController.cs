@@ -137,6 +137,58 @@ namespace OnBalance.Controllers
         #endregion
 
 
+        /// <summary>
+        /// Writes message to TempData["ResultMsg"]
+        /// </summary>
+        protected void SetTempOkMessage(string msg)
+        {
+            TempData["ResultMsg"] = msg;
+        }
+
+        /// <summary>
+        /// Writes message to TempData["ResultMsg"]
+        /// </summary>
+        protected void SetTempOkMessage(string fmt, params object[] args)
+        {
+            TempData["ResultMsg"] = string.Format(fmt, args);
+        }
+
+        /// <summary>
+        /// Writes message to TempData["ErrorMsg"]
+        /// </summary>
+        protected void SetTempErrorMessage(string msg)
+        {
+            TempData["ErrorMsg"] = msg;
+        }
+
+        /// <summary>
+        /// Writes message to TempData["ErrorMsg"]
+        /// </summary>
+        protected void SetTempErrorMessage(string fmt, params object[] args)
+        {
+            TempData["ErrorMsg"] = string.Format(fmt, args);
+        }
+
+        /// <summary>
+        /// Puts all available messages from TempData to ViewBag
+        /// </summary>
+        protected void SetTempMessagesToViewBag()
+        {
+            string temp;
+
+            temp = TempData["ResultMsg"] as string;
+            if(string.IsNullOrEmpty(temp) == false)
+            {
+                ViewBag.ResultMsg = temp;
+            }
+
+            temp = TempData["ErrorMsg"] as string;
+            if(string.IsNullOrEmpty(temp) == false)
+            {
+                ViewBag.ErrorMsg = temp;
+            }
+        }
+
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             base.OnActionExecuted(filterContext);
