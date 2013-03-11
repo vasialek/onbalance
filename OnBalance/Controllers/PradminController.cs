@@ -57,6 +57,60 @@ namespace OnBalance.Controllers
         }
 
         //
+        // GET: /pradmin/categories/500001
+
+        [Authorize]
+        public ActionResult Categories(int id)
+        {
+            var db = new ProductRepository();
+            var categories = (from c in db.Items
+                              where c.pos_id == id
+                              select c.Category).Distinct();
+            return View(categories);
+        }
+
+        //
+        // GET: /pradmin/createcat/500001
+
+        [Authorize]
+        public ActionResult CreateCat(int id)
+        {
+            return View(new Category());
+        }
+
+        //
+        // POST: /pradmin/createcat
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult CreateCat(Category model)
+        {
+            try
+            {
+                var db = new ProductRepository();
+                model = db.Save(model);
+            } catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+
+            SetTempOkMessage("Category was successfully saved");
+            return RedirectToAction("editcat", new { id = model.id });
+        }
+
+        //
+        // GET: /pradmin/editcat/500001
+
+        [Authorize]
+        public ActionResult EditCat(int id)
+        {
+            var db = new ProductRepository();
+            Category model = db.GetCategory(id);
+            return View(model);
+        }
+
+        //
         // GET: /pradmin/balance/123
 
         public ActionResult Balance(int id)

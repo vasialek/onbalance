@@ -54,6 +54,10 @@ namespace OnBalance.Models
             return Items.SingleOrDefault(x => x.id == id);
         }
 
+        public Category GetCategory(int id)
+        {
+            return _dataContext.Categories.SingleOrDefault(x => x.id == id);
+        }
 
         public void Update(Product model)
         {
@@ -66,6 +70,16 @@ namespace OnBalance.Models
         {
             _dataContext.Products.InsertOnSubmit(model);
             _dataContext.SubmitChanges();
+        }
+
+        /// <summary>
+        /// Adds category and submit changes
+        /// </summary>
+        public Category Save(Category model)
+        {
+            _dataContext.Categories.InsertOnSubmit(model);
+            _dataContext.SubmitChanges();
+            return model;
         }
 
         /// <summary>
@@ -87,5 +101,6 @@ namespace OnBalance.Models
         {
             _dataContext.SubmitChanges();
         }
+
     }
 }
