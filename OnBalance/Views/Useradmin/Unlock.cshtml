@@ -1,0 +1,24 @@
+﻿@model System.Web.Security.MembershipUser
+
+@{
+    ViewBag.Title = "Unlock";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Unlock user @Model.UserName</h2>
+
+@using(Html.BeginForm())
+{
+    
+    <div>
+        @Html.CheckBox("confirm", false)
+        @Html.Label("confirm", string.Concat("Confirm unlocking user ", @Model.UserName))
+    </div>
+    @Html.ValidationMessage("confirm")
+
+    <div class="bottom_links">
+        <input type="submit" value="Unlock" />
+        @Html.ActionLink("Back to list of users", "index")
+    </div>
+}
+

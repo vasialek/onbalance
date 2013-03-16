@@ -1,0 +1,12 @@
+﻿@if( !string.IsNullOrEmpty(ViewBag.ResultMsg) )
+{
+    <p>
+        <div class="message_ok">@ViewBag.ResultMsg</div>
+    </p>
+}
+@if(!string.IsNullOrEmpty(ViewBag.ErrorMsg))
+{
+    <p>
+        <div class="message_error">@ViewBag.ErrorMsg</div>
+    </p>
+}

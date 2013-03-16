@@ -1,0 +1,56 @@
+﻿@model System.Web.Security.MembershipUser
+
+@{
+    ViewBag.Title = "Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    // To prevent removing administrator role from himself
+    bool isUserTheSame = User.Identity.Name.Equals(Model.UserName, StringComparison.InvariantCultureIgnoreCase);
+}
+
+<h2>Roles</h2>
+
+@Model.UserName @(isUserTheSame ? "(it is you)" : "")<br />
+@Model.Email<br />
+@(Model.IsApproved ? "Approved" : "Disabled")<br />
+
+<div id="MessageDiv" style="display: none; width: 40em;"></div>
+
+<div>
+    @foreach(string role in Roles.GetAllRoles())
+    {
+        bool hasRole = Roles.IsUserInRole(Model.UserName, role);
+        if(isUserTheSame && hasRole && role.Equals("Administrator"))
+        {
+            <div>
+                @Html.CheckBox(string.Concat("role_", role), hasRole, new { disabled = "disabled" })
+                @Html.Label(string.Concat("role_", role), role)
+                <span class="red"> Could not remove role "Administrator" from yourself!</span>
+            </div>
+        } else
+        {
+            <div>
+                @Html.CheckBox(string.Concat("role_", role), hasRole)
+                @Html.Label(string.Concat("role_", role), role)
+            </div>
+        }
+    }
+</div>
+
+<div class="bottom_links">
+    @Html.ActionLink("Back to list of user", "index", "useradmin")
+</div>
+
+@section AdditionalJsFiles
+{
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+    <script src="/scripts/admin.js"></script>
+}
+
+<script type="text/javascript">
+
+    window.onload = function () {
+        InitializeRolesAdmin("@Model.UserName");
+    }
+
+</script>

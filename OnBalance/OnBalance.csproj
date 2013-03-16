@@ -76,6 +76,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
     <Compile Include="Helpers\AvHtmlHelper.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BaseRepository.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\ObLog.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -152,6 +154,7 @@
       <LastGenOutput>SizeConvertor.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <Content Include="images\changepassword.png" />
     <Content Include="images\decrease.gif" />
     <Content Include="images\edit.png" />
     <Content Include="images\export.png" />
@@ -162,6 +165,8 @@
     <Content Include="images\productadmin.png" />
     <Content Include="images\sidemenu-repeat-hover.jpg" />
     <Content Include="images\sidemenu-repeat.jpg" />
+    <Content Include="images\userroles.png" />
+    <Content Include="images\userunlock.png" />
     <Content Include="images\view.png" />
     <Content Include="log4net.xml">
       <SubType>Designer</SubType>
@@ -177,6 +182,10 @@
     <Content Include="Views\Pradmin\Categories.cshtml" />
     <Content Include="Views\Pradmin\CreateCat.cshtml" />
     <Content Include="Views\Pradmin\EditCat.cshtml" />
+    <Content Include="Views\Useradmin\Roles.cshtml" />
+    <Content Include="Views\Useradmin\Password.cshtml" />
+    <Content Include="Views\Shared\MessagesAndErrors.cshtml" />
+    <Content Include="Views\Useradmin\Unlock.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConnectionString.config">

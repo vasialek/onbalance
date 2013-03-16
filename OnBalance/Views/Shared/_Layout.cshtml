@@ -68,9 +68,12 @@
 
 <div>
     <footer id="footer">
-        <div class="copyright">2012 &copy;</div>
+        <div class="copyright">2012 - @DateTime.Now.ToString("yyyy") &copy;</div>
     </footer>
 </div>
 
 </body>
+
+@RenderSection("AdditionalJsFiles", false)
+
 </html>
