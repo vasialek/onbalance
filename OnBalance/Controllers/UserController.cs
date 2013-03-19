@@ -6,6 +6,9 @@ using System.Web.Mvc;
 using System.Web.Security;
 using OnBalance.ViewModels.User;
 using OnBalance.Models;
+using OnBalance.Helpers;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace OnBalance.Controllers
 {
@@ -18,6 +21,52 @@ namespace OnBalance.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        //
+        // GET: /user/dologin
+
+        public ActionResult DoLogin()
+        {
+            Status status = Status.Failed;
+            StringBuilder sbHash = new StringBuilder();
+
+            string username = Request["username"] ?? "";
+            string password = Request["password"] ?? "";
+            // Show only on login
+            string clientIp = "";
+
+            if(username.Equals("gj") && password.Equals("123456"))
+            {
+                clientIp = Request.UserHostAddress;
+                string hashToCompute = string.Format("{0}_{1}_{2}", username, password, clientIp);
+
+                MD5 md5hasher = MD5CryptoServiceProvider.Create();
+                byte[] ba = md5hasher.ComputeHash(Encoding.UTF8.GetBytes(hashToCompute));
+                for(int i = 0; i < ba.Length; i++)
+                {
+                    // JS calculate MD5 hash in lower
+                    sbHash.Append(ba[i].ToString("x2"));
+                }
+            }
+
+            string callback = Request["callback"];
+            if(string.IsNullOrEmpty(callback))
+            {
+                return Json(new
+                {
+                    Status = status,
+                    Hash = sbHash.ToString(),
+                    ClientIp = clientIp
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+
+            return new JsonpResult
+            {
+                Data = new { Status = status, Hash = sbHash.ToString(), ClientIp = clientIp },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
         }
 
         //

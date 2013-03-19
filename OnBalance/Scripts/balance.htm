@@ -10,8 +10,9 @@
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.9.0/build/button/assets/skins/sam/button.css">
     <!-- <link href="http://www.online-balance.com/css/onbalance.css" rel="stylesheet" type="text/css" /> -->
     <script src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
-    <!--<script src="http://online-balance.com/scripts/balance.js"></script>-->
-     <script src="balance.js"></script>
+    <script src="http://online-balance.com/scripts/balance.js"></script>
+    <script src="md5.js"></script>
+     <!--<script src="balance.js"></script>-->
 
     <style type="text/css">
         .yui-layout
@@ -76,8 +77,21 @@
     <div id="OnBalanceContextMenu"></div>
 
 
+    <div id="LoginDiv" class="yui-pe-content">
+        <div class="hd">Login form</div>
+        <div class="bd">
+            <form>
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" /><br/>
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" /><br/>
+                <div class="clear"></div>
+            </form>
+        </div>
+    </div>
 
-<script type="text/javascript">
+
+    <script type="text/javascript">
 
     window.onload = function()
     {
