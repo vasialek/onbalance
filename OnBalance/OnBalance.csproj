@@ -67,6 +67,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\ParamController.cs" />
     <Compile Include="Controllers\PosController.cs" />
     <Compile Include="Controllers\PradminController.cs" />
     <Compile Include="Controllers\SizeController.cs" />
@@ -102,6 +103,8 @@
       <DependentUpon>Organization.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\OrganizationRepository.cs" />
+    <Compile Include="Models\ParamModel.cs" />
+    <Compile Include="Models\ParamRepository.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Product.designer.cs">
       <DependentUpon>Product.dbml</DependentUpon>
@@ -186,6 +189,8 @@
     <Content Include="Views\Useradmin\Password.cshtml" />
     <Content Include="Views\Shared\MessagesAndErrors.cshtml" />
     <Content Include="Views\Useradmin\Unlock.cshtml" />
+    <Content Include="Views\Param\Index.cshtml" />
+    <Content Include="Views\Param\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConnectionString.config">

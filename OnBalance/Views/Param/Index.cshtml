@@ -1,0 +1,32 @@
+﻿@model IEnumerable<OnBalance.Models.ParamModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.ImageLink("/images/edit.png", "Edit parameter", Url.Action("edit", new { id = item.Id }), new { width = 16, height = 16 }, null)
+        </td>
+    </tr>
+}
+
+</table>
