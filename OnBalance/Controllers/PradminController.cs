@@ -23,7 +23,7 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return List(new PosRepository().Items.First().Id);
+            return List(new OrganizationRepository().Items.First().Id);
         }
 
         //
@@ -33,10 +33,10 @@ namespace OnBalance.Controllers
         public ActionResult List(int id)
         {
             ProductsInPosViewModel productsList = new ProductsInPosViewModel();
-            productsList.Pos = new PosRepository().Items.SingleOrDefault(x => x.Id == id);
+            productsList.Pos = new OrganizationRepository().Items.SingleOrDefault(x => x.Id == id);
             if( productsList.Pos == null )
             {
-                Log.ErrorFormat("Trying to list products in non-existing POS #{0}!", id);
+                ErrorFormat("Trying to list products in non-existing POS #{0}!", id);
                 return HttpNotFound();
             }
 
@@ -48,12 +48,66 @@ namespace OnBalance.Controllers
             }
             int offset = (page - 1) * perPage;
 
-            Log.InfoFormat("Displaying list of products in POS #{0}, skipping {1}, taking {2} products", id, offset, perPage);
+            InfoFormat("Displaying list of products in POS #{0}, skipping {1}, taking {2} products", id, offset, perPage);
             productsList.Products = new ProductRepository().GetLastInPos(id, offset, perPage)
                 .OrderBy(x => x.id)
                 .ToList();
 
             return View("List", Layout, productsList);
+        }
+
+        //
+        // GET: /pradmin/categories/500001
+
+        [Authorize]
+        public ActionResult Categories(int id)
+        {
+            var db = new ProductRepository();
+            var categories = (from c in db.Items
+                              where c.pos_id == id
+                              select c.Category).Distinct();
+            return View(categories);
+        }
+
+        //
+        // GET: /pradmin/createcat/500001
+
+        [Authorize]
+        public ActionResult CreateCat(int id)
+        {
+            return View(new Category());
+        }
+
+        //
+        // POST: /pradmin/createcat
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult CreateCat(Category model)
+        {
+            try
+            {
+                var db = new ProductRepository();
+                model = db.Save(model);
+            } catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+
+            SetTempOkMessage("Category was successfully saved");
+            return RedirectToAction("editcat", new { id = model.id });
+        }
+
+        //
+        // GET: /pradmin/editcat/500001
+
+        [Authorize]
+        public ActionResult EditCat(int id)
+        {
+            var db = new ProductRepository();
+            Category model = db.GetCategory(id);
+            return View(model);
         }
 
         //
@@ -63,9 +117,9 @@ namespace OnBalance.Controllers
         {
             ProductsInPosViewModel pb = new ProductsInPosViewModel();
             ProductRepository db = new ProductRepository();
-            PosRepository dbPos = new PosRepository();
+            OrganizationRepository dbPos = new OrganizationRepository();
 
-            Log.InfoFormat("Selecting products for POS #{0}", id);
+            InfoFormat("Selecting products for POS #{0}", id);
             pb.Products = db.Items
                 .Where(x => x.pos_id == id && x.status_id == (byte)Status.Approved)
                 .Take(100)
@@ -81,10 +135,10 @@ namespace OnBalance.Controllers
         {
             // ID of POS must be!
             int posId = int.Parse(Request["posid"]);
-            Log.InfoFormat("Loading products for POS ID #{0}...", posId);
+            InfoFormat("Loading products for POS ID #{0}...", posId);
 
             ProductRepository db = new ProductRepository();
-            PosRepository dbPos = new PosRepository();
+            OrganizationRepository dbPos = new OrganizationRepository();
 
             StringBuilder sbMain = new StringBuilder();
             StringBuilder sb = new StringBuilder();
@@ -92,7 +146,7 @@ namespace OnBalance.Controllers
                 .Where(x => x.pos_id == posId && x.status_id == (byte)Status.Approved)
                 .Take(200)
                 .ToList();
-            Log.InfoFormat("Got {0} products for POS ID #{1}", products == null ? "NULL" : products.Count.ToString(), posId);
+            InfoFormat("Got {0} products for POS ID #{1}", products == null ? "NULL" : products.Count.ToString(), posId);
             //var shops = dbPos.Items.ToList();
             string callback = Request["callback"];
 
@@ -286,6 +340,7 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Edit(int id)
         {
+            InfoFormat("Editing product with ID #{0}", id);
             ProductRepository db = new ProductRepository();
             Product model = db.GetById(id);
 
@@ -302,7 +357,10 @@ namespace OnBalance.Controllers
             if( ModelState.IsValid )
             {
                 ProductRepository db = new ProductRepository();
-                db.Update(model);
+                model = db.Items.SingleOrDefault(x => x.id == model.id);
+                UpdateModel<Product>(model);
+                //db.Update(model);
+                db.SubmitChanges();
                 return RedirectToAction("Edit", new { id = model.id });
             }
 

@@ -14,7 +14,7 @@ namespace OnBalance.Controllers
 
         public ActionResult Index()
         {
-            Log.InfoFormat("Test/Index...");
+            InfoFormat("Test/Index...");
             BalanceItem bi = new BalanceItem();
             return View(bi);
         }

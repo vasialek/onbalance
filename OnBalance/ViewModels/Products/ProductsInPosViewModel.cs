@@ -11,10 +11,10 @@ namespace OnBalance.ViewModels.Products
         /// <summary>
         /// Shop we are listing
         /// </summary>
-        public Pos Pos { get; set; }
+        public Organization Pos { get; set; }
 
         public IList<Product> Products { get; set; }
 
-        public IList<Pos> Shops { get; set; }
+        public IList<Organization> Shops { get; set; }
     }
 }

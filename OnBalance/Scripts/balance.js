@@ -327,6 +327,9 @@ function createTable(categoryId)
 
         this.selectCell(target);
         YAHOO.OnBalance.selectedCell = cell;
+        console.log(record._oData.code);
+        YAHOO.util.Dom.get("CurrentProductName").innerHTML = record._oData.code + " " + record._oData.name;
+        //console.log(record.record.oData.code);
 //        YAHOO.util.Dom.get("DivStatus").innerHTML = column + "" + record;
     });
 

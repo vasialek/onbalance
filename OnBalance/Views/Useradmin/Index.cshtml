@@ -6,12 +6,16 @@
 
 <h2>@ViewBag.Title</h2>
 
+@Html.Partial("MessagesAndErrors")
+
 <table>
     <thead>
         <tr>
             <th>Username</th>
             <th>E-mail</th>
-            <th>Approved</th>
+            <th>Is approved</th>
+            <th>Is locked</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -21,6 +25,16 @@
             <td>@user.UserName</td>
             <td>@user.Email</td>
             <td>@user.IsApproved</td>
+            <td>@user.IsLockedOut</td>
+            <td>
+                @Html.ImageLink("/images/userroles.png", "Manage user roles", Url.Action("roles", new { id = user.UserName }), new { width = 16, height = 16 }, null)
+                @*@Html.ImageLink("/images/userdisable.png", "Disable", Url.Action("disable", new { id = user.UserName }), new { width = 16, height = 16 }, null)*@
+                @Html.ImageLink("/images/changepassword.png", "Change password", Url.Action("password", new { id = user.UserName }), new { width = 16, height = 16 }, null)
+                @if(user.IsLockedOut)
+                {
+                    @Html.ImageLink("/images/userunlock.png", "Unlock user", Url.Action("unlock", new { id = user.UserName }), new { width = 16, height = 16 }, null)
+                }
+            </td>
         </tr>
     }
     </tbody>

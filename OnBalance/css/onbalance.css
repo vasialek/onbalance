@@ -194,6 +194,15 @@ a
 
 /* END of CSS helpers */
 
+/* Common classes */
+.red{color: #f00;}
+.green{color: #0f0;}
+
+.bottom_links
+{
+    text-align: center;
+}
+
 .user_shop_list, .user_imports_list, .user_exports_list
 {
     width: 150px;

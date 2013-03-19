@@ -8,24 +8,21 @@ using System.Web.Mvc;
 namespace OnBalance.Models
 {
 
-    [Table(Name = "organization")]
-    [Bind]
-    public class Organization
+    partial class Organization
     {
 
-        [Column(Name = "id", IsPrimaryKey = true, IsDbGenerated = true)]
-        public int Id;
+        /// <summary>
+        /// Gets name of status
+        /// </summary>
+        public string StatusName
+        {
+            get
+            {
+                Status s = Status.Unknown;
+                Enum.TryParse(StatusId.ToString(), out s);
+                return s.ToString();
+            }
+        }
 
-        [Column(Name = "status_id")]
-        public byte StatusId;
-
-        [Column(Name = "name")]
-        public string Name;
-
-        [Column(Name = "created_at")]
-        public DateTime CreatedAt;
-
-        [Column(Name = "updated_at")]
-        public DateTime? UpdatedAt;
     }
 }

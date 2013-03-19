@@ -26,6 +26,7 @@
         {
             <div class="user_shop_item">@Html.ActionLink(item.Name, "balance", "pradmin", new { id = item.Id }, null)</div>
             <ul class="list_actions left">
+                <li>@Html.ImageLink("/images/productadmin.png", "Product list", Url.Action("list", "pradmin", new { id = item.Id }), new { width = 16, height = 16 }, new { style = "border: 0" })</li>
                 <li><a href="@Url.Action("parse", "pradmin", new{ id = item.Id})"><img src="@Url.Content("/images/import.png")" alt="Import"/></a></li>
                 <li><a href="@Url.Action("list", "balance", new{ id = item.Id})"><img src="@Url.Content("/images/view.png")" alt="Import"/></a></li>
             </ul>
@@ -67,9 +68,12 @@
 
 <div>
     <footer id="footer">
-        <div class="copyright">2012 &copy;</div>
+        <div class="copyright">2012 - @DateTime.Now.ToString("yyyy") &copy;</div>
     </footer>
 </div>
 
 </body>
+
+@RenderSection("AdditionalJsFiles", false)
+
 </html>

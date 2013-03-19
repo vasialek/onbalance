@@ -37,7 +37,7 @@
       <Column Name="quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="Product_ProductDetail" Member="Product" ThisKey="product_id" OtherKey="id" Type="Product" IsForeignKey="true" />
+      <Association Name="Product_ProductDetail" Member="Product" ThisKey="product_id" OtherKey="id" Type="Product" IsForeignKey="true" DeleteOnNull="true" />
     </Type>
   </Table>
 </Database>

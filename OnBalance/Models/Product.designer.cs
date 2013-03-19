@@ -887,7 +887,7 @@ namespace OnBalance.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_ProductDetail", Storage="_Product", ThisKey="product_id", OtherKey="id", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_ProductDetail", Storage="_Product", ThisKey="product_id", OtherKey="id", IsForeignKey=true, DeleteOnNull=true)]
 		public Product Product
 		{
 			get

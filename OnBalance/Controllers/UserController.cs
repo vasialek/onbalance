@@ -85,7 +85,7 @@ namespace OnBalance.Controllers
         {
             if(ModelState.IsValid)
             {
-                Log.InfoFormat("Trying to log as user {0}, providing pasword length of {1}", model.Username, model.Password.Length);
+                InfoFormat("Trying to log as user {0}, providing pasword length of {1}", model.Username, model.Password.Length);
                 if(Membership.ValidateUser(model.Username, model.Password))
                 {
                     FormsAuthentication.SetAuthCookie(model.Username, false);
@@ -123,7 +123,7 @@ namespace OnBalance.Controllers
         public ActionResult Dashboard()
         {
             var dashboard = new DashboardViewModel();
-            dashboard.Shops = new PosRepository().Items.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
+            dashboard.Shops = new OrganizationRepository().Items.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
             dashboard.Imports = new List<Task>()
             {
                 new Task{ Type = Task.TypeId.Import, Status = Status.Pending }
