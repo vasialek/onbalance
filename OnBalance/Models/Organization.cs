@@ -11,6 +11,13 @@ namespace OnBalance.Models
     partial class Organization
     {
 
+        partial void OnCreated()
+        {
+            _StatusId = (byte)Status.Pending;
+            _CreatedAt = DateTime.Now;
+            _parentId = 0;
+        }
+
         /// <summary>
         /// Gets name of status
         /// </summary>

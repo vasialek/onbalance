@@ -20,6 +20,8 @@ namespace OnBalance.Models
 	using System.Linq.Expressions;
 	using System.ComponentModel;
 	using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
 	
 	
 	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="vasialek_onbalance")]
@@ -478,7 +480,8 @@ namespace OnBalance.Models
 		}
 		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int id
+        [HiddenInput(DisplayValue = false)]
+        public int id
 		{
 			get
 			{
@@ -498,6 +501,7 @@ namespace OnBalance.Models
 		}
 		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status_id", DbType="TinyInt NOT NULL")]
+        [UIHint("Status")]
 		public byte status_id
 		{
 			get

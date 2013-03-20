@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Net;
 using System.Collections.Specialized;
 using OnBalance.ViewModels.Products;
+using OnBalance.ViewModels.Categories;
 
 namespace OnBalance.Controllers
 {
@@ -62,11 +63,25 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Categories(int id)
         {
+            var model = new PosCategoriesListViewModel();
             var db = new ProductRepository();
-            var categories = (from c in db.Items
+            model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
+            model.Categories = (from c in db.Items
                               where c.pos_id == id
-                              select c.Category).Distinct();
-            return View(categories);
+                              select c.Category)
+                              .Distinct()
+                              .ToList();
+            return View(model);
+        }
+
+        //
+        // GET: /pradmin/allcategories
+
+        [Authorize(Roles = "Administrator")]
+        public ActionResult AllCategories()
+        {
+            var db = new ProductRepository();
+            return View(db.Categories);
         }
 
         //
@@ -75,7 +90,9 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult CreateCat(int id)
         {
-            return View(new Category());
+            var model = new PosCategoryViewModel();
+            model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
+            return View(model);
         }
 
         //
@@ -83,12 +100,12 @@ namespace OnBalance.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult CreateCat(Category model)
+        public ActionResult CreateCat(PosCategoryViewModel model)
         {
             try
             {
                 var db = new ProductRepository();
-                model = db.Save(model);
+                model.Category = db.Save(model.Category);
             } catch(Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
@@ -96,7 +113,7 @@ namespace OnBalance.Controllers
             }
 
             SetTempOkMessage("Category was successfully saved");
-            return RedirectToAction("editcat", new { id = model.id });
+            return RedirectToAction("editcat", new { id = model.Organization.Id });
         }
 
         //

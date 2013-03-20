@@ -1,19 +1,19 @@
-﻿@model OnBalance.Models.Category
+﻿@model OnBalance.ViewModels.Categories.PosCategoryViewModel
 
 @{
     ViewBag.Title = "Create category";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create category</h2>
+<h2>Create category for POS @Model.Organization.Name</h2>
 
 
 @using(Html.BeginForm())
 {
     @Html.ValidationSummary()
     
-    @Html.EditorForModel()
+    @Html.EditorFor(x => x.Category)
 
     <input type="submit" value="Save" />
-    @Html.ImageLink("/images/productadmin.png", "List of products", Url.Action("list", "pradmin"), new { width = 16, heigth = 16 }, null)
+    @Html.ImageLink("/images/productadmin.png", "List of categories", Url.Action("categories", "pradmin", new { id = Model.Organization.Id }), new { width = 16, heigth = 16 }, null)
 }

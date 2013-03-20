@@ -1,0 +1,22 @@
+﻿@model OnBalance.Models.Organization
+
+@{
+    ViewBag.Title = "MoveTo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Move @Model.Name to other company</h2>
+    @using( Html.BeginForm() )
+    {
+        foreach( var c in new OnBalance.Models.OrganizationRepository().Companies.Where(x => x.Id != Model.Id) )
+        {
+        
+            <div>
+                @Html.RadioButton("newParentId", c.Id)
+                @c.Name
+            </div>
+        
+        }
+        <input type="submit" value="Move" />
+        @Html.ActionLink("Back to list of companies", "list")
+    }

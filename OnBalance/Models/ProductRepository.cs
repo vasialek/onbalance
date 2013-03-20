@@ -22,6 +22,14 @@ namespace OnBalance.Models
             get { return _dataContext.Products; }
         }
 
+        public IList<Category> Categories
+        {
+            get
+            {
+                return _dataContext.Categories.ToList();
+            }
+        }
+
         public string[] GetAvailableSizes(int categoryId)
         {
             switch(categoryId)

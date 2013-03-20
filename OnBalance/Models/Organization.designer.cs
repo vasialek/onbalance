@@ -83,7 +83,9 @@ namespace OnBalance.Models
 		private int _Id;
 		
 		private byte _StatusId;
-		
+
+        private int _parentId;
+
 		private string _Name;
 		
 		private System.DateTime _CreatedAt;
@@ -98,6 +100,8 @@ namespace OnBalance.Models
     partial void OnIdChanged();
     partial void OnStatusIdChanging(byte value);
     partial void OnStatusIdChanged();
+    partial void OnParentIdChanging(int value);
+    partial void OnParentIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
     partial void OnCreatedAtChanging(System.DateTime value);
@@ -150,8 +154,28 @@ namespace OnBalance.Models
 				}
 			}
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="name", Storage="_Name", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Name = "parent_id", Storage = "_parentId", DbType = "Int NOT NULL")]
+        public int ParentId
+        {
+            get
+            {
+                return this._parentId;
+            }
+            set
+            {
+                if((this._Id != value))
+                {
+                    this.OnParentIdChanging(value);
+                    this.SendPropertyChanging();
+                    this._parentId = value;
+                    this.SendPropertyChanged("parentId");
+                    this.OnStatusIdChanged();
+                }
+            }
+        }
+        
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Name = "name", Storage = "_Name", DbType = "VarChar(255) NOT NULL", CanBeNull = false)]
 		public string Name
 		{
 			get

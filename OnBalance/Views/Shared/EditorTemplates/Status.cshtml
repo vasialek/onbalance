@@ -1,0 +1,15 @@
+﻿@model OnBalance.Status?
+
+@{
+    string name = ViewData.TemplateInfo.GetFullHtmlFieldName("status_id");
+    @*@name
+    if(name.EndsWith(".status_id.status_id"))
+    {
+        name = name.Substring(0, name.Length - ".status_id".Length);
+        @name
+    }*@
+    ViewData.TemplateInfo.HtmlFieldPrefix = ViewData.TemplateInfo.HtmlFieldPrefix.Replace(".status_id", "");
+}
+
+
+@Html.StatusDropDownList(Model ?? OnBalance.Status.Pending)

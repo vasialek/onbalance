@@ -1,0 +1,69 @@
+﻿@model IEnumerable<OnBalance.Models.Organization>
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>List</h2>
+
+    @Html.Partial("MessagesAndErrors")
+
+    <table width="90%">
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Parent
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Created at
+            </th>
+            <th>
+                Updated at
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model)
+    {
+    
+        <tr>
+            <td>
+                @Html.Encode(item.Id)
+            </td>
+            <td>
+                @item.StatusName
+            </td>
+            <td>
+                @Html.Encode(item.ParentId)
+            </td>
+            <td>
+                @Html.ActionLink(item.Name, "list", new { parent = item.Id })
+            </td>
+            <td>
+                @Html.Encode(String.Format("{0:g}", item.CreatedAt))
+            </td>
+            <td>
+                @Html.Encode(String.Format("{0:g}", item.UpdatedAt))
+            </td>
+            <td>
+                @Html.ImageLink("/images/posmoveto.png", "Move POS to...", Url.Action("moveto", new { id = item.Id }), new { width = 16, height = 16 }, null)
+            </td>
+        </tr>
+    
+    }
+
+    </table>
+
+    <div class="bottom_links">
+        @Html.ActionLink("Create New", "create")
+        @Html.ActionLink("List of companies", "list")
+    </div>
