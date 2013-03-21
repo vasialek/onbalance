@@ -30,7 +30,7 @@ create table category
     id int primary key not null identity(1000, 1),
     status_id tinyint not null default(1),
     parent_id int not null default(0),
-    used_in_org varchar(128),
+    organization_id integer not null,
     name nvarchar(128) not null
 );
 

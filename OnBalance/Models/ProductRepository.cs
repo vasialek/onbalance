@@ -59,18 +59,18 @@ namespace OnBalance.Models
         /// <param name="id"></param>
         public Product GetById(int id)
         {
-            return Items.SingleOrDefault(x => x.id == id);
+            return Items.SingleOrDefault(x => x.Id == id);
         }
 
         public Category GetCategory(int id)
         {
-            return _dataContext.Categories.SingleOrDefault(x => x.id == id);
+            return _dataContext.Categories.SingleOrDefault(x => x.Id == id);
         }
 
         public void Update(Product model)
         {
-            var p = Items.SingleOrDefault(x => x.id == model.id);
-            p.name = model.name;
+            var p = Items.SingleOrDefault(x => x.Id == model.Id);
+            p.Name = model.Name;
             _dataContext.SubmitChanges();
         }
 
@@ -99,8 +99,8 @@ namespace OnBalance.Models
         public IQueryable<Product> GetLastInPos(int id, int offset, int perPage)
         {
             return _dataContext.GetTable<Product>()
-                .Where(x => x.pos_id == id && x.status_id != (byte)Status.Deleted)
-                .OrderBy(x => x.id)
+                .Where(x => x.PosId == id && x.StatusId != (byte)Status.Deleted)
+                .OrderBy(x => x.Id)
                 .Skip(offset)
                 .Take(perPage);
         }

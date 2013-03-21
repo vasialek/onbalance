@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Controllers\BalanceController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
@@ -189,8 +190,8 @@
     <Content Include="Views\Shared\EditorTemplates\ProductDetail.cshtml" />
     <Content Include="Views\Pos\Edit.cshtml" />
     <Content Include="Views\Pradmin\Categories.cshtml" />
-    <Content Include="Views\Pradmin\CreateCat.cshtml" />
-    <Content Include="Views\Pradmin\EditCat.cshtml" />
+    <Content Include="Views\Pradmin\CreateCategory.cshtml" />
+    <Content Include="Views\Pradmin\EditCategory.cshtml" />
     <Content Include="Views\Useradmin\Roles.cshtml" />
     <Content Include="Views\Useradmin\Password.cshtml" />
     <Content Include="Views\Shared\MessagesAndErrors.cshtml" />
@@ -200,7 +201,9 @@
     <Content Include="Views\Organization\List.cshtml" />
     <Content Include="Views\Organization\MoveTo.cshtml" />
     <Content Include="Views\Organization\Create.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Status.cshtml" />
+    <Content Include="Views\Help\NotFound.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MyStatus.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
   </ItemGroup>
   <ItemGroup>

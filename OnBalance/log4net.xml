@@ -65,7 +65,7 @@
   </appender>
   <root>
     <level value="ALL" />
-    <!--<appender-ref ref="RolingLogFile" />-->
+    <appender-ref ref="RolingLogFile" />
     <!--<appender-ref ref="AdoNetAppender" />-->
   </root>
 </log4net>

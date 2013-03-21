@@ -1,0 +1,14 @@
+﻿@model byte?
+
+@{
+    string name = ViewData.TemplateInfo.GetFullHtmlFieldName("");
+    ViewData.TemplateInfo.HtmlFieldPrefix = ViewData.TemplateInfo.HtmlFieldPrefix.Replace("StatusId", "");
+
+    OnBalance.Status s = OnBalance.Status.Unknown;
+    if(Model.HasValue)
+    {
+        Enum.TryParse(Model.Value.ToString(), out s);
+    }
+}
+
+@Html.StatusDropDownList(s, "StatusId")

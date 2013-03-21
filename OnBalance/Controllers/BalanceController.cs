@@ -37,7 +37,7 @@ namespace OnBalance.Controllers
             StringBuilder sbMain = new StringBuilder();
             StringBuilder sb = new StringBuilder();
             var products = db.Items
-                .Where(x => x.pos_id == posId && x.status_id == (byte)Status.Approved);
+                .Where(x => x.PosId == posId && x.StatusId == (byte)Status.Approved);
             if( categoryId > 0 )
             {
                 //products = products.Where(x => x.category_id == categoryId);
@@ -58,7 +58,7 @@ namespace OnBalance.Controllers
                     sb.AppendFormat(", '{0}': {1}", kvp.Key, kvp.Value);
                 }
 
-                sbMain.AppendFormat("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3} {4} }},", p.name, p.internal_code, p.price, 0, sb.ToString());
+                sbMain.AppendFormat("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3} {4} }},", p.Name, p.InternalCode, p.Price, 0, sb.ToString());
             }
 
             return Content(string.Format("{0}({{'data': [ {1} ]}})", callback, sbMain.ToString()));
@@ -303,7 +303,7 @@ namespace OnBalance.Controllers
             }
 
             InfoFormat("Searching for product with code: [{0}]", item.InternalCode);
-            var product = dbProducts.Items.SingleOrDefault(x => x.internal_code == item.InternalCode);
+            var product = dbProducts.Items.SingleOrDefault(x => x.InternalCode == item.InternalCode);
             if(product == null)
             {
                 return HttpNotFound();
@@ -311,9 +311,9 @@ namespace OnBalance.Controllers
 
             if(!string.IsNullOrWhiteSpace(item.ProductName))
             {
-                product.name = item.ProductName;
+                product.Name = item.ProductName;
             }
-            product.price = item.Price;
+            product.Price = item.Price;
             InfoFormat("Going to save changes from POS to Online Balance System DB...");
             dbProducts.Update(product);
 

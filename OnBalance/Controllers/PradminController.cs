@@ -51,7 +51,7 @@ namespace OnBalance.Controllers
 
             InfoFormat("Displaying list of products in POS #{0}, skipping {1}, taking {2} products", id, offset, perPage);
             productsList.Products = new ProductRepository().GetLastInPos(id, offset, perPage)
-                .OrderBy(x => x.id)
+                .OrderBy(x => x.Id)
                 .ToList();
 
             return View("List", Layout, productsList);
@@ -66,11 +66,12 @@ namespace OnBalance.Controllers
             var model = new PosCategoriesListViewModel();
             var db = new ProductRepository();
             model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
-            model.Categories = (from c in db.Items
-                              where c.pos_id == id
-                              select c.Category)
-                              .Distinct()
-                              .ToList();
+            model.Categories = db.Categories.Where(x => x.OrganizationId == model.Organization.Id).ToList();
+            //model.Categories = (from c in db.Items
+            //                  where c.PosId == id
+            //                  select c.Category)
+            //                  .Distinct()
+            //                  .ToList();
             return View(model);
         }
 
@@ -85,22 +86,23 @@ namespace OnBalance.Controllers
         }
 
         //
-        // GET: /pradmin/createcat/500001
+        // GET: /pradmin/createcategory/500001
 
         [Authorize]
-        public ActionResult CreateCat(int id)
+        public ActionResult CreateCategory(int id)
         {
             var model = new PosCategoryViewModel();
             model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
+            model.Category = new Category { OrganizationId = id };
             return View(model);
         }
 
         //
-        // POST: /pradmin/createcat
+        // POST: /pradmin/createcategory
 
         [Authorize]
         [HttpPost]
-        public ActionResult CreateCat(PosCategoryViewModel model)
+        public ActionResult CreateCategory(PosCategoryViewModel model)
         {
             try
             {
@@ -113,21 +115,57 @@ namespace OnBalance.Controllers
             }
 
             SetTempOkMessage("Category was successfully saved");
-            return RedirectToAction("editcat", new { id = model.Organization.Id });
+            return RedirectToAction("editcategory", new { id = model.Organization.Id });
         }
 
         //
-        // GET: /pradmin/editcat/500001
+        // GET: /pradmin/editcategory/1001
 
         [Authorize]
-        public ActionResult EditCat(int id)
+        public ActionResult EditCategory(int id)
         {
+            var model = new Category();
             var db = new ProductRepository();
-            Category model = db.GetCategory(id);
+            model = db.GetCategory(id);
+            if( model == null )
+            {
+                ErrorFormat("User #{0} tries to edit non-existing category #{1}!", User.Identity.Name, id);
+                return RedirectToAction("notfound", "help");
+            }
+
+            //model.Organization = new OrganizationRepository().Items.Single(x => x.Id == model.Category.id);
             return View(model);
         }
 
         //
+        // POST: /pradmin/editcategory/1003
+        [Authorize]
+        [HttpPost]
+        public ActionResult EditCategory(int id, FormCollection f)
+        {
+            Category model = null;
+            try
+            {
+                var db = new ProductRepository();
+                model = db.GetCategory(id);
+                if(model == null)
+                {
+                    ErrorFormat("User #{0} tries to update non-existing category #{1}!", User.Identity.Name, id);
+                    return RedirectToAction("notfound", "help");
+                }
+
+                UpdateModel(model);
+                db.SubmitChanges();
+                return RedirectToAction("editcategory", new { id = id });
+            } catch(Exception ex)
+            {
+                Error(string.Concat("Error updating category #", id), ex);
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            return View(model);
+        }
+        
         // GET: /pradmin/balance/123
 
         public ActionResult Balance(int id)
@@ -138,7 +176,7 @@ namespace OnBalance.Controllers
 
             InfoFormat("Selecting products for POS #{0}", id);
             pb.Products = db.Items
-                .Where(x => x.pos_id == id && x.status_id == (byte)Status.Approved)
+                .Where(x => x.PosId == id && x.StatusId == (byte)Status.Approved)
                 .Take(100)
                 .ToList();
             pb.Shops = dbPos.Items.ToList();
@@ -160,7 +198,7 @@ namespace OnBalance.Controllers
             StringBuilder sbMain = new StringBuilder();
             StringBuilder sb = new StringBuilder();
             var products = db.Items
-                .Where(x => x.pos_id == posId && x.status_id == (byte)Status.Approved)
+                .Where(x => x.PosId == posId && x.StatusId == (byte)Status.Approved)
                 .Take(200)
                 .ToList();
             InfoFormat("Got {0} products for POS ID #{1}", products == null ? "NULL" : products.Count.ToString(), posId);
@@ -178,7 +216,7 @@ namespace OnBalance.Controllers
                     sb.AppendFormat(", '{0}': {1}", kvp.Key, kvp.Value);
                 }
 
-                sbMain.AppendFormat("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3} {4} }},", p.name, p.internal_code, p.price, 0, sb.ToString());
+                sbMain.AppendFormat("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3} {4} }},", p.Name, p.InternalCode, p.PosId, 0, sb.ToString());
             }
 
             return Content(string.Format("{0}({{'data': [ {1} ]}})", callback, sbMain.ToString()));
@@ -374,11 +412,11 @@ namespace OnBalance.Controllers
             if( ModelState.IsValid )
             {
                 ProductRepository db = new ProductRepository();
-                model = db.Items.SingleOrDefault(x => x.id == model.id);
+                model = db.Items.SingleOrDefault(x => x.Id == model.Id);
                 UpdateModel<Product>(model);
                 //db.Update(model);
                 db.SubmitChanges();
-                return RedirectToAction("Edit", new { id = model.id });
+                return RedirectToAction("Edit", new { id = model.Id });
             }
 
             return View(model);

@@ -1,0 +1,6 @@
+﻿@model byte
+
+@{
+    OnBalance.Status s;
+    @(Enum.TryParse(Model.ToString(), out s) ? s.ToString() : OnBalance.Status.Unknown.ToString())
+}

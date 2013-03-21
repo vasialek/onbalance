@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Categories</h2>
+<h2>Categories for POS @Model.Organization.Name</h2>
 
 <table>
     <tr>
@@ -13,10 +13,7 @@
             Status
         </th>
         <th>
-            Parent
-        </th>
-        <th>
-            List of POS
+            POS
         </th>
         <th>
             Name
@@ -27,21 +24,16 @@
 @foreach (var item in Model.Categories) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.status_id)
+            @Html.DisplayFor(modelItem => item.StatusId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.parent_id)
+            @Html.DisplayFor(modelItem => item.OrganizationId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.used_in_org)
+            @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.ImageLink("/images/edit.png", "Edit category", Url.Action("editcategory", new { id = item.Id }), new { width = 16, height = 16 }, null)
         </td>
     </tr>
 }
@@ -49,5 +41,5 @@
 </table>
 
 <div class="bottom_links">
-    @Html.ImageLink("/images/add.png", "Create new product category", Url.Action("createcat", new { id = Model.Organization.Id }), new { width = 16, heigth = 16 }, null)
+    @Html.ImageLink("/images/add.png", "Create new product category", Url.Action("createcategory", new { id = Model.Organization.Id }), new { width = 16, heigth = 16 }, null)
 </div>

@@ -2,9 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
 namespace OnBalance.Models
 {
+
+    partial class Category
+    {
+
+        partial void OnCreated()
+        {
+            this.StatusId = (byte)Status.Unknown;
+        }
+
+    }
+
     partial class ProductDetail
     {
         partial void OnCreated()
@@ -26,7 +36,7 @@ namespace OnBalance.Models
         {
             get
             {
-                return ((Status)status_id).ToString();
+                return ((Status)StatusId).ToString();
             }
         }
 
@@ -66,7 +76,7 @@ namespace OnBalance.Models
         public Dictionary<string, int> GetQuantityForAllSizes()
         {
             Dictionary<string, int> ar = new Dictionary<string, int>();
-            var sizes = new ProductRepository().GetAvailableSizes(this.category_id);
+            var sizes = new ProductRepository().GetAvailableSizes(this.CategoryId);
             sizes.ToList().ForEach(x => ar.Add(x, 0));
             return ar;
         }

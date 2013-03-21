@@ -7,22 +7,19 @@
 
 <h2>AllCategories</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table>
     <tr>
         <th>
-            status_id
+            Status
         </th>
         <th>
-            parent_id
+            Parent
         </th>
         <th>
-            used_in_org
+            Organization
         </th>
         <th>
-            name
+            Name
         </th>
         <th></th>
     </tr>
@@ -30,23 +27,25 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.status_id)
+            @Html.DisplayFor(modelItem => item.StatusId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.parent_id)
+            @Html.DisplayFor(modelItem => item.ParentId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.used_in_org)
+            @Html.DisplayFor(modelItem => item.OrganizationId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.name)
+            @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.ImageLink("/images/edit.png", "Edit category", Url.Action("editcategory", new { id = item.Id }), new { width = 16, heigth = 16 }, null)
         </td>
     </tr>
 }
 
 </table>
+
+<div class="bottom_links">
+    @Html.ImageLink("/images/add.png", "Create category", Url.Action("createcategory"), new { width = 16, heigth = 16 }, null)
+</div>

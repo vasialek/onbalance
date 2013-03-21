@@ -1,0 +1,19 @@
+﻿@model OnBalance.Models.Category
+
+@{
+    ViewBag.Title = "EditCat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit category @Model.Name</h2>
+
+@using(Html.BeginForm())
+{
+    @Html.ValidationSummary()
+    
+    @Html.EditorForModel()
+
+    <input type="submit" value="Save" />
+    @Html.ImageLink("/images/poscategories.png", "POS categories", Url.Action("categories", "pradmin", new { id = Model.OrganizationId }), new { width = 16, heigth = 16 }, null)
+}
+

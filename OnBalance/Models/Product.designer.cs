@@ -20,7 +20,7 @@ namespace OnBalance.Models
 	using System.Linq.Expressions;
 	using System.ComponentModel;
 	using System;
-    using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 	
 	
@@ -35,13 +35,19 @@ namespace OnBalance.Models
     partial void InsertProduct(Product instance);
     partial void UpdateProduct(Product instance);
     partial void DeleteProduct(Product instance);
-    partial void InsertCategory(Category instance);
-    partial void UpdateCategory(Category instance);
-    partial void DeleteCategory(Category instance);
     partial void InsertProductDetail(ProductDetail instance);
     partial void UpdateProductDetail(ProductDetail instance);
     partial void DeleteProductDetail(ProductDetail instance);
+    partial void InsertCategory(Category instance);
+    partial void UpdateCategory(Category instance);
+    partial void DeleteCategory(Category instance);
     #endregion
+		
+		public ProductDataContext() : 
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["vasialek_onbalanceConnectionString"].ConnectionString, mappingSource)
+		{
+			OnCreated();
+		}
 		
 		public ProductDataContext(string connection) : 
 				base(connection, mappingSource)
@@ -75,19 +81,19 @@ namespace OnBalance.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<Category> Categories
-		{
-			get
-			{
-				return this.GetTable<Category>();
-			}
-		}
-		
 		public System.Data.Linq.Table<ProductDetail> ProductDetails
 		{
 			get
 			{
 				return this.GetTable<ProductDetail>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Category> Categories
+		{
+			get
+			{
+				return this.GetTable<Category>();
 			}
 		}
 	}
@@ -126,26 +132,26 @@ namespace OnBalance.Models
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnidChanging(int value);
-    partial void OnidChanged();
-    partial void Onstatus_idChanging(byte value);
-    partial void Onstatus_idChanged();
-    partial void Onpos_idChanging(int value);
-    partial void Onpos_idChanged();
-    partial void Oninternal_codeChanging(string value);
-    partial void Oninternal_codeChanged();
-    partial void OnuidChanging(string value);
-    partial void OnuidChanged();
-    partial void Onuser_idChanging(string value);
-    partial void Onuser_idChanged();
-    partial void OnnameChanging(string value);
-    partial void OnnameChanged();
-    partial void OnpriceChanging(decimal value);
-    partial void OnpriceChanged();
-    partial void Oncreated_atChanging(System.DateTime value);
-    partial void Oncreated_atChanged();
-    partial void Oncategory_idChanging(int value);
-    partial void Oncategory_idChanged();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnStatusIdChanging(byte value);
+    partial void OnStatusIdChanged();
+    partial void OnPosIdChanging(int value);
+    partial void OnPosIdChanged();
+    partial void OnInternalCodeChanging(string value);
+    partial void OnInternalCodeChanged();
+    partial void OnUidChanging(string value);
+    partial void OnUidChanged();
+    partial void OnUserIdChanging(string value);
+    partial void OnUserIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnPriceChanging(decimal value);
+    partial void OnPriceChanged();
+    partial void OnCreatedAtChanging(System.DateTime value);
+    partial void OnCreatedAtChanged();
+    partial void OnCategoryIdChanging(int value);
+    partial void OnCategoryIdChanged();
     #endregion
 		
 		public Product()
@@ -155,8 +161,8 @@ namespace OnBalance.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="id", Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
 		{
 			get
 			{
@@ -166,17 +172,17 @@ namespace OnBalance.Models
 			{
 				if ((this._id != value))
 				{
-					this.OnidChanging(value);
+					this.OnIdChanging(value);
 					this.SendPropertyChanging();
 					this._id = value;
-					this.SendPropertyChanged("id");
-					this.OnidChanged();
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status_id", DbType="TinyInt NOT NULL")]
-		public byte status_id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="status_id", Storage="_status_id", DbType="TinyInt NOT NULL")]
+		public byte StatusId
 		{
 			get
 			{
@@ -186,17 +192,17 @@ namespace OnBalance.Models
 			{
 				if ((this._status_id != value))
 				{
-					this.Onstatus_idChanging(value);
+					this.OnStatusIdChanging(value);
 					this.SendPropertyChanging();
 					this._status_id = value;
-					this.SendPropertyChanged("status_id");
-					this.Onstatus_idChanged();
+					this.SendPropertyChanged("StatusId");
+					this.OnStatusIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pos_id", DbType="Int NOT NULL")]
-		public int pos_id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="pos_id", Storage="_pos_id", DbType="Int NOT NULL")]
+		public int PosId
 		{
 			get
 			{
@@ -206,17 +212,17 @@ namespace OnBalance.Models
 			{
 				if ((this._pos_id != value))
 				{
-					this.Onpos_idChanging(value);
+					this.OnPosIdChanging(value);
 					this.SendPropertyChanging();
 					this._pos_id = value;
-					this.SendPropertyChanged("pos_id");
-					this.Onpos_idChanged();
+					this.SendPropertyChanged("PosId");
+					this.OnPosIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_internal_code", DbType="VarChar(64) NOT NULL", CanBeNull=false)]
-		public string internal_code
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="internal_code", Storage="_internal_code", DbType="VarChar(64) NOT NULL", CanBeNull=false)]
+		public string InternalCode
 		{
 			get
 			{
@@ -226,17 +232,17 @@ namespace OnBalance.Models
 			{
 				if ((this._internal_code != value))
 				{
-					this.Oninternal_codeChanging(value);
+					this.OnInternalCodeChanging(value);
 					this.SendPropertyChanging();
 					this._internal_code = value;
-					this.SendPropertyChanged("internal_code");
-					this.Oninternal_codeChanged();
+					this.SendPropertyChanged("InternalCode");
+					this.OnInternalCodeChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_uid", DbType="VarChar(64) NOT NULL", CanBeNull=false)]
-		public string uid
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="uid", Storage="_uid", DbType="VarChar(64) NOT NULL", CanBeNull=false)]
+		public string Uid
 		{
 			get
 			{
@@ -246,17 +252,17 @@ namespace OnBalance.Models
 			{
 				if ((this._uid != value))
 				{
-					this.OnuidChanging(value);
+					this.OnUidChanging(value);
 					this.SendPropertyChanging();
 					this._uid = value;
-					this.SendPropertyChanged("uid");
-					this.OnuidChanged();
+					this.SendPropertyChanged("Uid");
+					this.OnUidChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_id", DbType="VarChar(128) NOT NULL", CanBeNull=false)]
-		public string user_id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="user_id", Storage="_user_id", DbType="VarChar(128) NOT NULL", CanBeNull=false)]
+		public string UserId
 		{
 			get
 			{
@@ -266,17 +272,17 @@ namespace OnBalance.Models
 			{
 				if ((this._user_id != value))
 				{
-					this.Onuser_idChanging(value);
+					this.OnUserIdChanging(value);
 					this.SendPropertyChanging();
 					this._user_id = value;
-					this.SendPropertyChanged("user_id");
-					this.Onuser_idChanged();
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="VarChar(128) NOT NULL", CanBeNull=false)]
-		public string name
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="name", Storage="_name", DbType="VarChar(128) NOT NULL", CanBeNull=false)]
+		public string Name
 		{
 			get
 			{
@@ -286,17 +292,17 @@ namespace OnBalance.Models
 			{
 				if ((this._name != value))
 				{
-					this.OnnameChanging(value);
+					this.OnNameChanging(value);
 					this.SendPropertyChanging();
 					this._name = value;
-					this.SendPropertyChanged("name");
-					this.OnnameChanged();
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_price", DbType="Decimal(8,4) NOT NULL")]
-		public decimal price
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="price", Storage="_price", DbType="Decimal(8,4) NOT NULL")]
+		public decimal Price
 		{
 			get
 			{
@@ -306,17 +312,17 @@ namespace OnBalance.Models
 			{
 				if ((this._price != value))
 				{
-					this.OnpriceChanging(value);
+					this.OnPriceChanging(value);
 					this.SendPropertyChanging();
 					this._price = value;
-					this.SendPropertyChanged("price");
-					this.OnpriceChanged();
+					this.SendPropertyChanged("Price");
+					this.OnPriceChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_at", DbType="DateTime NOT NULL")]
-		public System.DateTime created_at
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="created_at", Storage="_created_at", DbType="DateTime NOT NULL")]
+		public System.DateTime CreatedAt
 		{
 			get
 			{
@@ -326,17 +332,17 @@ namespace OnBalance.Models
 			{
 				if ((this._created_at != value))
 				{
-					this.Oncreated_atChanging(value);
+					this.OnCreatedAtChanging(value);
 					this.SendPropertyChanging();
 					this._created_at = value;
-					this.SendPropertyChanged("created_at");
-					this.Oncreated_atChanged();
+					this.SendPropertyChanged("CreatedAt");
+					this.OnCreatedAtChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_category_id", DbType="Int NOT NULL")]
-		public int category_id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="category_id", Storage="_category_id", DbType="Int NOT NULL")]
+		public int CategoryId
 		{
 			get
 			{
@@ -346,20 +352,16 @@ namespace OnBalance.Models
 			{
 				if ((this._category_id != value))
 				{
-					if (this._Category.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Oncategory_idChanging(value);
+					this.OnCategoryIdChanging(value);
 					this.SendPropertyChanging();
 					this._category_id = value;
-					this.SendPropertyChanged("category_id");
-					this.Oncategory_idChanged();
+					this.SendPropertyChanged("CategoryId");
+					this.OnCategoryIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_ProductDetail", Storage="_ProductDetails", ThisKey="id", OtherKey="product_id")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_ProductDetail", Storage="_ProductDetails", ThisKey="Id", OtherKey="product_id")]
 		public EntitySet<ProductDetail> ProductDetails
 		{
 			get
@@ -372,7 +374,7 @@ namespace OnBalance.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Product", Storage="_Category", ThisKey="category_id", OtherKey="id", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Product", Storage="_Category", ThisKey="CategoryId", OtherKey="Id", IsForeignKey=true)]
 		public Category Category
 		{
 			get
@@ -395,7 +397,7 @@ namespace OnBalance.Models
 					if ((value != null))
 					{
 						value.Products.Add(this);
-						this._category_id = value.id;
+						this._category_id = value.Id;
 					}
 					else
 					{
@@ -436,194 +438,6 @@ namespace OnBalance.Models
 		{
 			this.SendPropertyChanging();
 			entity.Product = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="vasialek_onbalance_user.category")]
-	public partial class Category : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _id;
-		
-		private byte _status_id;
-		
-		private int _parent_id;
-		
-		private string _used_in_org;
-		
-		private string _name;
-		
-		private EntitySet<Product> _Products;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidChanging(int value);
-    partial void OnidChanged();
-    partial void Onstatus_idChanging(byte value);
-    partial void Onstatus_idChanged();
-    partial void Onparent_idChanging(int value);
-    partial void Onparent_idChanged();
-    partial void Onused_in_orgChanging(string value);
-    partial void Onused_in_orgChanged();
-    partial void OnnameChanging(string value);
-    partial void OnnameChanged();
-    #endregion
-		
-		public Category()
-		{
-			this._Products = new EntitySet<Product>(new Action<Product>(this.attach_Products), new Action<Product>(this.detach_Products));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-        [HiddenInput(DisplayValue = false)]
-        public int id
-		{
-			get
-			{
-				return this._id;
-			}
-			set
-			{
-				if ((this._id != value))
-				{
-					this.OnidChanging(value);
-					this.SendPropertyChanging();
-					this._id = value;
-					this.SendPropertyChanged("id");
-					this.OnidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status_id", DbType="TinyInt NOT NULL")]
-        [UIHint("Status")]
-		public byte status_id
-		{
-			get
-			{
-				return this._status_id;
-			}
-			set
-			{
-				if ((this._status_id != value))
-				{
-					this.Onstatus_idChanging(value);
-					this.SendPropertyChanging();
-					this._status_id = value;
-					this.SendPropertyChanged("status_id");
-					this.Onstatus_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_parent_id", DbType="Int NOT NULL")]
-		public int parent_id
-		{
-			get
-			{
-				return this._parent_id;
-			}
-			set
-			{
-				if ((this._parent_id != value))
-				{
-					this.Onparent_idChanging(value);
-					this.SendPropertyChanging();
-					this._parent_id = value;
-					this.SendPropertyChanged("parent_id");
-					this.Onparent_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_used_in_org", DbType="VarChar(128)")]
-		public string used_in_org
-		{
-			get
-			{
-				return this._used_in_org;
-			}
-			set
-			{
-				if ((this._used_in_org != value))
-				{
-					this.Onused_in_orgChanging(value);
-					this.SendPropertyChanging();
-					this._used_in_org = value;
-					this.SendPropertyChanged("used_in_org");
-					this.Onused_in_orgChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
-		public string name
-		{
-			get
-			{
-				return this._name;
-			}
-			set
-			{
-				if ((this._name != value))
-				{
-					this.OnnameChanging(value);
-					this.SendPropertyChanging();
-					this._name = value;
-					this.SendPropertyChanged("name");
-					this.OnnameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Product", Storage="_Products", ThisKey="id", OtherKey="category_id")]
-		public EntitySet<Product> Products
-		{
-			get
-			{
-				return this._Products;
-			}
-			set
-			{
-				this._Products.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Products(Product entity)
-		{
-			this.SendPropertyChanging();
-			entity.Category = this;
-		}
-		
-		private void detach_Products(Product entity)
-		{
-			this.SendPropertyChanging();
-			entity.Category = null;
 		}
 	}
 	
@@ -891,7 +705,7 @@ namespace OnBalance.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_ProductDetail", Storage="_Product", ThisKey="product_id", OtherKey="id", IsForeignKey=true, DeleteOnNull=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_ProductDetail", Storage="_Product", ThisKey="product_id", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true)]
 		public Product Product
 		{
 			get
@@ -914,7 +728,7 @@ namespace OnBalance.Models
 					if ((value != null))
 					{
 						value.ProductDetails.Add(this);
-						this._product_id = value.id;
+						this._product_id = value.Id;
 					}
 					else
 					{
@@ -943,6 +757,194 @@ namespace OnBalance.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="vasialek_onbalance_user.category")]
+	public partial class Category : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private byte _StatusId;
+		
+		private int _ParentId;
+		
+		private string _Name;
+		
+		private int _OrganizationId;
+		
+		private EntitySet<Product> _Products;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnStatusIdChanging(byte value);
+    partial void OnStatusIdChanged();
+    partial void OnParentIdChanging(int value);
+    partial void OnParentIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnOrganizationIdChanging(int value);
+    partial void OnOrganizationIdChanged();
+    #endregion
+		
+		public Category()
+		{
+			this._Products = new EntitySet<Product>(new Action<Product>(this.attach_Products), new Action<Product>(this.detach_Products));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="id", Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+        [HiddenInput(DisplayValue = false)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="status_id", Storage="_StatusId", DbType="TinyInt NOT NULL")]
+        [UIHint("MyStatus")]
+		public byte StatusId
+		{
+			get
+			{
+				return this._StatusId;
+			}
+			set
+			{
+				if ((this._StatusId != value))
+				{
+					this.OnStatusIdChanging(value);
+					this.SendPropertyChanging();
+					this._StatusId = value;
+					this.SendPropertyChanged("StatusId");
+					this.OnStatusIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="parent_id", Storage="_ParentId", DbType="Int NOT NULL")]
+		public int ParentId
+		{
+			get
+			{
+				return this._ParentId;
+			}
+			set
+			{
+				if ((this._ParentId != value))
+				{
+					this.OnParentIdChanging(value);
+					this.SendPropertyChanging();
+					this._ParentId = value;
+					this.SendPropertyChanged("ParentId");
+					this.OnParentIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="name", Storage="_Name", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="organization_id", Storage="_OrganizationId", DbType="Int NOT NULL")]
+		public int OrganizationId
+		{
+			get
+			{
+				return this._OrganizationId;
+			}
+			set
+			{
+				if ((this._OrganizationId != value))
+				{
+					this.OnOrganizationIdChanging(value);
+					this.SendPropertyChanging();
+					this._OrganizationId = value;
+					this.SendPropertyChanged("OrganizationId");
+					this.OnOrganizationIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_Product", Storage="_Products", ThisKey="Id", OtherKey="CategoryId")]
+		public EntitySet<Product> Products
+		{
+			get
+			{
+				return this._Products;
+			}
+			set
+			{
+				this._Products.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Products(Product entity)
+		{
+			this.SendPropertyChanging();
+			entity.Category = this;
+		}
+		
+		private void detach_Products(Product entity)
+		{
+			this.SendPropertyChanging();
+			entity.Category = null;
 		}
 	}
 }
