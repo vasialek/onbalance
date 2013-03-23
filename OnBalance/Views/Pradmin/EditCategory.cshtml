@@ -3,15 +3,32 @@
 @{
     ViewBag.Title = "EditCat";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Html.ScriptManager()
+        .ScriptInclude("http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js")
+        .IncludeLibrary(OnBalance.Helpers.SimpleScriptManager.Libraries.UnobtrusiveMvc, "", OnBalance.Helpers.SimpleScriptManager.ScriptFormats.Min, OnBalance.Helpers.SimpleScriptManager.Cdns.Microsoft);
+
+    var ajaxOptions = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        LoadingElementId = "LoadingDiv",
+        UpdateTargetId = "DynamicDiv"
+    };
 }
 
 <h2>Edit category @Model.Name</h2>
 
-@using(Html.BeginForm())
+@using(Ajax.BeginForm("dosavestructure", new { id = Model.Id }, ajaxOptions))
 {
     @Html.ValidationSummary()
     
+    <div id="LoadingDiv" style="">loading</div>
+    
     @Html.EditorForModel()
+
+    <div id="DynamicDiv">
+        @Html.Partial("CategoryStructure", Model)
+    </div>
 
     <input type="submit" value="Save" />
     @Html.ImageLink("/images/poscategories.png", "POS categories", Url.Action("categories", "pradmin", new { id = Model.OrganizationId }), new { width = 16, heigth = 16 }, null)

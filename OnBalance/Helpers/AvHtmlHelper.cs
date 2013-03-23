@@ -89,5 +89,18 @@ namespace System.Web.Mvc
 
             return htmlHelper.DropDownList(name, items);
         }
+
+        private static readonly string _scriptManagerKey = "SimpleScriptManagerKey";
+        public static SimpleScriptManager ScriptManager(this HtmlHelper htmlHelper)
+        {
+            var sm = htmlHelper.ViewData[_scriptManagerKey] as SimpleScriptManager;
+            if( sm == null )
+            {
+                sm = new SimpleScriptManager(htmlHelper);
+                htmlHelper.ViewData[_scriptManagerKey] = sm;
+            }
+
+            return sm;
+        }
     }
 }

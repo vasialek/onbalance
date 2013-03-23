@@ -5,14 +5,21 @@ using System.Web;
 namespace OnBalance.Models
 {
 
-    partial class Category
+    partial class Category : BaseModel
     {
 
         partial void OnCreated()
         {
-            this.StatusId = (byte)Status.Unknown;
+            this._statusId = (byte)Status.Unknown;
         }
 
+        public CategoryStructure[] Strucutre
+        {
+            get
+            {
+                return null;
+            }
+        }
     }
 
     partial class ProductDetail

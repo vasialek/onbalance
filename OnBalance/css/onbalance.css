@@ -192,11 +192,14 @@ a
 
 .b {font-weight: bold;}
 
-/* END of CSS helpers */
-
-/* Common classes */
 .red{color: #f00;}
 .green{color: #0f0;}
+
+/* DIVs as table */
+.dtrow{display: table-row;}
+.dtcell{display: table-cell;}
+
+/* END of CSS helpers */
 
 .bottom_links
 {

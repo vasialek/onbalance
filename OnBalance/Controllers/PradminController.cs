@@ -165,6 +165,42 @@ namespace OnBalance.Controllers
 
             return View(model);
         }
+
+        //
+        // POST: /pradmin/dosavestructure
+
+        //[HttpPost]
+        public ActionResult DoSaveStructure(int id, List<CategoryStructure> CategoryStructure)
+        {
+            var db = new CategoryStructureRepository();
+            Category model = new ProductRepository().GetCategory(id);
+            string newName = Request["NewName"];
+            bool isNewApproved = false;
+
+            if(CategoryStructure != null)
+            {
+                Info("Updating category structure...");
+                foreach(var item in CategoryStructure)
+                {
+                    InfoFormat("  Category structure: #{0, -8}. {1}", item.Id, item.Name);
+                    db.Update(item);
+                }
+            }
+
+            if(string.IsNullOrEmpty(newName) == false)
+            {
+                bool.TryParse(Request["NewStatus"], out isNewApproved);
+                CategoryStructure cs = new CategoryStructure();
+                cs.Name = newName;
+                cs.StatusId = isNewApproved ? (byte)Status.Approved : (byte)Status.Deleted;
+                cs.CategoryId = model.Id;
+                db.Add(cs);
+            }
+
+            db.SubmitChanges();
+
+            return PartialView("CategoryStructure", model);
+        }
         
         // GET: /pradmin/balance/123
 

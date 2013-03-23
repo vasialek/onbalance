@@ -20,7 +20,7 @@ namespace OnBalance.Models
 	using System.Linq.Expressions;
 	using System.ComponentModel;
 	using System;
-using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 	
 	
@@ -766,15 +766,15 @@ using System.ComponentModel.DataAnnotations;
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _Id;
+		private int _id;
 		
-		private byte _StatusId;
+        //private byte _StatusId;
 		
-		private int _ParentId;
+		private int _parentId;
 		
-		private string _Name;
+		private string _name;
 		
-		private int _OrganizationId;
+		private int _organizationId;
 		
 		private EntitySet<Product> _Products;
 		
@@ -799,104 +799,104 @@ using System.ComponentModel.DataAnnotations;
 			this._Products = new EntitySet<Product>(new Action<Product>(this.attach_Products), new Action<Product>(this.detach_Products));
 			OnCreated();
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="id", Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Name = "id", Storage = "_id", AutoSync = AutoSync.OnInsert, DbType = "Int NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true)]
         [HiddenInput(DisplayValue = false)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="status_id", Storage="_StatusId", DbType="TinyInt NOT NULL")]
+        public int Id
+        {
+            get
+            {
+                return this._id;
+            }
+            set
+            {
+                if((this._id != value))
+                {
+                    this.OnIdChanging(value);
+                    this.SendPropertyChanging();
+                    this._id = value;
+                    this.SendPropertyChanged("id");
+                    this.OnIdChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Name = "status_id", Storage = "_statusId", DbType = "TinyInt NOT NULL")]
         [UIHint("MyStatus")]
-		public byte StatusId
-		{
-			get
-			{
-				return this._StatusId;
-			}
-			set
-			{
-				if ((this._StatusId != value))
-				{
-					this.OnStatusIdChanging(value);
-					this.SendPropertyChanging();
-					this._StatusId = value;
-					this.SendPropertyChanged("StatusId");
-					this.OnStatusIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="parent_id", Storage="_ParentId", DbType="Int NOT NULL")]
+        public byte StatusId
+        {
+            get
+            {
+                return this._statusId;
+            }
+            set
+            {
+                if((this._statusId != value))
+                {
+                    this.OnStatusIdChanging(value);
+                    this.SendPropertyChanging();
+                    this._statusId = value;
+                    this.SendPropertyChanged("statusId");
+                    this.OnStatusIdChanged();
+                }
+            }
+        }
+        
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Name = "parent_id", Storage = "_parentId", DbType = "Int NOT NULL")]
 		public int ParentId
 		{
 			get
 			{
-				return this._ParentId;
+				return this._parentId;
 			}
 			set
 			{
-				if ((this._ParentId != value))
+				if ((this._parentId != value))
 				{
 					this.OnParentIdChanging(value);
 					this.SendPropertyChanging();
-					this._ParentId = value;
-					this.SendPropertyChanged("ParentId");
+					this._parentId = value;
+					this.SendPropertyChanged("parentId");
 					this.OnParentIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="name", Storage="_Name", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="name", Storage="_name", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
 		public string Name
 		{
 			get
 			{
-				return this._Name;
+				return this._name;
 			}
 			set
 			{
-				if ((this._Name != value))
+				if ((this._name != value))
 				{
 					this.OnNameChanging(value);
 					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
+					this._name = value;
+					this.SendPropertyChanged("name");
 					this.OnNameChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="organization_id", Storage="_OrganizationId", DbType="Int NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="organization_id", Storage="_organizationId", DbType="Int NOT NULL")]
 		public int OrganizationId
 		{
 			get
 			{
-				return this._OrganizationId;
+				return this._organizationId;
 			}
 			set
 			{
-				if ((this._OrganizationId != value))
+				if ((this._organizationId != value))
 				{
 					this.OnOrganizationIdChanging(value);
 					this.SendPropertyChanging();
-					this._OrganizationId = value;
-					this.SendPropertyChanged("OrganizationId");
+					this._organizationId = value;
+					this.SendPropertyChanged("organizationId");
 					this.OnOrganizationIdChanged();
 				}
 			}
@@ -914,26 +914,26 @@ using System.ComponentModel.DataAnnotations;
 				this._Products.Assign(value);
 			}
 		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
+
+        public event PropertyChangingEventHandler PropertyChanging;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void SendPropertyChanging()
+        {
+            if((this.PropertyChanging != null))
+            {
+                this.PropertyChanging(this, emptyChangingEventArgs);
+            }
+        }
+
+        protected virtual void SendPropertyChanged(String propertyName)
+        {
+            if((this.PropertyChanged != null))
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
 		
 		private void attach_Products(Product entity)
 		{

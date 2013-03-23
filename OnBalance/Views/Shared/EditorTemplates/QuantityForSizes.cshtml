@@ -9,9 +9,9 @@
     {
         prefixForDictionary = string.Format("{0}QuantityForSizes[{1}].", prefix, index);
         @Html.Hidden(prefixForDictionary + "key", item);
-        <div style="display: table-row;">
-            <div style="display: table-cell;">@item</div>
-            <div style="display: table-cell;">
+        <div class="dtrow">
+            <div class="dtcell">@item</div>
+            <div class="dtcell">
                 @Html.TextBox(prefixForDictionary + "value")
             </div>
         </div>

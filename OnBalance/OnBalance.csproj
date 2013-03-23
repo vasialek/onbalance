@@ -83,11 +83,13 @@
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
     <Compile Include="Helpers\AvHtmlHelper.cs" />
+    <Compile Include="Helpers\SimpleScriptManager.cs" />
     <Compile Include="Models\BalanceItem.cs" />
     <Compile Include="Models\BalanceItemRepository.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BaseRepository.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\CategoryStructure.cs" />
     <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\ObLog.designer.cs">
       <AutoGen>True</AutoGen>
@@ -203,6 +205,7 @@
     <Content Include="Views\Organization\Create.cshtml" />
     <Content Include="Views\Help\NotFound.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MyStatus.cshtml" />
+    <Content Include="Views\Pradmin\CategoryStructure.cshtml" />
     <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
   </ItemGroup>
