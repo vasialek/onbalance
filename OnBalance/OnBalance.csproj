@@ -79,11 +79,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\HtmlResourcesAggregator.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
     <Compile Include="Helpers\AvHtmlHelper.cs" />
-    <Compile Include="Helpers\SimpleScriptManager.cs" />
     <Compile Include="Models\BalanceItem.cs" />
     <Compile Include="Models\BalanceItemRepository.cs" />
     <Compile Include="Models\BaseModel.cs" />

@@ -14,7 +14,7 @@
             @Html.TextBoxFor(x => CategoryStructure[i].Name)
         </div>
         <div class="dtcell">
-                @Html.CheckBox(ViewData.TemplateInfo.GetFullHtmlFieldName("StatusId"), CategoryStructure[i].StatusId == (byte)OnBalance.Status.Approved)
+            @Html.CheckBox(ViewData.TemplateInfo.GetFullHtmlFieldName(string.Concat("CategoryStructure[", i, "].StatusId")), CategoryStructure[i].StatusId == (byte)OnBalance.Status.Approved)
         </div>
     </div>
 }

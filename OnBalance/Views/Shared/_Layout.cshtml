@@ -1,12 +1,13 @@
 ﻿@{
     var Model = new OnBalance.ViewModels.User.DashboardViewModel();
+    Html.ResourceManager().AddCssFile("~/css/onbalance.css");
 }
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>@ViewBag.Title</title>
-    <link href="@Url.Content("/css/onbalance.css")" rel="stylesheet" type="text/css" />
+    @*<link href="@Url.Content("/css/onbalance.css")" rel="stylesheet" type="text/css" />*@
 </head>
 
 <body>
@@ -72,9 +73,9 @@
     </footer>
 </div>
 
-</body>
-
 @RenderSection("AdditionalJsFiles", false)
-@Html.ScriptManager().Render();
+@Html.ResourceManager().OutputCssFiles()
+@Html.ResourceManager().OutputJsFiles()
 
+</body>
 </html>

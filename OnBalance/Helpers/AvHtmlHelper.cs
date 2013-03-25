@@ -90,14 +90,13 @@ namespace System.Web.Mvc
             return htmlHelper.DropDownList(name, items);
         }
 
-        private static readonly string _scriptManagerKey = "SimpleScriptManagerKey";
-        public static SimpleScriptManager ScriptManager(this HtmlHelper htmlHelper)
+        public static HtmlResourcesAggregator ResourceManager(this HtmlHelper htmlHelper)
         {
-            var sm = htmlHelper.ViewData[_scriptManagerKey] as SimpleScriptManager;
+            var sm = htmlHelper.ViewData["__HtmlResourcesAggregatorStorage"] as HtmlResourcesAggregator;
             if( sm == null )
             {
-                sm = new SimpleScriptManager(htmlHelper);
-                htmlHelper.ViewData[_scriptManagerKey] = sm;
+                sm = new HtmlResourcesAggregator(htmlHelper);
+                htmlHelper.ViewData["__HtmlResourcesAggregatorStorage"] = sm;
             }
 
             return sm;
