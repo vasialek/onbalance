@@ -33,6 +33,7 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult List(int id)
         {
+            ProductRepository db = new ProductRepository();
             ProductsInPosViewModel productsList = new ProductsInPosViewModel();
             productsList.Pos = new OrganizationRepository().Items.SingleOrDefault(x => x.Id == id);
             if( productsList.Pos == null )
@@ -40,6 +41,10 @@ namespace OnBalance.Controllers
                 ErrorFormat("Trying to list products in non-existing POS #{0}!", id);
                 return HttpNotFound();
             }
+
+            productsList.Categories = db.Categories
+                .Where(x => x.OrganizationId == productsList.Pos.Id)
+                .ToList();
 
             int perPage = 50;
             int page = 0;
@@ -50,7 +55,7 @@ namespace OnBalance.Controllers
             int offset = (page - 1) * perPage;
 
             InfoFormat("Displaying list of products in POS #{0}, skipping {1}, taking {2} products", id, offset, perPage);
-            productsList.Products = new ProductRepository().GetLastInPos(id, offset, perPage)
+            productsList.Products = db.GetLastInPos(id, offset, perPage)
                 .OrderBy(x => x.Id)
                 .ToList();
 
@@ -215,7 +220,7 @@ namespace OnBalance.Controllers
                 .Where(x => x.PosId == id && x.StatusId == (byte)Status.Approved)
                 .Take(100)
                 .ToList();
-            pb.Shops = dbPos.Items.ToList();
+            pb.Organizations = dbPos.Items.ToList();
             return View(pb);
         }
 
@@ -423,6 +428,23 @@ namespace OnBalance.Controllers
 
             ViewBag.ExchangeItems = TempData["ExchangeItems"];
             return View();
+        }
+
+        [Authorize]
+        public ActionResult Create(int id)
+        {
+            InfoFormat("Creating product in POS with ID #{0}", id);
+            var db = new OrganizationRepository();
+            Organization pos = db.Items.SingleOrDefault(x => x.Id == id);
+            if( pos == null )
+            {
+                return RedirectToAction("notfound", "help");
+            }
+
+            Product model = new Product();
+            model.PosId = pos.Id;
+            model.CategoryId = int.Parse(Request["category"]);
+            return View(model);
         }
 
         //

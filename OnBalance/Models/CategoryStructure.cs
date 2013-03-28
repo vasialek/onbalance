@@ -10,11 +10,13 @@ namespace OnBalance.Models
 
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public int Priority { get; set; }
 
         public byte StatusId { get; set; }
 
         public int CategoryId { get; set; }
+
+        public string Name { get; set; }
 
     }
 

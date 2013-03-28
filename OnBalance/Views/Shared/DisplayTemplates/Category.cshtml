@@ -1,0 +1,10 @@
+﻿@model OnBalance.Models.Category
+
+<div>
+    <div class="fleft">@Html.ActionLink(Model.Name, "list", "pradmin", new { id = Model.OrganizationId, category = Model.Id }, null)</div>
+    <div class="fleft">
+        @Html.ImageLink("/images/add.png", "Edit parameters", Url.Action("create", "pradmin", new { id = Model.OrganizationId, category = Model.Id }), new { width = 12, height = 12 }, null)
+        @Html.ImageLink("/images/edit.png", "Add product", Url.Action("editcategory", "pradmin", new { id = Model.Id }), new { width = 12, height = 12 }, null)
+        @*@Html.ImageLink("/images/categoryparameters.png", "Edit parameters", Url.Action("editcategory", "pradmin", new { id = Model.Id }), new { width = 12, height = 12 }, null)*@
+    </div>
+</div>

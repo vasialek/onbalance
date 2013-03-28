@@ -5,6 +5,14 @@
     
 }
 
+<div style="width: 900px;">
+    @foreach(var c in Model.Categories)
+    {
+        <div class="fleft">&bull;@Html.DisplayFor(x => c)</div>
+    }
+</div>
+<div style="clear: both;"></div>
+
 <table>
 @foreach(var item in Model.Products)
 {
@@ -14,19 +22,19 @@
                 @Html.Display(item.StatusName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.internal_code)
+                @Html.DisplayFor(modelItem => item.InternalCode)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.uid)
+                @Html.DisplayFor(modelItem => item.Uid)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.name)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.created_at)
+                @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
             <td>
-                <a href="@Url.Action("edit", new{ id = item.id })"><img src="@Url.Content("/images/edit.png")" alt="Edit" width="16" height="16" /></a>
+                @Html.ImageLink("/images/edit.png", "Edit", Url.Action("edit", new { id = item.Id }), new { width = 16, heigth = 16 }, null)
                 
             </td>
         </tr>

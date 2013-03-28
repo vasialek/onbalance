@@ -164,6 +164,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="images\add.png" />
+    <Content Include="images\categoryparameters.png" />
     <Content Include="images\changepassword.png" />
     <Content Include="images\decrease.gif" />
     <Content Include="images\edit.png" />
@@ -206,6 +207,8 @@
     <Content Include="Views\Help\NotFound.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\CategoryStructure.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Category.cshtml" />
+    <Content Include="Views\Pradmin\Create.cshtml" />
     <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
   </ItemGroup>

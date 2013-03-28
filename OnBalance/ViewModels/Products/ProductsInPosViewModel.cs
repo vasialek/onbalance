@@ -15,6 +15,15 @@ namespace OnBalance.ViewModels.Products
 
         public IList<Product> Products { get; set; }
 
-        public IList<Organization> Shops { get; set; }
+        public IList<Category> Categories { get; set; }
+
+        public IList<Organization> Organizations { get; set; }
+
+        public ProductsInPosViewModel()
+        {
+            Products = new List<Product>();
+            Categories = new List<Category>();
+            Organizations = new List<Organization>();
+        }
     }
 }
