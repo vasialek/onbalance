@@ -1,6 +1,7 @@
 ﻿@model OnBalance.Models.Organization
 
 @Html.HiddenFor(x => x.Id)
+@Html.HiddenFor(x => x.ParentId)
 
 <div class="editor-label">@Html.LabelFor(x => x.StatusId)</div>
 <div class="editor-field">

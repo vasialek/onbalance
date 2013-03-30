@@ -4,6 +4,7 @@ create table user_organization
     username varchar(128) not null,
     organization_id integer not null
 );
+alter table user_organization add constraint U_username_organizationid unique(username, organization_id);
 
 create table organization
 (

@@ -1,0 +1,51 @@
+﻿@model OnBalance.ViewModels.Organizations.OrganizationEditViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>
+    Edit @Model.Organization.Name
+    @if(Model.Parent != null)
+    {
+        <span>(under [@Html.ActionLink(Model.Parent.Name, "edit", "organization", new { id = Model.Parent.Id }, null)])</span>
+    }
+</h2>
+
+@using(Html.BeginForm())
+{
+    @Html.EditorFor(x => x.Organization)
+
+    <div class="bottom_links">
+        <input type="submit" value="Save" />
+
+    </div>
+}
+
+<div class="dtrow" style="width: 500px;">
+    <div class="dtcell">
+        <div class="b" style="width: 250px;">Children POS</div>
+        <div>
+            @Html.ImageLink("/images/add.png", "Create POS under this", Url.Action("create", "organization", new { id = Model.Organization.Id }), new { width = 16, height = 16 }, null)
+        </div>
+        @foreach(var p in Model.Children)
+        {
+            <div class="dtrow">
+                <div class="dtcell">@Html.ActionLink(p.Name, "edit", "organization", new { id = p.Id }, null)</div>
+            </div>
+        }
+    </div>
+    <div class="dtcell" style="width: 245px;">
+        <div class="b">Users</div>
+        <div>
+            @Html.ImageLink("/images/add.png", "Create user for this POS", Url.Action("createinpos", "useradmin", new { id = Model.Organization.Id }), new { width = 16, height = 16 }, null)
+        </div>
+        @foreach(var user in Model.Users)
+        {
+            <div class="dtrow">
+                <div class="dtcell">@user.UserName</div>
+            </div>
+        }
+    </div>
+</div>

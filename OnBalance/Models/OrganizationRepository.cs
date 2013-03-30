@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Linq;
 using System.Configuration;
+using System.Web.Security;
 
 namespace OnBalance.Models
 {
@@ -33,6 +34,24 @@ namespace OnBalance.Models
         }
 
         /// <summary>
+        /// Returns Organization by ID or null if not found
+        /// </summary>
+        /// <param name="id"></param>
+        public Organization GetById(int id)
+        {
+            return Items.SingleOrDefault(x => x.Id == id);
+        }
+
+        /// <summary>
+        /// Returns list of ALL children by specified parent ID (parent is not included)
+        /// </summary>
+        /// <param name="parentId"></param>
+        public IList<Organization> GetByParentId(int parentId)
+        {
+            return Items.Where(x => x.ParentId == parentId).ToList();
+        }
+
+        /// <summary>
         /// Adds Organization to DB and submit changes
         /// </summary>
         /// <param name="model"></param>
@@ -47,6 +66,18 @@ namespace OnBalance.Models
         public void SubmitChanges()
         {
             _dataContext.SubmitChanges();
+        }
+
+
+        public IList<MembershipUser> GetUsersInOrganization(int organizationId)
+        {
+            using(DataContext dataContext = new DataContext(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString()))
+            {
+                var q = dataContext.GetTable<UserOrganization>()
+                    .Where(x => x.OrganizationId == organizationId)
+                    .Select(x => Membership.GetUser(x.Username));
+                return q.ToList();
+	        }
         }
     }
 }

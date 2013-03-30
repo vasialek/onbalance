@@ -11,11 +11,44 @@ namespace OnBalance.Models
     partial class Organization
     {
 
+        protected Organization _parent = null;
+
         partial void OnCreated()
         {
             _StatusId = (byte)Status.Pending;
             _CreatedAt = DateTime.Now;
             _parentId = 0;
+        }
+
+        /// <summary>
+        /// Gets parent Organization or null
+        /// </summary>
+        public Organization Parent
+        {
+            get
+            {
+                if(_parentId < 1)
+                {
+                    return null;
+                }
+                if(_parent == null)
+                {
+                    _parent = new OrganizationRepository().GetById(_parentId);
+                }
+
+                return _parent;
+            }
+        }
+
+        /// <summary>
+        /// Gets list of all children
+        /// </summary>
+        public IList<Organization> Children
+        {
+            get
+            {
+                return new OrganizationRepository().GetByParentId(Id);
+            }
         }
 
         /// <summary>

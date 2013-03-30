@@ -245,6 +245,41 @@ namespace OnBalance.Controllers
         }
 
         //
+        // GET: /useradmin/createinpos/500002
+
+        [Authorize(Roles = "PosAdministrator")]
+        public ActionResult CreateInPos(int id)
+        {
+            var model = new UserCreate();
+            model.OrganizationId = id;
+            return View(model);
+        }
+
+        [Authorize(Roles = "PosAdministrator")]
+        [HttpPost]
+        public ActionResult CreateInPos(UserCreate model)
+        {
+            try
+            {
+                MembershipCreateStatus status;
+                Membership.CreateUser(model.UserName, model.Password, model.Email, null, null, true, out status);
+                if( status == MembershipCreateStatus.Success )
+                {
+                    InfoFormat("User {0} was created, going to add to POS #{1}", model.UserName, model.OrganizationId);
+                    new UserOrganizationRepository().AddUserToOrganization(model.UserName, model.OrganizationId);
+                    SetTempOkMessage("User {0} was successfully created adn added to POS", model.UserName);
+                    return RedirectToAction("edit", "organization", new { id = model.OrganizationId });
+                }
+            } catch(Exception ex)
+            {
+                Error("Error creating user in POS", ex);
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            return View(model);
+        }
+
+        //
         // GET: /useradmin/delete/5
  
         public ActionResult Delete(int id)

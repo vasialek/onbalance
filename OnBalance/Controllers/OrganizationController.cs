@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using OnBalance.Models;
+using OnBalance.ViewModels.Organizations;
 
 namespace OnBalance.Controllers
 {
@@ -42,9 +43,10 @@ namespace OnBalance.Controllers
         //
         // GET: /organization/create
 
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
             Organization model = new Organization();
+            model.ParentId = id ?? 0;
             return View(model);
         }
 
@@ -67,6 +69,30 @@ namespace OnBalance.Controllers
             }
 
             return View(model);
+        }
+
+        //
+        // GET: /organization/edit/500002
+
+        [Authorize]
+        public ActionResult Edit(int id)
+        {
+            InfoFormat("User #{0} is going to edit Organization #{1}", User.Identity.Name, id);
+            var db = new OrganizationRepository();
+            Organization model = db.Items.SingleOrDefault(x => x.Id == id);
+            if(model == null)
+            {
+                WarnFormat("Non-existing organization #{0}!", id);
+                return RedirectToAction("notfound", "help");
+            }
+
+            OrganizationEditViewModel viewModel = new OrganizationEditViewModel();
+            viewModel.Organization = model;
+            viewModel.Parent = db.GetById(model.ParentId);
+            viewModel.Children = db.GetByParentId(model.Id);
+            viewModel.Users = db.GetUsersInOrganization(model.Id);
+
+            return View(viewModel);
         }
 
         //

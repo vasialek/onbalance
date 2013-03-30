@@ -58,6 +58,9 @@ namespace OnBalance.Controllers
             _isInfoEnabled = Logger.IsInfoEnabled;
             _isWarnEnabled = Logger.IsWarnEnabled;
             _isErrorEnabled = Logger.IsErrorEnabled;
+
+            // Prepare messages and errors in TempData for use in views
+            SetTempMessagesToViewBag();
         }
 
         #region " Logger methods "

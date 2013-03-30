@@ -1,7 +1,9 @@
-﻿@if(Request.IsAuthenticated) {
-    <text>Welcome <strong>@User.Identity.Name</strong>!
-    [ @Html.ActionLink("Log out", "logout", "user") ]</text>
+﻿@if(Request.IsAuthenticated)
+{
+    @:Welcome <strong>@User.Identity.Name</strong>!
+    @Html.ImageLink("/images/logout.png", "Log out", Url.Action("logout", "user"), new { width = 16, height = 16 }, null)
 }
-else {
-    @:[ @Html.ActionLink(OnBalance.MyMessages.ButtonText.Login, "login", "user") ]
+else
+{
+    @Html.ImageLink("/images/login.png", "Login to Online Balance System", Url.Action("login", "user"), new { width = 16, height = 16 }, null)
 }

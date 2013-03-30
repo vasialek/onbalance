@@ -1,0 +1,18 @@
+﻿@model OnBalance.Models.UserCreate
+
+@{
+    ViewBag.Title = "CreateInPos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create user for @Model.Organization.Name</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    @Html.EditorFor(x => Model)
+    
+    <div class="bottom_links">
+        <input type="submit" value="Create" />
+    </div>
+}

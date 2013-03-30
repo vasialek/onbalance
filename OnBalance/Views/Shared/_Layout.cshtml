@@ -26,10 +26,11 @@
         {
             <div class="user_shop_item">@Html.ActionLink(item.Name, "balance", "pradmin", new { id = item.Id }, null)</div>
             <ul class="list_actions left">
+                <li>@Html.ImageLink("/images/edit.png", "Edit POS", Url.Action("edit", "organization", new { id = item.Id }), new { width = 16, height = 16 }, null)</li>
                 <li>@Html.ImageLink("/images/productadmin.png", "Product list", Url.Action("list", "pradmin", new { id = item.Id }), new { width = 16, height = 16 }, new { style = "border: 0" })</li>
                 <li>@Html.ImageLink("/images/poscategories.png", "List of categories", Url.Action("categories", "pradmin", new { id = item.Id }), new { width = 16, height = 16 }, null)</li>
-                <li><a href="@Url.Action("parse", "pradmin", new{ id = item.Id})"><img src="@Url.Content("/images/import.png")" alt="Import"/></a></li>
-                <li><a href="@Url.Action("list", "balance", new{ id = item.Id})"><img src="@Url.Content("/images/view.png")" alt="Import"/></a></li>
+                <li>@Html.ImageLink("/images/import.png", "Import from file", Url.Action("parse", "pradmin", new { id = item.Id }), new { width = 16, height = 16 }, null)</li>
+                <li>@Html.ImageLink("/images/view.png", "Balance", Url.Action("list", "balance", new { id = item.Id }), new { width = 16, height = 16 }, null)</li>
             </ul>
         }
     </div>

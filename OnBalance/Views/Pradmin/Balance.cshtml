@@ -104,17 +104,17 @@
             {
 
                 sb.Clear();
-                foreach(var kvp in p.GetQuantityForAllSizes())
+                @*foreach(var kvp in p.GetQuantityForAllSizes())
                 {
                     sb.AppendFormat(", '{0}': {1}", kvp.Key, kvp.Value);
                 }
 
-                @Html.Raw(string.Format("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3} {4} }},", p.name, p.internal_code, p.price, 0, sb.ToString()))
+                @Html.Raw(string.Format("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3} {4} }},", p.Name, p.InternalCode, p.Price, 0, sb.ToString()))*@
             }
         ]
     };
 
-    YAHOO.namespace("OnBalance.container");
+    YAHOO.Namespace("OnBalance.container");
 
     YAHOO.util.Event.onDOMReady(function () {
 
@@ -142,10 +142,10 @@
             var s = "";
             for(var i = 0; i < YAHOO.OnBalance.localChanges.length; i++)
             {
-                s += "<label>" + YAHOO.OnBalance.localChanges[i].name + ", " + YAHOO.OnBalance.localChanges[i].price + "</label>";
+                s += "<label>" + YAHOO.OnBalance.localChanges[i].Name + ", " + YAHOO.OnBalance.localChanges[i].Price + "</label>";
                 s += "<input type='hidden' name='[" + i + "].InternalCode' value='" + YAHOO.OnBalance.localChanges[i].code + "' />";
-                s += "<input type='hidden' name='[" + i + "].ProductName' value='" + YAHOO.OnBalance.localChanges[i].name + "' />";
-                s += "<input type='hidden' name='[" + i + "].Price' value='" + YAHOO.OnBalance.localChanges[i].price + "' />";
+                s += "<input type='hidden' name='[" + i + "].ProductName' value='" + YAHOO.OnBalance.localChanges[i].Name + "' />";
+                s += "<input type='hidden' name='[" + i + "].Price' value='" + YAHOO.OnBalance.localChanges[i].Price + "' />";
             }
             return s;
         }
@@ -156,10 +156,10 @@
             var s = YAHOO.OnBalance.localChanges.length > 0 ? "" : "@OnBalance.MyMessages.Balancer.NoPendingLocalChanges";
 //            for( var i = 0; i < gLocalChanges.length; i++ )
 //            {
-//                s += "<label>" + gLocalChanges[i].name + ", " + gLocalChanges[i].price + "</label>";
+//                s += "<label>" + gLocalChanges[i].Name + ", " + gLocalChanges[i].Price + "</label>";
 //                s += "<input type='hidden' name='[" + i + "].InternalCode' value='" + gLocalChanges[i].code + "' />";
-//                s += "<input type='hidden' name='[" + i + "].ProductName' value='" + gLocalChanges[i].name + "' />";
-//                s += "<input type='hidden' name='[" + i + "].Price' value='" + gLocalChanges[i].price + "' />";
+//                s += "<input type='hidden' name='[" + i + "].ProductName' value='" + gLocalChanges[i].Name + "' />";
+//                s += "<input type='hidden' name='[" + i + "].Price' value='" + gLocalChanges[i].Price + "' />";
 //            }
             document.getElementById("PendingChangesDiv").innerHTML = formatLocalChangesForSubmit();
             dlg.show();
@@ -199,7 +199,7 @@
 <body class="yui-skin-sam">
 
     <div class="balance_status_panel">
-        @Html.DisplayFor(x => pendingChanges)
+        @*@Html.DisplayFor(x => pendingChanges)*@
         @*<label>Local pending changes to be synced with remote: </label>
         <label id="BalanceLocalPending">Synchronized</label>*@
     </div>

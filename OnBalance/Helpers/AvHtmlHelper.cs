@@ -16,6 +16,15 @@ namespace System.Web.Mvc
     public static class AvHtmlHelper
     {
 
+        public static HtmlString Image(this HtmlHelper htmlHelper, string src, int w, int h, string alt, object htmlAttributes)
+        {
+            Dictionary<string, object> attributes = Common.DynamicObjectToDictionaryInsensitive(htmlAttributes);
+            attributes["width"] = w;
+            attributes["height"] = h;
+            TagBuilder img = ImageTag(src, alt, attributes);
+            return new HtmlString(img.ToString());
+        }
+
         /// <summary>
         /// Returns string with A tag containing IMG
         /// </summary>
@@ -31,7 +40,7 @@ namespace System.Web.Mvc
             TagBuilder img = new TagBuilder("img");
             // Merge provided image attributes (in object) with image attributes
             var attributes = Common.DynamicObjectToDictionaryInsensitive(htmlImageAttributes);
-            if( (attributes != null) && !attributes.Keys.Contains("title"))
+            if((attributes != null) && !attributes.Keys.Contains("title"))
             {
                 attributes["title"] = alt;
             }
@@ -42,6 +51,7 @@ namespace System.Web.Mvc
             TagBuilder urlTag = new TagBuilder("a");
             urlTag.MergeAttributes(Common.DynamicObjectToDictionary(htmlUrlAttributes), true);
             urlTag.MergeAttribute("href", hrefLink);
+            //urlTag.InnerHtml = ImageTag(imageSrc, alt, htmlImageAttributes).ToString();
             urlTag.InnerHtml = img.ToString();
 
             return new HtmlString(urlTag.ToString());
@@ -100,6 +110,33 @@ namespace System.Web.Mvc
             }
 
             return sm;
+        }
+
+        private static TagBuilder ImageTag(string src, string alt, object htmlAttributes)
+        {
+            Dictionary<string, object> attributes = Common.DynamicObjectToDictionaryInsensitive(htmlAttributes);
+            return ImageTag(src, alt, attributes);
+        }
+
+        /// <summary>
+        /// Helper method to create image tag
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="alt"></param>
+        /// <param name="htmlAttributes"></param>
+        private static TagBuilder ImageTag(string src, string alt, Dictionary<string, object> htmlAttributes)
+        {
+            TagBuilder img = new TagBuilder("img");
+            // Merge provided image attributes (in object) with image attributes
+            if(!htmlAttributes.Keys.Contains("title"))
+            {
+                htmlAttributes["title"] = alt;
+            }
+            img.MergeAttributes(htmlAttributes, true);
+            img.MergeAttribute("src", src, true);
+            img.MergeAttribute("alt", alt, true);
+
+            return img;
         }
     }
 }

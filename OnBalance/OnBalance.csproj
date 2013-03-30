@@ -123,6 +123,9 @@
     </Compile>
     <Compile Include="Models\SizeConvertorRepository.cs" />
     <Compile Include="Models\Task.cs" />
+    <Compile Include="Models\UserCreate.cs" />
+    <Compile Include="Models\UserOrganization.cs" />
+    <Compile Include="Models\UserOrganizationRepository.cs" />
     <Compile Include="MyConstants.cs" />
     <Compile Include="MyMessages.cs" />
     <Compile Include="ObLog.cs" />
@@ -130,6 +133,7 @@
     <Compile Include="ViewModels\Balance\OrganizationSchemaViewModel.cs" />
     <Compile Include="ViewModels\Categories\PosCategoriesListViewModel.cs" />
     <Compile Include="ViewModels\Categories\PosCategoryViewModel.cs" />
+    <Compile Include="ViewModels\Organizations\OrganizationEditViewModel.cs" />
     <Compile Include="ViewModels\PendingChangesViewModel.cs" />
     <Compile Include="ViewModels\Products\ProductsInPosViewModel.cs" />
     <Compile Include="ViewModels\SizeConvertorViewModel.cs" />
@@ -172,12 +176,15 @@
     <Content Include="images\header-repeat.jpg" />
     <Content Include="images\import.png" />
     <Content Include="images\increase.gif" />
+    <Content Include="images\login.png" />
     <Content Include="images\logo.png" />
+    <Content Include="images\logout.png" />
     <Content Include="images\poscategories.png" />
     <Content Include="images\posmoveto.png" />
     <Content Include="images\productadmin.png" />
     <Content Include="images\sidemenu-repeat-hover.jpg" />
     <Content Include="images\sidemenu-repeat.jpg" />
+    <Content Include="images\userlist.png" />
     <Content Include="images\userroles.png" />
     <Content Include="images\userunlock.png" />
     <Content Include="images\view.png" />
@@ -209,8 +216,10 @@
     <Content Include="Views\Pradmin\CategoryStructure.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Category.cshtml" />
     <Content Include="Views\Pradmin\Create.cshtml" />
+    <Content Include="Views\Organization\Edit.cshtml" />
     <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
+    <Content Include="Views\Useradmin\CreateInPos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConnectionString.config">
