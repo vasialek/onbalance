@@ -58,7 +58,15 @@ namespace OnBalance.Models
         public void Save(Organization model)
         {
             var db = _dataContext.GetTable<Organization>();
-            db.InsertOnSubmit(model);
+            if(model.Id < 1)
+            {
+                db.InsertOnSubmit(model);
+            } else
+            {
+                //Organization record = db.SingleOrDefault(x => x.Id == model.Id);
+                db.Attach(model);
+                //record = model;
+            }
             db.Context.SubmitChanges();
         }
 
@@ -79,5 +87,6 @@ namespace OnBalance.Models
                 return q.ToList();
 	        }
         }
+
     }
 }

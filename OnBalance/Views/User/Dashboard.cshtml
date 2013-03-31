@@ -6,5 +6,19 @@
 
 <h2>Dashboard</h2>
 
-
-@Html.DisplayFor(x => Model)
+<div class="dtrow">
+    <div class="dtcell" style="width: 400px;">
+        <div class="b">Last created POS</div>
+        @foreach(var p in Model.LastPos)
+        {
+            <div>@p.Name (at @p.CreatedAt.ToShortDateString())</div>
+        }
+    </div>
+    <div class="dtcell" style="width: 400px;">
+        <div class="b">Last created users</div>
+        @foreach(var u in Model.LastUsers)
+        {
+            <div>@u.UserName (at @u.CreationDate.ToShortDateString())</div>
+        }
+    </div>
+</div>

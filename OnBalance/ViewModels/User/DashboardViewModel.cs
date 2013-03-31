@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using OnBalance.Models;
+using System.Web.Security;
 
 namespace OnBalance.ViewModels.User
 {
@@ -15,17 +16,30 @@ namespace OnBalance.ViewModels.User
 
         public List<Task> Exports { get; set; }
 
+        /// <summary>
+        /// Gets list of last created/registered users
+        /// </summary>
+        public IList<MembershipUser> LastUsers { get; set; }
+
+        /// <summary>
+        /// Gets list of last created POS
+        /// </summary>
+        public IList<Organization> LastPos { get; set; }
+
         public DashboardViewModel()
         {
             Shops = new List<Organization>();
-            Shops = new OrganizationRepository().Items.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
-            Imports = new List<Task>()
-            {
-                new Task{ Type = Task.TypeId.Import, Status = Status.Pending }
-                , new Task{ Type = Task.TypeId.Import, Status = Status.Pending }
-            };
+            Imports = new List<Task>();
             Exports = new List<Task>();
+            LastPos = new List<Organization>();
+            LastUsers = new List<MembershipUser>();
         }
 
+
+        public void Init()
+        {
+            var dbOrg = new OrganizationRepository();
+            Shops = dbOrg.Companies.ToList();
+        }
     }
 }

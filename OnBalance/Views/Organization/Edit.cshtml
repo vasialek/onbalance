@@ -15,6 +15,8 @@
 
 @using(Html.BeginForm())
 {
+    @Html.ValidationSummary(true)
+    
     @Html.EditorFor(x => x.Organization)
 
     <div class="bottom_links">

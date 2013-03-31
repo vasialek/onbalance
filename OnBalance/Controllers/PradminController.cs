@@ -207,23 +207,6 @@ namespace OnBalance.Controllers
             return PartialView("CategoryStructure", model);
         }
         
-        // GET: /pradmin/balance/123
-
-        public ActionResult Balance(int id)
-        {
-            ProductsInPosViewModel pb = new ProductsInPosViewModel();
-            ProductRepository db = new ProductRepository();
-            OrganizationRepository dbPos = new OrganizationRepository();
-
-            InfoFormat("Selecting products for POS #{0}", id);
-            pb.Products = db.Items
-                .Where(x => x.PosId == id && x.StatusId == (byte)Status.Approved)
-                .Take(100)
-                .ToList();
-            pb.Organizations = dbPos.Items.ToList();
-            return View(pb);
-        }
-
         //
         // GET: /pradmin/get?posid=100001
 

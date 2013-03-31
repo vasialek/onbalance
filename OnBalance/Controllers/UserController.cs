@@ -122,17 +122,24 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Dashboard()
         {
+            var dbOrg = new OrganizationRepository();
             var dashboard = new DashboardViewModel();
-            dashboard.Shops = new OrganizationRepository().Items.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
+            dashboard.Shops = dbOrg.Items.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
             dashboard.Imports = new List<Task>()
             {
                 new Task{ Type = Task.TypeId.Import, Status = Status.Pending }
                 , new Task{ Type = Task.TypeId.Import, Status = Status.Pending }
             };
-            dashboard.Exports = new List<Task>
-            {
-                
-            };
+            dashboard.LastUsers = Membership
+                .GetAllUsers()
+                .Cast<MembershipUser>()
+                .OrderByDescending(x => x.CreationDate)
+                .Take(3)
+                .ToList();
+            dashboard.LastPos = dbOrg.Items
+                .OrderByDescending(x => x.CreatedAt)
+                .Take(3)
+                .ToList();
             return View(dashboard);
         }
 

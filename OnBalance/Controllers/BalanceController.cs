@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using OnBalance.Helpers;
 using OnBalance.ViewModels.Balance;
+using OnBalance.ViewModels.Products;
 
 namespace OnBalance.Controllers
 {
@@ -124,8 +125,12 @@ namespace OnBalance.Controllers
             });
 
             List<OrganizationViewModel> shops = new List<OrganizationViewModel>();
-            foreach(var item in dbOrg.Items.Where(x => x.StatusId == (byte)Status.Approved))
+            var q = dbOrg.Items
+                .Where(x => x.StatusId == (byte)Status.Approved && (x.Id == id || x.ParentId == id));
+            InfoFormat("Organization which belong to organization #{0}", id);
+            foreach(var item in q)
             {
+                InfoFormat("  #{0}. {1}", item.Id, item.Name);
                 shops.Add(new OrganizationViewModel
                 {
                     Id = item.Id,
@@ -330,6 +335,25 @@ namespace OnBalance.Controllers
         public ActionResult Index()
         {
             return List(new OrganizationRepository().Items.FirstOrDefault().Id);
+        }
+
+        //
+        // GET: /balance/edit/100002
+
+        [Authorize]
+        public ActionResult Edit(int id)
+        {
+            ProductsInPosViewModel pb = new ProductsInPosViewModel();
+            ProductRepository db = new ProductRepository();
+            OrganizationRepository dbPos = new OrganizationRepository();
+
+            InfoFormat("Selecting products for POS #{0}", id);
+            pb.Products = db.Items
+                .Where(x => x.PosId == id && x.StatusId == (byte)Status.Approved)
+                .Take(100)
+                .ToList();
+            pb.Organizations = dbPos.Items.ToList();
+            return View(pb);
         }
 
         //

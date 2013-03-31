@@ -23,6 +23,7 @@ namespace OnBalance.Controllers
 
         public ActionResult List(/*int id*/)
         {
+            SetTempMessagesToViewBag();
             OrganizationRepository db = new OrganizationRepository();
             var companies = db.Companies;
             int parentId = 0;
@@ -93,6 +94,30 @@ namespace OnBalance.Controllers
             viewModel.Users = db.GetUsersInOrganization(model.Id);
 
             return View(viewModel);
+        }
+
+        //
+        // POST: /organization/edit
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Edit(OrganizationEditViewModel model)
+        {
+            try
+            {
+                InfoFormat("User #{0} going to update Organization #{1}", User.Identity.Name, model.Organization.Id);
+                var db = new OrganizationRepository();
+                var record = db.GetById(model.Organization.Id);
+                UpdateModel(record, "Organization");
+                db.SubmitChanges();
+                SetTempOkMessage("Organization {0} was successfully updated", model.Organization.Name);
+                return RedirectToAction("list", new { parent = model.Organization.ParentId == 0 ? model.Organization.Id : model.Organization.ParentId });
+            } catch(Exception ex)
+            {
+                Error("Error updating Organization!", ex);
+                ModelState.AddModelError("", ex.Message);
+            }
+            return View(model);
         }
 
         //

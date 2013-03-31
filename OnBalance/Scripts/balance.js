@@ -9,8 +9,8 @@ YAHOO.OnBalance = {
     uid: "",
     currentPosId: 100002,
     currentCategoryId: 0,
-    baseUrl: "http://www.online-balance.com/",
-//    baseUrl: "http://localhost:52293/",
+//    baseUrl: "http://www.online-balance.com/",
+    baseUrl: "http://localhost:52293/",
     uiElements: {
         // Displays current path GJ->POS1
         lblPath: null,
@@ -100,64 +100,6 @@ YAHOO.OnBalance = {
     ],
     contextMenu: [],
 
-    oLogin: function()
-    {
-        var dlg = new YAHOO.widget.Dialog("LoginDiv", {
-            width: "300px",
-            visible : false,
-            fixedcenter: true,
-            constraintoviewport : true,
-            close: false,
-            buttons: [
-                {
-                    text: "Login",
-                    isDefault: true,
-                    handler: function()
-                    {
-                        var data = this.getData();
-                        if( (data.username.length < 2) || (data.password.length < 1) )
-                        {
-                            alert("Please enter username and password!");
-                            this.focusFirst();
-                            return false;
-                        }
-
-                        var sUrl = YAHOO.OnBalance.baseUrl + "user/dologin?username=" + data.username + "&password=" + data.password;
-                        var loader = new YAHOO.util.ScriptNodeDataSource(sUrl);
-                        loader.responseType = YAHOO.util.ScriptNodeDataSource.TYPE_SCRIPTNODE;
-                        loader.responseSchema = {
-                            fields: [
-                                { key: "Status" }, { key: "Token" }, { key: "ClientIp" }
-                            ]
-                        }
-
-                        loader.sendRequest("", {
-                                success: function(oRequest, oParsedResponse)
-                                {
-                                    var dataToCheck = data.username + "_" + data.password + "_" + oParsedResponse.results.ClientIp;
-                                    console.log("Hash from server: " + oParsedResponse.results.Hash);
-                                    var dataMd5 = md5(dataToCheck);
-                                    console.log("MD5 to check:     " + dataMd5);
-                                    if( dataMd5 == oParsedResponse.results.Hash )
-                                    {
-                                        authorizeUser(oParsedResponse.results.Hash, oParsedResponse.results.ClientIp);
-                                        dlg.hide();
-                                    }
-                                },
-                                failure: function()
-                                {
-                                    alert("Error logging in!");
-                                }
-                            }
-                        );
-                    }}
-            ]
-        });
-
-        dlg.render();
-
-        return dlg;
-    }
 };
 
 /**
@@ -187,15 +129,14 @@ function isAuthorized()
 
 function securePage()
 {
-    if( !isAuthorized() )
-    {
-        console.log("Login, please!");
-        var dlg = YAHOO.OnBalance.oLogin();
-//        dlg.render();
-        dlg.show();
-        dlg.focusFirst();
-        console.log("login?");
-    }
+//    if( !isAuthorized() )
+//    {
+//        console.log("Login, please!");
+//        var dlg = YAHOO.OnBalance.oLogin();
+//        dlg.show();
+//        dlg.focusFirst();
+//        console.log("login?");
+//    }
 }
 
 function createToolbar()
@@ -270,9 +211,9 @@ function createTable(categoryId)
 {
     console.log("Creating table for POS #" + categoryId);
     arColumnsDefinitions = [
-        { key: "name", label: "Name", sortable: true, width: 150, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
-        { key: "price_minor", label: "Price", sortable: true, width: 80, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
-        { key: "code", label: "Code", sortable: true, width: 100, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
+        { key: "name", label: "Name", sortable: true, width: 150, maxAutoWidth: 180, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) },
+        { key: "price_minor", label: "Price", sortable: true, width: 60, maxAutoWidth: 70, editor: new YAHOO.widget.TextboxCellEditor(/*{ validator: YAHOO.widget.DataTable.validateNumber }*/) },
+        { key: "code", label: "Code", sortable: true, width: 100, maxAutoWidth: 110, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
     ];
     var details = getDetailsForCategory(categoryId);
     for(var i = 0; i < details.length; i++)
@@ -281,8 +222,8 @@ function createTable(categoryId)
         arColumnsDefinitions[arColumnsDefinitions.length] = {
             key: details[i],
             label: details[i],
-            width: 25,
-            maxAutoWidth: 30,
+            width: 15,
+            maxAutoWidth: 50,
             editor: new YAHOO.widget.TextboxCellEditor({validator: YAHOO.widget.DataTable.validateNumber})
         };
     }

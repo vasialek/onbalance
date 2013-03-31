@@ -215,6 +215,11 @@ a
     min-height: 100px;
 }
 
+.user_shop_children
+{
+    padding-left: 1em;
+}
+
 .list_header
 {
     background-color: #97aebf;

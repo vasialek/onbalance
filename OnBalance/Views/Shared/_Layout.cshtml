@@ -1,5 +1,6 @@
 ﻿@{
     var Model = new OnBalance.ViewModels.User.DashboardViewModel();
+    Model.Init();
     Html.ResourceManager().AddCssFile("~/css/onbalance.css");
 }
 
@@ -24,14 +25,18 @@
         <div class="list_header">Shops</div>
         @foreach(var item in Model.Shops)
         {
-            <div class="user_shop_item">@Html.ActionLink(item.Name, "balance", "pradmin", new { id = item.Id }, null)</div>
-            <ul class="list_actions left">
-                <li>@Html.ImageLink("/images/edit.png", "Edit POS", Url.Action("edit", "organization", new { id = item.Id }), new { width = 16, height = 16 }, null)</li>
-                <li>@Html.ImageLink("/images/productadmin.png", "Product list", Url.Action("list", "pradmin", new { id = item.Id }), new { width = 16, height = 16 }, new { style = "border: 0" })</li>
-                <li>@Html.ImageLink("/images/poscategories.png", "List of categories", Url.Action("categories", "pradmin", new { id = item.Id }), new { width = 16, height = 16 }, null)</li>
-                <li>@Html.ImageLink("/images/import.png", "Import from file", Url.Action("parse", "pradmin", new { id = item.Id }), new { width = 16, height = 16 }, null)</li>
-                <li>@Html.ImageLink("/images/view.png", "Balance", Url.Action("list", "balance", new { id = item.Id }), new { width = 16, height = 16 }, null)</li>
-            </ul>
+            <div style="clear: both;">
+                @Html.DisplayFor(x => item)
+                @if(item.Children.Count > 0)
+                {
+                    <div class="user_shop_children">
+                        @foreach (var child in item.Children)
+	                    {
+                            <div>@Html.DisplayFor(x => child)</div>
+	                    }
+                    </div>
+                }
+            </div>
         }
     </div>
     <div class="vspacer5"></div>

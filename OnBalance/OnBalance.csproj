@@ -217,6 +217,8 @@
     <Content Include="Views\Shared\DisplayTemplates\Category.cshtml" />
     <Content Include="Views\Pradmin\Create.cshtml" />
     <Content Include="Views\Organization\Edit.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Organization.cshtml" />
+    <Content Include="Views\Balance\Edit.cshtml" />
     <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
     <Content Include="Views\Useradmin\CreateInPos.cshtml" />
@@ -257,9 +259,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\User\Dashboard.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Pradmin\Balance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Pradmin\Parse.cshtml" />
