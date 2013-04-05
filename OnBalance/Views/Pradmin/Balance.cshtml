@@ -49,45 +49,20 @@
     }
 
 </style>
-@*<link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/button/assets/skins/sam/button.css")" />
-<link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/container/assets/skins/sam/container.css")" />
-<link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/fonts/fonts-min.css")" />
-<link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/datatable/assets/skins/sam/datatable.css")">
-<link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/yui/build/menu/assets/skins/sam/menu.css")">*@
-
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css" />
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/datatable/assets/skins/sam/datatable.css">
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/menu/assets/skins/sam/menu.css">
-
-<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event-delegate/event-delegate-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datatable/datatable-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/container/container-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js"></script>
 
 
-@*<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/yahoo-dom-event/yahoo-dom-event.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/calendar/calendar-min.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/element/element-min.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/button/button-min.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/connection/connection-min.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/datasource/datasource-min.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/event-delegate/event-delegate-min.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/datatable/datatable-min.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/dragdrop/dragdrop-min.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/container/container-min.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/scripts/yui/build/menu/menu-min.js")"></script>*@
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css" />
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/datatable/assets/skins/sam/datatable.css">
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/menu/assets/skins/sam/menu.css">
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.9.0/build/button/assets/skins/sam/button.css">
+    
+    <script src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+
 </head>
 <body>
-<script src="@Url.Content("~/scripts/balance.js")"></script>
+
 
 <script type="text/javascript">
     document.documentElement.className = "yui-pe";
@@ -196,37 +171,73 @@
 
 </script>
 
-<body class="yui-skin-sam">
+<body class="yui-skin-sam" style="margin: 0;">
 
-    <div class="balance_status_panel">
-        @*@Html.DisplayFor(x => pendingChanges)*@
-        @*<label>Local pending changes to be synced with remote: </label>
-        <label id="BalanceLocalPending">Synchronized</label>*@
+    <div id="TopDiv">
+        <fieldset id="idToolbar" class="myToolbar" style="border: 0;">
+            <span id="CurrentPath">GJ</span>
+        </fieldset>
     </div>
+    <div id="CenterDiv">
+        <div id="MainBalanceDiv"></div>
+		<div id="CurrentProductName"></div>
+    </div>
+    <div id="BottomDiv"><span id="DivStatus">Status : </span></div>
 
-	<div id="MainBalanceDiv"></div>
-    <div id="OnBalanceContextMenu">
+
+    <div id="RemoteChangesDialog" style="width: 30em;">
+        <div class="hd">Remote changes</div>
+		<div class="bd">
+			<div id="RemoteChangesTable"></div>
+		</div>
+	</div>
+    <div id="LocalChangesDialog" style="width: 30em;">
+        <div class="hd">Local changes</div>
         <div class="bd">
-            <ul>
-                <li><a href="#" style="color: #f00;">Red</a></li>
-                <li><a href="#" style="color: #0f0;">Green</a></li>
-                <li><a href="#" style="color: #00f;">Blue</a></li>
-            </ul>
         </div>
     </div>
 
-    <div id="dialog1" class="yui-pe-content">
-        <div class="hd">Please review pending changes to confirm them</div>
-        <div class="bd">
-            <form method="POST" action="/balance/dosend">
-                <div id="PendingChangesDiv">
-                ...
-                </div>
-            </form>
-        </div>
-    </div>
+
+    <div id="OnBalanceContextMenu"></div>
+
+
+    <script type="text/javascript">
+
+        window.onload = function ()
+        {
+            var loader = new YAHOO.util.YUILoader({
+                require: ["datatable", "menu", "datasource", "json", "container", "connection", "button", "layout"]
+            , onSuccess: function ()
+            {
+
+                var layout = new YAHOO.widget.Layout({
+                    units: [
+                        { position: "top", body: "TopDiv", height: 50, gutter: "0 0 0 0" },
+                        { position: "center", body: "CenterDiv", scroll: true, gutter: "0 0 0 0" },
+                        { position: "bottom", body: "BottomDiv", height: 30, gutter: "0 0 0 0" }
+                    ]
+                });
+
+                layout.on('render', function ()
+                {
+                    onPageLoaded();
+                });
+
+                layout.render();
+
+                //                onPageLoaded();
+            }
+            });
+
+            loader.insert();
+
+        }
+
+</script>
+<script src="@Url.Content("~/scripts/balance.js")"></script>
 
 </body>
 </html>
+
 
 
