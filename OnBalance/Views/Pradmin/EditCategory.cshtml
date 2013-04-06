@@ -1,7 +1,7 @@
-﻿@model OnBalance.Models.Category
+﻿@model OnBalance.ViewModels.Categories.CategoryStructureViewModel
 
 @{
-    ViewBag.Title = "EditCat";
+    ViewBag.Title = "Edit category";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     Html.ResourceManager()
@@ -12,27 +12,28 @@
     {
         HttpMethod = "POST",
         LoadingElementId = "LoadingDiv",
-        UpdateTargetId = "DynamicDiv"
+        UpdateTargetId = "DynamicDiv",
+        OnFailure = "alert('Error saving Category structure!');"
     };
 
     Html.EnableUnobtrusiveJavaScript(true);
 }
 
-<h2>Edit category @Model.Name</h2>
+<h2>Edit category @Model.Category.Name</h2>
 
-@using(Ajax.BeginForm("dosavestructure", new { id = Model.Id }, ajaxOptions))
+@using(Ajax.BeginForm("dosavestructure", new { id = Model.Category.Id }, ajaxOptions))
 {
     @Html.ValidationSummary()
     
     <div id="LoadingDiv" style="display: none;">loading</div>
     
-    @Html.EditorForModel()
+    @Html.EditorFor(x => Model.Category)
 
     <div id="DynamicDiv">
-        @Html.Partial("CategoryStructure", Model)
+        @Html.Partial("CategoryStructure", Model.Category)
     </div>
 
     <input type="submit" value="Save" />
-    @Html.ImageLink("/images/poscategories.png", "POS categories", Url.Action("categories", "pradmin", new { id = Model.OrganizationId }), new { width = 16, heigth = 16 }, null)
+    @Html.ImageLink("/images/poscategories.png", "POS categories", Url.Action("categories", "pradmin", new { id = Model.Category.OrganizationId }), new { width = 16, heigth = 16 }, null)
 }
 

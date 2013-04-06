@@ -131,6 +131,7 @@
     <Compile Include="ObLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\Balance\OrganizationSchemaViewModel.cs" />
+    <Compile Include="ViewModels\Categories\CategoryStructure.cs" />
     <Compile Include="ViewModels\Categories\PosCategoriesListViewModel.cs" />
     <Compile Include="ViewModels\Categories\PosCategoryViewModel.cs" />
     <Compile Include="ViewModels\Organizations\OrganizationEditViewModel.cs" />

@@ -7,6 +7,7 @@ namespace OnBalance.Models
 
     partial class Category : BaseModel
     {
+        protected Category _parent = null;
 
         partial void OnCreated()
         {
@@ -18,6 +19,24 @@ namespace OnBalance.Models
             get
             {
                 return null;
+            }
+        }
+
+        public Category Parent
+        {
+            get
+            {
+                if(ParentId == 0)
+                {
+                    return null;
+                }
+
+                if(_parent == null)
+                {
+                    _parent = new ProductRepository().GetCategory(ParentId);
+                }
+
+                return _parent;
             }
         }
     }

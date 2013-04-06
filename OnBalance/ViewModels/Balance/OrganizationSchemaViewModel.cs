@@ -29,6 +29,8 @@ namespace OnBalance.ViewModels.Balance
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public CategoryStructureViewModel[] Categories { get; set; }
     }
 
     public class CategoryStructureViewModel

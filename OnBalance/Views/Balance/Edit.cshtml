@@ -107,12 +107,11 @@
                 });
 
                 layout.on('render', function () {
-                    onPageLoaded();
+                    onPageLoaded(@Model.Pos.Id);
                 });
 
                 layout.render();
 
-                //                onPageLoaded();
             }
             });
 

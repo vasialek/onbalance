@@ -111,6 +111,7 @@ namespace OnBalance.Controllers
         {
             try
             {
+                InfoFormat("User #{0} creating category...", User.Identity.Name);
                 var db = new ProductRepository();
                 model.Category = db.Save(model.Category);
             } catch(Exception ex)
@@ -120,7 +121,7 @@ namespace OnBalance.Controllers
             }
 
             SetTempOkMessage("Category was successfully saved");
-            return RedirectToAction("editcategory", new { id = model.Organization.Id });
+            return RedirectToAction("categories", "pradmin", new { id = model.Category.OrganizationId });
         }
 
         //
@@ -129,17 +130,18 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult EditCategory(int id)
         {
-            var model = new Category();
+            CategoryStructureViewModel vm = new CategoryStructureViewModel();
+            //var model = new Category();
             var db = new ProductRepository();
-            model = db.GetCategory(id);
-            if( model == null )
+            vm.Category = db.GetCategory(id);
+            if( vm.Category == null )
             {
                 ErrorFormat("User #{0} tries to edit non-existing category #{1}!", User.Identity.Name, id);
                 return RedirectToAction("notfound", "help");
             }
 
             //model.Organization = new OrganizationRepository().Items.Single(x => x.Id == model.Category.id);
-            return View(model);
+            return View(vm);
         }
 
         //
@@ -175,36 +177,50 @@ namespace OnBalance.Controllers
         // POST: /pradmin/dosavestructure
 
         //[HttpPost]
-        public ActionResult DoSaveStructure(int id, List<CategoryStructure> CategoryStructure)
+        public ActionResult DoSaveStructure(int id, CategoryStructureViewModel vm /*FormCollection f, List<CategoryStructure> CategoryStructure*/)
         {
-            var db = new CategoryStructureRepository();
-            Category model = new ProductRepository().GetCategory(id);
-            string newName = Request["NewName"];
-            bool isNewApproved = false;
-
-            if(CategoryStructure != null)
+            try
             {
-                Info("Updating category structure...");
-                foreach(var item in CategoryStructure)
+                var db = new CategoryStructureRepository();
+                var dbProduct = new ProductRepository();
+                //Category model = dbProduct.GetCategory(id);
+                string newName = Request["NewName"];
+                bool isNewApproved = false;
+
+                InfoFormat("User #{0} updates Category #{1} to name: {2}, status: {3} ({4}), organization: #{5}", User.Identity.Name, vm.Category.Id, vm.Category.Name, vm.Category.StatusName, vm.Category.StatusId, vm.Category.OrganizationId);
+                //InfoFormat("User #{0} updates Category #{1} to name: {2}, status: {3} ({4}), organization: #{5}", User.Identity.Name, model.Id, model.Name, model.StatusName, model.StatusId, model.OrganizationId);
+                dbProduct.Save(vm.Category);
+                //UpdateModel<Category>(model, "Category__");
+                //dbProduct.SubmitChanges();
+
+                //if(CategoryStructure != null)
+                //{
+                    Info("Updating category structure...");
+                    foreach(var item in vm.CategoryStructure)
+                    {
+                        InfoFormat("  Category structure: #{0, -8}. {1}", item.Id, item.Name);
+                        db.Update(item);
+                    }
+                //}
+
+                if(string.IsNullOrEmpty(newName) == false)
                 {
-                    InfoFormat("  Category structure: #{0, -8}. {1}", item.Id, item.Name);
-                    db.Update(item);
+                    bool.TryParse(Request["NewStatus"], out isNewApproved);
+                    CategoryStructure cs = new CategoryStructure();
+                    cs.Name = newName;
+                    cs.StatusId = isNewApproved ? (byte)Status.Approved : (byte)Status.Deleted;
+                    cs.CategoryId = vm.Category.Id;
+                    db.Add(cs);
                 }
-            }
 
-            if(string.IsNullOrEmpty(newName) == false)
+                db.SubmitChanges();
+
+                return PartialView("CategoryStructure", vm.Category);
+            } catch(Exception ex)
             {
-                bool.TryParse(Request["NewStatus"], out isNewApproved);
-                CategoryStructure cs = new CategoryStructure();
-                cs.Name = newName;
-                cs.StatusId = isNewApproved ? (byte)Status.Approved : (byte)Status.Deleted;
-                cs.CategoryId = model.Id;
-                db.Add(cs);
+                Error("Error updating Category structure!", ex);
+                throw ex;
             }
-
-            db.SubmitChanges();
-
-            return PartialView("CategoryStructure", model);
         }
         
         //

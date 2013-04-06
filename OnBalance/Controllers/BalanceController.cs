@@ -65,68 +65,125 @@ namespace OnBalance.Controllers
             return Content(string.Format("{0}({{'data': [ {1} ]}})", callback, sbMain.ToString()));
         }
 
+        public JsonpResult GetSchemaOfOrganizationsList(int id)
+        {
+            List<OrganizationSchemaViewModel> pos = new List<OrganizationSchemaViewModel>();
+            var dbProduct = new ProductRepository();
+            var orgs = new OrganizationRepository().Items
+                .Where(x => x.Id.Equals(id) || x.ParentId.Equals(id) && x.StatusId == (byte)Status.Approved)
+                .ToList();
+
+            foreach(var item in orgs)
+            {
+                var categories = dbProduct.Categories.Where(x => x.OrganizationId == item.Id);
+                List<CategoryStructureViewModel> cs = new List<CategoryStructureViewModel>();
+                foreach (var c in categories)
+	            {
+                    cs.Add(new CategoryStructureViewModel
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Sizes = dbProduct.GetAvailableSizes(c.Id)
+                    });
+	            }
+                var orgVm = new OrganizationSchemaViewModel
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Categories = cs.ToArray()
+                };
+
+                pos.Add(orgVm);
+            }
+
+            return new JsonpResult
+            {
+                Data = new
+                {
+                    Results = pos
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         //
         // GET: /balance/getorganizationstructure/100002
 
         public JsonpResult GetOrganizationSchema(int id)
         {
-            InfoFormat("Preparing JSON schema for main page (shops, categories)");
+            throw new Exception("Use GetSchemaOfOrganizationsList method instead!");
+
+            InfoFormat("Preparing JSON schema for main page (shops, categories). POS ID is {0}", id);
             OrganizationRepository dbOrg = new OrganizationRepository();
             OrganizationSchemaViewModel orgVm = new OrganizationSchemaViewModel();
             ProductRepository dbProduct = new ProductRepository();
 
-            orgVm.Id = 100002;
-            orgVm.Name = "GJ";
+            Organization pos = dbOrg.GetById(id);
+            orgVm.Id = pos.Id;
+            orgVm.Name = pos.Name;
+
+            //orgVm.Id = 100002;
+            //orgVm.Name = "GJ";
             orgVm.ReceivedAt = Common.GetTimestamp(DateTime.Now);
 
             var categories = new List<CategoryStructureViewModel>();
-            int catId = 1000;
+            foreach(var c in dbProduct.Categories.Where(x => x.OrganizationId == pos.Id))
+            {
+                categories.Add(new CategoryStructureViewModel
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Sizes = dbProduct.GetAvailableSizes(c.Id)
+                });
+            }
+            //int catId = 1000;
             
-            categories.Add(new CategoryStructureViewModel
-            {
-                Id = ++catId,
-                Name = "Avalyne",
-                Sizes = dbProduct.GetAvailableSizes(catId)
-            });
-
-            categories.Add(new CategoryStructureViewModel
-            {
-                Id = ++catId,
-                Name = "Apranga vyrams ir apranga moteris",
-                Sizes = dbProduct.GetAvailableSizes(catId)
-            });
-
-            categories.Add(new CategoryStructureViewModel
-            {
-                Id = ++catId,
-                Name = "Apranga vaikams",
-                Sizes = dbProduct.GetAvailableSizes(catId)
-            });
-
-            categories.Add(new CategoryStructureViewModel
-            {
-                Id = ++catId,
-                Name = "Kepures (priedai)",
-                Sizes = dbProduct.GetAvailableSizes(catId)
-            });
-
-            //categories.Add(new ViewModels.Balance.CategoryStructureViewModel
+            //categories.Add(new CategoryStructureViewModel
             //{
             //    Id = ++catId,
-            //    Name = "Kojines (priedai)",
-            //    Sizes = new string[] { "122cm", "128", "134", "140", "152", "158", "164", "170", "176" }
+            //    Name = "Avalyne",
+            //    Sizes = dbProduct.GetAvailableSizes(catId)
             //});
 
-            categories.Add(new CategoryStructureViewModel
-            {
-                Id = ++catId,
-                Name = "Kamuoliai (kita)",
-                Sizes = dbProduct.GetAvailableSizes(catId)
-            });
+            //categories.Add(new CategoryStructureViewModel
+            //{
+            //    Id = ++catId,
+            //    Name = "Apranga vyrams ir apranga moteris",
+            //    Sizes = dbProduct.GetAvailableSizes(catId)
+            //});
+
+            //categories.Add(new CategoryStructureViewModel
+            //{
+            //    Id = ++catId,
+            //    Name = "Apranga vaikams",
+            //    Sizes = dbProduct.GetAvailableSizes(catId)
+            //});
+
+            //categories.Add(new CategoryStructureViewModel
+            //{
+            //    Id = ++catId,
+            //    Name = "Kepures (priedai)",
+            //    Sizes = dbProduct.GetAvailableSizes(catId)
+            //});
+
+            ////categories.Add(new ViewModels.Balance.CategoryStructureViewModel
+            ////{
+            ////    Id = ++catId,
+            ////    Name = "Kojines (priedai)",
+            ////    Sizes = new string[] { "122cm", "128", "134", "140", "152", "158", "164", "170", "176" }
+            ////});
+
+            //categories.Add(new CategoryStructureViewModel
+            //{
+            //    Id = ++catId,
+            //    Name = "Kamuoliai (kita)",
+            //    Sizes = dbProduct.GetAvailableSizes(catId)
+            //});
 
             List<OrganizationViewModel> shops = new List<OrganizationViewModel>();
-            var q = dbOrg.Items
-                .Where(x => x.StatusId == (byte)Status.Approved && (x.Id == id || x.ParentId == id));
+            //var q = dbOrg.Items
+            //    .Where(x => x.StatusId == (byte)Status.Approved && (x.Id == id || x.ParentId == id));
+            var q = dbOrg.GetByParentId(pos.ParentId);
             InfoFormat("Organization which belong to organization #{0}", id);
             foreach(var item in q)
             {
@@ -348,6 +405,7 @@ namespace OnBalance.Controllers
             OrganizationRepository dbPos = new OrganizationRepository();
 
             InfoFormat("Selecting products for POS #{0}", id);
+            pb.Pos = dbPos.GetById(id);
             pb.Products = db.Items
                 .Where(x => x.PosId == id && x.StatusId == (byte)Status.Approved)
                 .Take(100)

@@ -85,7 +85,18 @@ namespace OnBalance.Models
         /// </summary>
         public Category Save(Category model)
         {
-            _dataContext.Categories.InsertOnSubmit(model);
+            if(model.Id < 1)
+            {
+                _dataContext.Categories.InsertOnSubmit(model);
+            }else
+            {
+                Category entity = _dataContext.Categories.SingleOrDefault(x => x.Id.Equals(model.Id));
+                entity.Name = model.Name;
+                entity.OrganizationId = model.OrganizationId;
+                entity.ParentId = model.ParentId;
+                entity.StatusId = model.StatusId;
+                //_dataContext.Categories.Attach(model);
+            }
             _dataContext.SubmitChanges();
             return model;
         }
