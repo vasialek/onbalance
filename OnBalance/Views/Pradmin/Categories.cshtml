@@ -16,6 +16,7 @@
             POS
         </th>
         <th>Parent</th>
+        <th>Category type</th>
         <th>
             Name
         </th>
@@ -33,6 +34,7 @@
         <td>
             @(item.ParentId == 0 ? "" : item.Parent.Name)
         </td>
+        <td>@item.CategoryTypeName</td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
         </td>

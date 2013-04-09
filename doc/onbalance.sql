@@ -34,6 +34,7 @@ create table category
     organization_id integer not null,
     name nvarchar(128) not null
 );
+alter table category add category_type_id int not null default(1);
 
 create table product
 (

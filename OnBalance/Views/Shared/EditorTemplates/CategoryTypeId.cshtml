@@ -1,0 +1,7 @@
+﻿@model int
+
+@{
+    var list = new SelectList(new OnBalance.Models.CategoryTypeRepository().Items, "Id", "Name", Model.ToString());
+}
+
+@Html.DropDownList("", list)

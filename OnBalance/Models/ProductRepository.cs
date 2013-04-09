@@ -95,6 +95,7 @@ namespace OnBalance.Models
                 entity.OrganizationId = model.OrganizationId;
                 entity.ParentId = model.ParentId;
                 entity.StatusId = model.StatusId;
+                entity.CategoryTypeId = model.CategoryTypeId;
                 //_dataContext.Categories.Attach(model);
             }
             _dataContext.SubmitChanges();

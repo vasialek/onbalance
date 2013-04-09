@@ -90,6 +90,7 @@
     <Compile Include="Models\BaseRepository.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CategoryStructure.cs" />
+    <Compile Include="Models\CategoryType.cs" />
     <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\ObLog.designer.cs">
       <AutoGen>True</AutoGen>
@@ -220,6 +221,7 @@
     <Content Include="Views\Organization\Edit.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Organization.cshtml" />
     <Content Include="Views\Balance\Edit.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CategoryTypeId.cshtml" />
     <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
     <Content Include="Views\Useradmin\CreateInPos.cshtml" />

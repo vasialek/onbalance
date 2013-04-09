@@ -8,6 +8,7 @@ namespace OnBalance.Models
     partial class Category : BaseModel
     {
         protected Category _parent = null;
+        protected CategoryType _categoryType = null;
 
         partial void OnCreated()
         {
@@ -37,6 +38,19 @@ namespace OnBalance.Models
                 }
 
                 return _parent;
+            }
+        }
+
+        public string CategoryTypeName
+        {
+            get
+            {
+                if( _categoryType == null )
+                {
+                    _categoryType = new CategoryTypeRepository().Items.SingleOrDefault(x => x.Id.Equals(_categoryTypeId));
+                }
+
+                return _categoryType == null ? "" : _categoryType.Name;
             }
         }
     }

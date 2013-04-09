@@ -12,6 +12,11 @@ namespace OnBalance.ViewModels.Categories
 
         public Category Category { get; set; }
 
+        public List<CategoryType> CategoryTypes
+        {
+            get { return new CategoryTypeRepository().Items.ToList(); }
+        }
+
         public IList<CategoryStructure> CategoryStructure
         {
             get
