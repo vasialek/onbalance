@@ -1,7 +1,20 @@
 ﻿@model int
 
 @{
-    var list = new SelectList(new OnBalance.Models.CategoryTypeRepository().Items, "Id", "Name", Model.ToString());
+    // CSS for nice buttons :)
+    Html.ResourceManager().AddCssFile("~/css/gh-buttons.css");
+    
+    var list = new OnBalance.Models.CategoryTypeRepository().Items.ToList();
 }
 
-@Html.DropDownList("", list)
+
+<div class="button-group minor-group">
+@foreach(var item in list)
+{
+    <div class="button pill @(item.Id == Model ? "primary" : "")">
+        @item.Name
+    </div>
+}
+</div>
+
+
