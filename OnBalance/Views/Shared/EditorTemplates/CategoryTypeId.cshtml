@@ -5,16 +5,26 @@
     Html.ResourceManager().AddCssFile("~/css/gh-buttons.css");
     
     var list = new OnBalance.Models.CategoryTypeRepository().Items.ToList();
+    var o = list.FirstOrDefault(x => x.Id == Model);
+    string name = o == null ? "" : o.Name;
 }
 
 
-<div class="button-group minor-group">
+@if( o != null )
+{
+    <div>Current category type is <strong>@name</strong></div>
+}else
+{
+    <div>Category does <strong>not</strong> have specified type</div>
+}
+@Html.HiddenFor(x => Model, new { id = "CategoryTypeId" })
+<ul id="CategoryTypeList" class="button-group minor-group">
 @foreach(var item in list)
 {
-    <div class="button pill @(item.Id == Model ? "primary" : "")">
-        @item.Name
-    </div>
+    <li>
+        <a id="@string.Concat("CategoryTypeId_", item.Id)" class="button pill @(item.Id == Model ? "primary" : "")">@item.Name</a>
+    </li>
 }
-</div>
+</ul>
 
 

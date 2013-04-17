@@ -6,7 +6,9 @@
 
     Html.ResourceManager()
         .AddJsFile("http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js")
-        .AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.UnobtrusiveMvc, "", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Min, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Microsoft);
+        .AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.UnobtrusiveMvc, "", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Min, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Microsoft)
+        .AddJsFile("~/scripts/admin.js")
+        .AddJsFile("~/scripts/category.js");
 
     var ajaxOptions = new AjaxOptions
     {
@@ -33,7 +35,14 @@
         @Html.Partial("CategoryStructure", Model.Category)
     </div>
 
-    <input type="submit" value="Save" />
-    @Html.ImageLink("/images/poscategories.png", "POS categories", Url.Action("categories", "pradmin", new { id = Model.Category.OrganizationId }), new { width = 16, heigth = 16 }, null)
+    <button class="button icon approve primary">Save</button>
+    @Html.ActionLink("POS categories", "categories", "pradmin", new { id = Model.Category.OrganizationId }, new { @class = "button icon fork" })
 }
 
+<script type="text/javascript">
+
+    window.onload = function () {
+        Category.init(@Model.Category.Id, @Model.Category.CategoryTypeId);
+    }
+
+</script>

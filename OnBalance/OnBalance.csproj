@@ -169,12 +169,14 @@
       <LastGenOutput>SizeConvertor.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <Content Include="css\gh-buttons.css" />
     <Content Include="images\add.png" />
     <Content Include="images\categoryparameters.png" />
     <Content Include="images\changepassword.png" />
     <Content Include="images\decrease.gif" />
     <Content Include="images\edit.png" />
     <Content Include="images\export.png" />
+    <Content Include="images\gh-icons.png" />
     <Content Include="images\header-repeat.jpg" />
     <Content Include="images\import.png" />
     <Content Include="images\increase.gif" />
@@ -193,6 +195,7 @@
     <Content Include="log4net.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Scripts\category.js" />
     <Content Include="Views\Balance\List.cshtml" />
     <Content Include="Views\Log\List.cshtml" />
     <Content Include="Views\Balance\Confirm.cshtml" />
