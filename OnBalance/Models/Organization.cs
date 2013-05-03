@@ -21,6 +21,12 @@ namespace OnBalance.Models
         }
 
         /// <summary>
+        /// Configuration of Organization/POS
+        /// </summary>
+        public OrganizationConfig Configuration { get { return new OrganizationConfig(); } }
+
+
+        /// <summary>
         /// Gets parent Organization or null
         /// </summary>
         public Organization Parent

@@ -19,7 +19,7 @@
         {
             Text = x.Name,
             Value = x.Id.ToString(),
-            Selected = x.Equals(Model.PosId)
+            Selected = Model.PosId > 0 ? x.Equals(Model.PosId) : false
         }));
     
 }

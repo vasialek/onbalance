@@ -97,19 +97,44 @@ namespace OnBalance.Helpers
 
         public HtmlResourcesAggregator AddJsLibrary(Libraries library, string version, ScriptFormats f, Cdns cdn)
         {
-            string jsFilename = _librariesNames[(int)library];
-            jsFilename = f == ScriptFormats.Min ? string.Concat(jsFilename, ".min.js") : string.Concat(jsFilename, ".js");
-
-            if( library == Libraries.UnobtrusiveMvc )
+            if( (library == Libraries.UnobtrusiveMvc) && (cdn != Cdns.Microsoft) )
             {
-                if(cdn != Cdns.Microsoft)
-                {
-                    throw new ArgumentException("Google CDN does not host Microsoft Unobtrusive Ajax!");
-                }
-                this.JsFiles.Add(string.Concat("//ajax.aspnetcdn.com/ajax/mvc/3.0/", jsFilename));
-                return this;
+                throw new ArgumentException("Reuired CDN (" + cdn + ") does not host Microsoft Unobtrusive Ajax!");
             }
-            string baseUrl = cdn == Cdns.Google ? "//ajax.googleapis.com/ajax/libs/" : "//ajax.aspnetcdn.com/ajax/";
+
+            version = version.StartsWith("-") ? version : string.Concat("-", version);
+            if(version.EndsWith("."))
+            {
+                version = version.Substring(0, version.Length - 1);
+            }
+
+            string jsFilename = _librariesNames[(int)library];
+            string baseUrl = "";// = cdn == Cdns.Google ? "//ajax.googleapis.com/ajax/libs/" : "//ajax.aspnetcdn.com/ajax/";
+            switch(cdn)
+            {
+                case Cdns.Google:
+                    // //ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js
+                    throw new NotImplementedException("Google CDN is not supported yet!!!");
+                case Cdns.Microsoft:
+                    // //ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js
+
+                    switch (library)
+	                {
+                        case Libraries.jQuery:
+                            baseUrl = "//ajax.aspnetcdn.com/ajax/jquery/";
+                            break;
+                        case Libraries.jQueryUI:
+                            baseUrl = "//ajax.aspnetcdn.com/ajax/jquery.ui/";
+                            break;
+                        case Libraries.UnobtrusiveMvc:
+                            baseUrl = "//ajax.aspnetcdn.com/ajax/mvc/3.0/";
+                            break;
+	                }
+
+                    break;
+            }
+            jsFilename = f == ScriptFormats.Min ? string.Concat(jsFilename, version, ".min.js") : string.Concat(jsFilename, version, ".js");
+
             this.JsFiles.Add(string.Format("{0}{1}", baseUrl, jsFilename));
             return this;
         }

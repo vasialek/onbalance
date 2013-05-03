@@ -71,6 +71,27 @@ namespace OnBalance.Models
 
     partial class Product
     {
+        protected Organization _organization = null;
+
+        public Organization Pos
+        {
+            get
+            {
+                if(_organization == null)
+                {
+                    _organization = PosId > 0 ? new OrganizationRepository().GetById(PosId) : null;
+                }
+                return _organization;
+            }
+        }
+
+        public Uri PhotosUri
+        {
+            get
+            {
+                return Pos.Configuration.PhotosUri;
+            }
+        }
 
         public string StatusName
         {

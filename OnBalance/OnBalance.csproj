@@ -107,6 +107,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Organization.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\OrganizationConfig.cs" />
     <Compile Include="Models\OrganizationRepository.cs" />
     <Compile Include="Models\ParamModel.cs" />
     <Compile Include="Models\ParamRepository.cs" />
@@ -186,6 +187,8 @@
     <Content Include="images\poscategories.png" />
     <Content Include="images\posmoveto.png" />
     <Content Include="images\productadmin.png" />
+    <Content Include="images\productphotos.png" />
+    <Content Include="images\productweb.png" />
     <Content Include="images\sidemenu-repeat-hover.jpg" />
     <Content Include="images\sidemenu-repeat.jpg" />
     <Content Include="images\userlist.png" />
@@ -196,6 +199,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Scripts\category.js" />
+    <Content Include="Scripts\product.js" />
     <Content Include="Views\Balance\List.cshtml" />
     <Content Include="Views\Log\List.cshtml" />
     <Content Include="Views\Balance\Confirm.cshtml" />

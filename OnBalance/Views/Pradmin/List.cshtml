@@ -2,7 +2,10 @@
 @{
     ViewBag.Title = "Balance";
     Layout = null;
-    
+
+    Html.ResourceManager()
+        .AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.jQuery, "1.8.1", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Debug, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Microsoft)
+        .AddJsFile("~/scripts/product.js");
 }
 
 <div style="width: 900px;">
@@ -13,11 +16,18 @@
 </div>
 <div style="clear: both;"></div>
 
-<table>
+<table width="95%" border="1">
 @foreach(var item in Model.Products)
 {
     
         <tr>
+            <td>
+                @if(item.Pos.Configuration.IsPhotosFromEshop)
+                {
+                    @Html.ImageLink("/images/productweb.png", "Product info at E-shop", item.PhotosUri.ToString(), new { width = 16, height = 16 }, new { @class = "ob-prphotos-link", target = "_blank" })
+                }
+                @Html.ImageLink("/images/productphotos.png", "Photos from E-shop", "#", new { width = 16, height = 16 }, new { @class = "ob-prinfo-link" })
+            </td>
             <td>
                 @Html.Display(item.StatusName)
             </td>
@@ -39,9 +49,15 @@
             </td>
         </tr>
         <tr>
-            <td colspan="6">
+            <td colspan="7">
                 @Html.DisplayFor(x => item.Details, "ProductDetail")
             </td>
         </tr>
 }
 </table>
+
+<script type="text/javascript">
+    window.onload = function () {
+        Product.init();
+    }
+</script>

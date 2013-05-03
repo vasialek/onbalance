@@ -58,6 +58,7 @@ namespace OnBalance.Controllers
             productsList.Products = db.GetLastInPos(id, offset, perPage)
                 .OrderBy(x => x.Id)
                 .ToList();
+            DebugFormat("  got {0} products...", productsList.Products.Count);
 
             return View("List", Layout, productsList);
         }
@@ -446,6 +447,24 @@ namespace OnBalance.Controllers
             return View(model);
         }
 
+        [Authorize]
+        [HttpPost]
+        public ActionResult Create(Product model)
+        {
+            try
+            {
+                InfoFormat("User #{0} saving new product", User.Identity.Name);
+                SetTempOkMessage("New product '{0}' was created", model.Name);
+                return RedirectToAction("edit", new { id = model.Id });
+            } catch(Exception ex)
+            {
+                Error("Error creating product!", ex);
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            return View(model);
+        }
+
         //
         // GET: /pradmin/edit/1234
 
@@ -455,6 +474,11 @@ namespace OnBalance.Controllers
             InfoFormat("Editing product with ID #{0}", id);
             ProductRepository db = new ProductRepository();
             Product model = db.GetById(id);
+            if(model == null)
+            {
+                ErrorFormat("User #{0} trying to edit non-existing product with ID: {1}!", User.Identity.Name, id);
+                return new HttpNotFoundResult();
+            }
 
             return View(model);
         }

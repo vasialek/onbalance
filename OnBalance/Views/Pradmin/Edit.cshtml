@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Edit";
+    Html.ResourceManager().AddCssFile("~/css/gh-buttons.css");
 }
 
 <h2>Edit</h2>
@@ -11,6 +12,6 @@
 
     @Html.EditorForModel()
 
-    <input type="submit" value="@OnBalance.MyMessages.ButtonText.Save" />
-    
+    <button class="button icon approve primary">@OnBalance.MyMessages.ButtonText.Save</button>
+   
 }

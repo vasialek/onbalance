@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Html.ResourceManager().AddCssFile("~/css/gh-buttons.css");
 }
 
 <h2>Create</h2>
@@ -12,8 +14,6 @@
 
     @Html.EditorForModel()
 
-    <div class="bottom_links">
-        <input type="submit" value="Save" />
-    </div>
-    
+    <button class="button icon approve primary">Save</button>
+        @*<input type="submit" value="Save" />*@
 }
