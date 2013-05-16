@@ -8,17 +8,19 @@
         .AddJsFile("~/scripts/product.js");
 }
 
-<div style="width: 900px;">
-    @foreach(var c in Model.Categories)
-    {
-        <div class="fleft">&bull;@Html.DisplayFor(x => c)</div>
-    }
-</div>
-<div style="clear: both;"></div>
+<div class="container-fluid">
+        @foreach(var c in Model.Categories)
+        {
+            <div style="float: left; margin: 5px; line-height: 25px; border: solid 1px #d2d2d2; border-radius: 4px; padding: 2px;">
+                @c.Name
+                <i class="icon-remove"></i>
+            </div>
+        }
 
-<table width="95%" border="1">
-@foreach(var item in Model.Products)
-{
+    <div class="container-fluid">
+    <table class="table table-hover">
+    @foreach(var item in Model.Products)
+    {
     
         <tr>
             <td>
@@ -29,7 +31,7 @@
                 @Html.ImageLink("/images/productphotos.png", "Photos from E-shop", "#", new { width = 16, height = 16 }, new { @class = "ob-prinfo-link" })
             </td>
             <td>
-                @Html.Display(item.StatusName)
+                @Html.Display(item.StatusName, new { @class = item.StatusCssStyle })
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.InternalCode)
@@ -41,10 +43,12 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
+                @item.CreatedAt.ToShortDateString()
             </td>
             <td>
-                @Html.ImageLink("/images/edit.png", "Edit", Url.Action("edit", new { id = item.Id }), new { width = 16, heigth = 16 }, null)
+                <div class="btn-group">
+                @Html.ImageLink("/images/edit.png", "Edit", Url.Action("edit", new { id = item.Id }), new { width = 16, heigth = 16 }, new { @class = "btn-mini" })
+                </div>
                 
             </td>
         </tr>
@@ -53,8 +57,11 @@
                 @Html.DisplayFor(x => item.Details, "ProductDetail")
             </td>
         </tr>
-}
-</table>
+    }
+    </table>
+    </div>
+
+</div>
 
 <script type="text/javascript">
     window.onload = function () {

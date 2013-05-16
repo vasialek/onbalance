@@ -1,26 +1,36 @@
-﻿<!DOCTYPE html>
-
-<html>
+﻿@{
+    Html.ResourceManager()
+        .AddCssFile("~/bootstrap/css/bootstrap.css")
+        .AddCssFile("~/css/admin.css")
+        .AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.jQuery, "1.9.1", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Min, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Google)
+        .AddJsFile("~/bootstrap/js/bootstrap.js");
+}
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
     <title>@ViewBag.Title</title>
-    <link href="@Url.Content("/css/onbalance.css")" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Html.ResourceManager().OutputCssFiles()
 </head>
 <body>
-
-<div id="wrapper">
-    <header id="header">
-	    <div class="logo">
-
-	    </div>
-    </header>
-
-	<div id="container">
-		<div id="content">
+    <div class="container">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                @Html.ActionLink(OnBalance.MyConstants.Name, "Index", "Home", null, new { @class = "brand" })
+            </div>
+        </div>
+        <div class="container">
             @RenderBody()
-        </div><!-- #content-->
-	</div><!-- #container-->
+            <hr>
+        </div>
+        <div class="navbar-fixed-bottom">
+            <p>&copy; 2012-@DateTime.Now.ToString("yyyy")</p>
+        </div>
+    
+    </div>
 
-</div>
+    @Html.ResourceManager().OutputJsFiles()
 
 </body>
 </html>

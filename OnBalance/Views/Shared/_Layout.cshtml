@@ -1,19 +1,64 @@
 ﻿@{
     var Model = new OnBalance.ViewModels.User.DashboardViewModel();
     Model.Init();
-    Html.ResourceManager().AddCssFile("~/css/onbalance.css");
+    Html.ResourceManager()
+        //.AddCssFile("~/css/onbalance.css")
+        .AddCssFile("~/bootstrap/css/bootstrap.css");
 }
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @*<link href="@Url.Content("/css/onbalance.css")" rel="stylesheet" type="text/css" />*@
 </head>
 
 <body>
 
-<div id="wrapper">
+<div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+    <div class="container-fluid">
+        @Html.ActionLink(OnBalance.MyConstants.Name, "Index", "Home", null, new { @class = "brand" })
+        <div class="nav-collapse collapse">
+        <p class="navbar-text pull-right">
+            @Html.Partial("_LogOnPartial")
+        </p>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="span3">
+        <ul class="nav nav-list">
+          <li class="nav-header">Shops</li>
+            @foreach(var item in Model.Shops)
+            {
+                <li>
+                    @Html.DisplayFor(x => item)
+                    @if(item.Children.Count > 0)
+                    {
+                        <ul class="nav nav-list">
+                            @foreach (var child in item.Children)
+	                        {
+                                <li>@Html.DisplayFor(x => child)</li>
+	                        }
+                        </ul>
+                        <li class="divider"></li>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="span9">
+        @RenderBody()
+    </div>
+</div>
+
+    <div class="navbar navbar-fixed-bottom">&copy; 2012-@DateTime.Now.ToString("yyyy")</div>
+
+@*<div id="wrapper">
     <header id="header">
 	    <div class="logo">
             @Html.Partial("_LogOnPartial")
@@ -69,15 +114,7 @@
 </div>
 <div class="main_content_center">
     @RenderBody()
-</div>
-
-<div style="clear: both;"></div>
-
-<div>
-    <footer id="footer">
-        <div class="copyright">2012 - @DateTime.Now.ToString("yyyy") &copy;</div>
-    </footer>
-</div>
+</div>*@
 
 @RenderSection("AdditionalJsFiles", false)
 @Html.ResourceManager().OutputCssFiles()

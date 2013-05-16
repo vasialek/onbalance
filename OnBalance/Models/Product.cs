@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 namespace OnBalance.Models
 {
 
@@ -101,6 +102,21 @@ namespace OnBalance.Models
             }
         }
 
+        [ScaffoldColumn(false)]
+        public string StatusCssStyle
+        {
+            get
+            {
+                switch(StatusId)
+                {
+                    case (byte)Status.Approved:
+                        return "label-success";
+                    case (byte)Status.Deleted:
+                        return "label-inverse";
+                }
+                return "";
+            }
+        }
 
         public IList<ProductDetail> Details
         {

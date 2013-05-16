@@ -3,12 +3,12 @@
 <div>
     <div class="user_shop_item">@Html.ActionLink(Model.Name, "list", "balance", new { id = Model.Id }, null)</div>
     <div>
-        <ul class="list_actions">
-            <li>@Html.ImageLink("/images/edit.png", "Edit POS", Url.Action("edit", "organization", new { id = Model.Id }), new { width = 12, height = 12 }, null)</li>
-            <li>@Html.ImageLink("/images/productadmin.png", "Product list", Url.Action("list", "pradmin", new { id = Model.Id }), new { width = 12, height = 12 }, new { style = "border: 0" })</li>
-            <li>@Html.ImageLink("/images/poscategories.png", "List of categories", Url.Action("categories", "pradmin", new { id = Model.Id }), new { width = 12, height = 12 }, null)</li>
-            <li>@Html.ImageLink("/images/import.png", "Import from file", Url.Action("parse", "pradmin", new { id = Model.Id }), new { width = 12, height = 12 }, null)</li>
-            <li>@Html.ImageLink("/images/view.png", "Balance", Url.Action("list", "balance", new { id = Model.Id }), new { width = 12, height = 12 }, null)</li>
-        </ul>
+        <div class="btn-group">
+            @Html.ImageLink("/images/edit.png", "Edit POS", Url.Action("edit", "organization", new { id = Model.Id }), new { width = 12, height = 12 }, new { @class = "btn-mini" })
+            @Html.ImageLink("/images/productadmin.png", "Product list", Url.Action("list", "pradmin", new { id = Model.Id }), new { width = 12, height = 12 }, new { @class = "btn-mini" })
+            @Html.ImageLink("/images/poscategories.png", "List of categories", Url.Action("categories", "pradmin", new { id = Model.Id }), new { width = 12, height = 12 }, new { @class = "btn-mini" })
+            @Html.ImageLink("/images/import.png", "Import from file", Url.Action("parse", "pradmin", new { id = Model.Id }), new { width = 12, height = 12 }, new { @class = "btn-mini" })
+            @Html.ImageLink("/images/view.png", "Balance", Url.Action("list", "balance", new { id = Model.Id }), new { width = 12, height = 12 }, new { @class = "btn-mini" })
+        </div>
     </div>
 </div>

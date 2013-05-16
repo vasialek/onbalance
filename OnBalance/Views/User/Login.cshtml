@@ -1,11 +1,10 @@
 ﻿@model OnBalance.ViewModels.User.LoginViewModel
 
 @{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
     ViewBag.Title = "Login";
     Html.EnableClientValidation(true);
 }
-
-<h2>Login</h2>
 
 @using(Html.BeginForm())
 {
@@ -13,7 +12,7 @@
     @Html.ValidationSummary(false)
     @Html.EditorFor(x => Model)
     
-    <input type="submit" value="@OnBalance.MyMessages.ButtonText.Login" />
+    <input type="submit" value="@OnBalance.MyMessages.ButtonText.Login" class="btn-small btn-primary" />
 }
 
 <script type="text/javascript">

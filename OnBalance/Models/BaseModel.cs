@@ -28,5 +28,21 @@ namespace OnBalance.Models
             }
         }
 
+        [ScaffoldColumn(false)]
+        public virtual string StatusCssStyle
+        {
+            get
+            {
+                switch(_statusId)
+                {
+                    case (byte)Status.Approved:
+                        return "label-success";
+                    case (byte)Status.Deleted:
+                        return "label-inverse";
+                }
+                return "";
+            }
+        }
+
     }
 }

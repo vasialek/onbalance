@@ -4,21 +4,34 @@
     ViewBag.Title = "Dashboard";
 }
 
-<h2>Dashboard</h2>
+<div class="container">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i> @Html.ActionLink(OnBalance.MyConstants.Name, "Index", "Home")
+            <span class="divider">\</span>
+        </li>
+        <li>
+            Dashboard
+        </li>
+    </ul>
 
-<div class="dtrow">
-    <div class="dtcell" style="width: 400px;">
-        <div class="b">Last created POS</div>
+
+    <div class="span4 well">
+        <div><strong>Last created POS</strong></div>
+        <ul>
         @foreach(var p in Model.LastPos)
         {
-            <div>@p.Name (at @p.CreatedAt.ToShortDateString())</div>
+            <li>@p.Name (at @p.CreatedAt.ToShortDateString())</li>
         }
+        </ul>
     </div>
-    <div class="dtcell" style="width: 400px;">
-        <div class="b">Last created users</div>
+    <div class="span4 well">
+        <div><strong>Last created users</strong></div>
+        <ul>
         @foreach(var u in Model.LastUsers)
         {
-            <div>@u.UserName (at @u.CreationDate.ToShortDateString())</div>
+            <li>@u.UserName (at @u.CreationDate.ToShortDateString())</li>
         }
+        </ul>
     </div>
 </div>
