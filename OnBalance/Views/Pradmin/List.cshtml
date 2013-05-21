@@ -18,7 +18,9 @@
         }
 
     <div class="container-fluid">
-    <table class="table table-hover">
+    <table class="table table-hover table-bordered table-condensed table-striped">
+        <caption>Products of @Model.Pos.Name</caption>
+    <tbody>
     @foreach(var item in Model.Products)
     {
     
@@ -37,7 +39,7 @@
                 @Html.DisplayFor(modelItem => item.InternalCode)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Uid)
+                <i class="icon-barcode" title="Unique ID @item.Uid"></i>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -58,6 +60,7 @@
             </td>
         </tr>
     }
+    </tbody>
     </table>
     </div>
 
