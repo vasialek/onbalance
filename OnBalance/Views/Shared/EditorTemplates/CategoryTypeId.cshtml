@@ -18,13 +18,11 @@
     <div>Category does <strong>not</strong> have specified type</div>
 }
 @Html.HiddenFor(x => Model, new { id = "CategoryTypeId" })
-<ul id="CategoryTypeList" class="button-group minor-group">
+<div id="CategoryTypeList" class="btn-group">
 @foreach(var item in list)
 {
-    <li>
-        <a id="@string.Concat("CategoryTypeId_", item.Id)" class="button pill @(item.Id == Model ? "primary" : "")">@item.Name</a>
-    </li>
+    <a id="@string.Concat("CategoryTypeId_", item.Id)" class="btn btn-mini @(item.Id == Model ? "btn-primary" : "")">@item.Name</a>
 }
-</ul>
+</div>
 
 

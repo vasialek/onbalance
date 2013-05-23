@@ -35,8 +35,10 @@
         @Html.Partial("CategoryStructure", Model.Category)
     </div>
 
-    <button class="button icon approve primary">Save</button>
-    @Html.ActionLink("POS categories", "categories", "pradmin", new { id = Model.Category.OrganizationId }, new { @class = "button icon fork" })
+    <div class="btn-group">
+        <button class="btn btn-mini"><i class="icon-ok"></i> Save</button>
+        @Html.ActionLink("POS categories", "categories", "pradmin", new { id = Model.Category.OrganizationId }, new { @class = "btn btn-mini" })
+    </div>
 }
 
 <script type="text/javascript">

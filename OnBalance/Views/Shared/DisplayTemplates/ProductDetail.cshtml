@@ -2,22 +2,35 @@
            
 @{
     var categories = Model.Select(x => x.parameter_name).Distinct();
+
+    string[] cats = new OnBalance.Models.ProductRepository().GetAvailableSizes(1001);
 }
 
-@foreach(var c in categories)
-{
-    <div>
-        <div class="b">@c</div>
-        <div style="padding-left: 1em;">
-            @foreach(var size in Model.Where(x => x.parameter_name.Equals(c)))
-            {
-                <div style="width: 10em;" class="fleft">
-                    <span class="b">@size.parameter_value</span>:
-                    <span>@size.price_minor.ToString("C")</span>;
-                    <span>@size.quantity qnt.</span>
-                </div>
-            }
-        </div>
-        <div style="clear: both;"></div>
-    </div>
-}
+<table class="table table-condensed">
+    <thead>
+        <tr>
+        @for(int i = 0; i < cats.Length; i++)
+        {
+            <td>@cats[i]</td>
+        }
+        </tr>
+    </thead>
+    <tbody class="font-mini">
+        <tr>
+        @for(int i = 0; i < cats.Length; i++)
+        {
+            var v = Model.FirstOrDefault(x => x.parameter_value.Equals(cats[i]));
+            <td>
+                @if( v != null )
+                {
+                    <abbr title="@string.Format("Quantity: {0} x {1:C}", v.quantity, v.price_minor)">@v.quantity</abbr>
+                }
+                else
+                {
+
+                }
+            </td>
+        }
+        </tr>
+    </tbody>
+</table>

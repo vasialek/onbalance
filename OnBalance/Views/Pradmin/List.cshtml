@@ -20,47 +20,51 @@
     <div class="container-fluid">
     <table class="table table-hover table-bordered table-condensed table-striped">
         <caption>Products of @Model.Pos.Name</caption>
-    <tbody>
-    @foreach(var item in Model.Products)
-    {
-    
-        <tr>
-            <td>
-                @if(item.Pos.Configuration.IsPhotosFromEshop)
-                {
-                    @Html.ImageLink("/images/productweb.png", "Product info at E-shop", item.PhotosUri.ToString(), new { width = 16, height = 16 }, new { @class = "ob-prphotos-link", target = "_blank" })
-                }
-                @Html.ImageLink("/images/productphotos.png", "Photos from E-shop", "#", new { width = 16, height = 16 }, new { @class = "ob-prinfo-link" })
-            </td>
-            <td>
-                @Html.Display(item.StatusName, new { @class = item.StatusCssStyle })
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InternalCode)
-            </td>
-            <td>
-                <i class="icon-barcode" title="Unique ID @item.Uid"></i>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @item.CreatedAt.ToShortDateString()
-            </td>
-            <td>
-                <div class="btn-group">
-                @Html.ImageLink("/images/edit.png", "Edit", Url.Action("edit", new { id = item.Id }), new { width = 16, heigth = 16 }, new { @class = "btn-mini" })
-                </div>
+        <tbody>
+        @foreach(var item in Model.Products)
+        {
+        
+            <tr>
+                <td>
+                    @if(item.Pos.Configuration.IsPhotosFromEshop)
+                    {
+                        @Html.ImageLink("/images/productweb.png", "Product info at E-shop", item.PhotosUri.ToString(), new { width = 16, height = 16 }, new { @class = "ob-prphotos-link", target = "_blank" })
+                    }
+                    @Html.ImageLink("/images/productphotos.png", "Photos from E-shop", "#", new { width = 16, height = 16 }, new { @class = "ob-prinfo-link" })
+                </td>
+                <td>
+                    @Html.Display(item.StatusName, new { @class = item.StatusCssStyle })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InternalCode)
+                </td>
+                <td>
+                    <i class="icon-barcode" title="Unique ID @item.Uid"></i>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @item.CreatedAt.ToShortDateString()
+                </td>
+                <td>
+                    <div class="btn-group">
+                    @Html.ImageLink("/images/edit.png", "Edit", Url.Action("edit", new { id = item.Id }), new { width = 16, heigth = 16 }, new { @class = "btn-mini" })
+                    </div>
                 
-            </td>
-        </tr>
-        <tr>
-            <td colspan="7">
-                @Html.DisplayFor(x => item.Details, "ProductDetail")
-            </td>
-        </tr>
-    }
-    </tbody>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7">
+                    @if(item.Category != null)
+                    {
+                        <strong>@item.Category.CategoryTypeName</strong>
+                    }
+                    @Html.DisplayFor(x => item.Details, "ProductDetail")
+                </td>
+            </tr>
+        }
+        </tbody>
     </table>
     </div>
 

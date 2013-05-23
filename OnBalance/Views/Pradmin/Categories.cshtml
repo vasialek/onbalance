@@ -7,7 +7,7 @@
 
 <h2>Categories for POS @Model.Organization.Name</h2>
 
-<table>
+<table class="table table-bordered table-condensed table-striped">
     <tr>
         <th>
             Status
@@ -47,5 +47,8 @@
 </table>
 
 <div class="bottom_links">
-    @Html.ImageLink("/images/add.png", "Create new product category", Url.Action("createcategory", new { id = Model.Organization.Id }), new { width = 16, heigth = 16 }, null)
+    <div class="btn-group">
+        <a href="@Url.Action("list", new { id = Model.Organization.Id })" class="btn btn-mini" title="List of categories">Back to list</a>
+        <a href="@Url.Action("createcategory", new { id = Model.Organization.Id })" class="btn btn-mini" title="Create new product category"><i class="icon-plus"></i> Create</a>
+    </div>
 </div>
