@@ -130,8 +130,8 @@ namespace OnBalance.Helpers
                     switch (library)
 	                {
                         case Libraries.jQuery:
-                            baseUrl = "//ajax.aspnetcdn.com/ajax/jquery/";
-                            //urlFmt = "//ajax.aspnetcdn.com/ajax/%LIBRARY_SHORT_NAME%/%LIBRARY_SHORT_NAME%-%LIBRARY_VERSION%.js";
+                            //baseUrl = "//ajax.aspnetcdn.com/ajax/jquery/";
+                            urlFmt = "//ajax.aspnetcdn.com/ajax/%LIBRARY_SHORT_NAME%/%LIBRARY_SHORT_NAME%-%LIBRARY_VERSION%.js";
                             break;
                         case Libraries.jQueryUI:
                             baseUrl = "//ajax.aspnetcdn.com/ajax/jquery.ui/";

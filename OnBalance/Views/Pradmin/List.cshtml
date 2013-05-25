@@ -5,7 +5,8 @@
 
     Html.ResourceManager()
         .AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.jQuery, "1.8.1", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Debug, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Microsoft)
-        .AddJsFile("~/scripts/product.js");
+        .AddJsFile("~/scripts/product.js")
+        .AddCssFile("~/css/admin.css");
 }
 
 <div class="container-fluid">

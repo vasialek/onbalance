@@ -28,3 +28,12 @@
 }
 
 
+/* OBS custom */
+
+.popup-div
+{
+    position: absolute;
+    left: -999px;
+    top: 0;
+    z-index: 100;
+}
