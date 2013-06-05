@@ -20,9 +20,10 @@
                 @Html.ActionLink(OnBalance.MyConstants.Name, "Index", "Home", null, new { @class = "brand" })
             </div>
         </div>
-        <div class="container">
-            @RenderBody()
-            <hr>
+        <div class="row">
+            <div class="span2"></div>
+            <div class="span6">@RenderBody()</div>
+            <div class="span4"></div>
         </div>
         <div class="navbar-fixed-bottom">
             <p>&copy; 2012-@DateTime.Now.ToString("yyyy")</p>

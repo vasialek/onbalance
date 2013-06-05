@@ -5,13 +5,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>
-    Edit @Model.Organization.Name
-    @if(Model.Parent != null)
-    {
-        <span>(under [@Html.ActionLink(Model.Parent.Name, "edit", "organization", new { id = Model.Parent.Id }, null)])</span>
-    }
-</h2>
+<div class="container">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i> @Html.ActionLink(OnBalance.MyConstants.Name, "Index", "Home")
+            <span class="divider">\</span>
+        </li>
+        <li>
+            @Html.ActionLink("Organizations", "Index", "Organization")
+            <span class="divider">\</span>
+        </li>
+        <li>
+            @Model.Organization.Name
+            @if(Model.Parent != null)
+            {
+                <span>(under [@Html.ActionLink(Model.Parent.Name, "edit", "organization", new { id = Model.Parent.Id }, null)])</span>
+            }
+        </li>
+    </ul>
+
 
 @using(Html.BeginForm())
 {
@@ -19,35 +31,46 @@
     
     @Html.EditorFor(x => x.Organization)
 
-    <div class="bottom_links">
-        <input type="submit" value="Save" />
-
-    </div>
+    <input type="submit" value="Save" class="btn btn-small btn-primary" />
 }
 
-<div class="dtrow" style="width: 500px;">
-    <div class="dtcell">
-        <div class="b" style="width: 250px;">Children POS</div>
-        <div>
-            @Html.ImageLink("/images/add.png", "Create POS under this", Url.Action("create", "organization", new { id = Model.Organization.Id }), new { width = 16, height = 16 }, null)
-        </div>
-        @foreach(var p in Model.Children)
-        {
-            <div class="dtrow">
-                <div class="dtcell">@Html.ActionLink(p.Name, "edit", "organization", new { id = p.Id }, null)</div>
+    <div class="row-container">
+        <div class="span5">
+            <div class="well">
+                <p><b>Children POS</b> <a href="@Url.Action("create", "organization", new { id = Model.Organization.Id })"><i class="icon-plus-sign"></i></a></p>
             </div>
-        }
-    </div>
-    <div class="dtcell" style="width: 245px;">
-        <div class="b">Users</div>
-        <div>
-            @Html.ImageLink("/images/add.png", "Create user for this POS", Url.Action("createinpos", "useradmin", new { id = Model.Organization.Id }), new { width = 16, height = 16 }, null)
         </div>
-        @foreach(var user in Model.Users)
-        {
-            <div class="dtrow">
-                <div class="dtcell">@user.UserName</div>
-            </div>
-        }
+
+        <div class="span5">
+            <div class="well"><b>Users in this POS</b></div>
+        </div>
     </div>
+
+    @*<div class="row-container">
+        <div class="span5">
+            <b class="pull-left">Children POS</b>
+            <div class="pull-left">
+                @Html.ImageLink("/images/add.png", "Create POS under this", Url.Action("create", "organization", new { id = Model.Organization.Id }), new { width = 16, height = 16 }, null)
+            </div>
+            <div class="clearfix"></div>
+            @foreach(var p in Model.Children)
+            {
+                <div class="dtrow">
+                    <div class="dtcell">@Html.ActionLink(p.Name, "edit", "organization", new { id = p.Id }, null)</div>
+                </div>
+            }
+        </div>
+        <div class="span5">
+            <div class="b">Users</div>
+            <div>
+                @Html.ImageLink("/images/add.png", "Create user for this POS", Url.Action("createinpos", "useradmin", new { id = Model.Organization.Id }), new { width = 16, height = 16 }, null)
+            </div>
+            @foreach(var user in Model.Users)
+            {
+                <div class="dtrow">
+                    <div class="dtcell">@user.UserName</div>
+                </div>
+            }
+        </div>
+    </div>*@
 </div>

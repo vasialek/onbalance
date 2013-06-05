@@ -5,19 +5,32 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+<div class="container">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i> @Html.ActionLink(OnBalance.MyConstants.Name, "Index", "Home")
+            <span class="divider">\</span>
+        </li>
+        <li>
+            @Html.ActionLink("Organizations", "Index", "Organization")
+            <span class="divider">\</span>
+        </li>
+        <li>Create</li>
+    </ul>
 
-@using( Html.BeginForm() )
-{
+    @using( Html.BeginForm() )
+    {
     
-    @Html.ValidationSummary()
+        @Html.ValidationSummary()
     
-    @Html.EditorForModel()
-    @*@Html.RenderPartial("~/Views/Shared/EditorTemplates/Organization.ascx", Model)*@
+        @Html.EditorForModel()
+        @*@Html.RenderPartial("~/Views/Shared/EditorTemplates/Organization.ascx", Model)*@
         
-    <div class="bottom_links">
-        <input type="submit" value="Create" />
-        @Html.ActionLink("Back to list of companies", "list")
-    </div>
+        <div class="bottom_links">
+            <input type="submit" value="Create" class="btn btn-small btn-primary" />
+            @Html.ActionLink("Back to list of companies", "list", null, new { @class = "btn btn-small" })
+        </div>
     
-}
+    }
+
+</div>

@@ -26,13 +26,13 @@ var Product = {
 //            self._log(e);
 //            self._log(this);
 //            self._log("Going to open link: " + jQuery(this).attr("href"));
-            self._displayProductPhotos();
+            self._displayProductPhotos(jQuery(this).attr("href"));
             e.preventDefault();
             return false;
         });
     },
 
-    _displayProductPhotos: function()
+    _displayProductPhotos: function(href)
     {
         this._log("Displaying photos popup...");
         var mask = this._getSpecDiv("MaskDiv");
@@ -41,6 +41,39 @@ var Product = {
         popup.html("Loading...");
         popup.css({"border": "solid 1px red", "width": "300px", "height": "400px"});
         popup.show();
+
+        var self = this;
+        var img = new Image();
+        this._log("Setting image to load SRC attribute to: " + href);
+        img.src = href;
+        img.onload = function()
+        {
+            self._log("Image is loaded, put it into DIV");
+            popup.html(img);
+        }
+//        this._log("SRC of ImageToLoad: " + img.attr("src"));
+//        img.load();
+//        img.one("load", function(){
+//            self._log("Image is loaded...");
+//        }).each(function(){
+//            self._log("is complete?");
+//            if(this.complete)
+//            {
+//                jQuery(this).load();
+//                popup.html(img);
+//            }
+//        });
+    },
+
+    _getImgageToLoad: function()
+    {
+        var img = jQuery("#ImageToLoad");
+        if( img.length < 1 )
+        {
+            img = jQuery("body").append("<img id='ImageToLoad' src=''>");
+        }
+        img.attr("src", "");
+        return img;
     },
 
     _getSpecDiv: function(id)

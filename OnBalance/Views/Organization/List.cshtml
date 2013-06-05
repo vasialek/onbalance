@@ -5,11 +5,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>List</h2>
+<div class="container">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i> @Html.ActionLink(OnBalance.MyConstants.Name, "Index", "Home")
+            <span class="divider">\</span>
+        </li>
+        <li>
+            @Html.ActionLink("Organizations", "Index", "Organization")
+        </li>
+    </ul>
+
 
     @Html.Partial("MessagesAndErrors")
 
-    <table width="90%">
+    <table width="90%" class="table table-bordered table-striped table-condensed">
         <tr>
             <th>
                 Id
@@ -55,8 +65,10 @@
                 @Html.Encode(String.Format("{0:g}", item.UpdatedAt))
             </td>
             <td>
-                @Html.ImageLink("/images/edit.png", "Edit organization", Url.Action("edit", new { id = item.Id }), new { width = 16, height = 16 }, null)
-                @Html.ImageLink("/images/posmoveto.png", "Move POS to...", Url.Action("moveto", new { id = item.Id }), new { width = 16, height = 16 }, null)
+                <a href="Url.Action("edit", new { id = item.Id })" title="Edit organization" cl__ass="btn btn-mini"><i class="icon-edit"></i></a>
+                <a href="Url.Action("moveto", new { id = item.Id })" title="Move POS to..." cl__ass="btn btn-mini"><i class="icon-arrow-right"></i></a>
+                @*@Html.ImageLink("/images/edit.png", "Edit organization", Url.Action("edit", new { id = item.Id }), new { width = 16, height = 16 }, null)*@
+                @*@Html.ImageLink("/images/posmoveto.png", "Move POS to...", Url.Action("moveto", new { id = item.Id }), new { width = 16, height = 16 }, null)*@
             </td>
         </tr>
     
@@ -64,7 +76,8 @@
 
     </table>
 
-    <div class="bottom_links">
-        @Html.ImageLink("/images/add.png", "Create new", @Url.Action("create", string.IsNullOrEmpty(Request["parent"]) ? null : new{ id = Request["parent"] }), new { width = 16, height = 16 }, null)
-        @Html.ActionLink("List of companies", "list")
-    </div>
+        @*@Html.ImageLink("/images/add.png", "Create new", @Url.Action("create", string.IsNullOrEmpty(Request["parent"]) ? null : new{ id = Request["parent"] }), new { width = 16, height = 16 }, null)*@
+        <a class="btn btn-small btn-primary" href="@Url.Action("create", string.IsNullOrEmpty(Request["parent"]) ? null : new{ id = Request["parent"] })"><i class="icon-plus-sign icon-white"></i> Create</a>
+        @Html.ActionLink("List of companies", "list", null, new { @class = "btn btn-small" })
+
+</div>

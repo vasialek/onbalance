@@ -136,6 +136,7 @@ namespace OnBalance.Models
 		}
 		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="status_id", Storage="_StatusId", DbType="TinyInt NOT NULL")]
+        [DisplayName("Status")]
 		public byte StatusId
 		{
 			get
@@ -156,6 +157,7 @@ namespace OnBalance.Models
 		}
 
         [global::System.Data.Linq.Mapping.ColumnAttribute(Name = "parent_id", Storage = "_parentId", DbType = "Int NOT NULL")]
+        [DisplayName("Organization to which belongs")]
         public int ParentId
         {
             get
@@ -176,6 +178,7 @@ namespace OnBalance.Models
         }
         
         [global::System.Data.Linq.Mapping.ColumnAttribute(Name = "name", Storage = "_Name", DbType = "VarChar(255) NOT NULL", CanBeNull = false)]
+        [DisplayName("Name of organization")]
 		public string Name
 		{
 			get
@@ -196,6 +199,7 @@ namespace OnBalance.Models
 		}
 		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="created_at", Storage="_CreatedAt", DbType="DateTime NOT NULL")]
+        [DisplayName("Created at")]
 		public System.DateTime CreatedAt
 		{
 			get
@@ -216,6 +220,7 @@ namespace OnBalance.Models
 		}
 		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="updated_at", Storage="_UpdatedAt", DbType="DateTime")]
+        [DisplayName("Updated at")]
 		public System.Nullable<System.DateTime> UpdatedAt
 		{
 			get
