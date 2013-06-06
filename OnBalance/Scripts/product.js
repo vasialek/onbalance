@@ -19,6 +19,12 @@ var Product = {
         jQuery(".ob-prinfo-link").click(function(e){
             self._log("Displaying product info...");
             e.preventDefault();
+            jQuery(this).popover({
+                title: "Xxx Bbb",
+                content: function(){
+                    setTimeout(function(){return "xxx zzz";}, 5000);
+                }
+            });
             return false;
         });
         jQuery(".ob-prphotos-link").click(function(e){
@@ -38,8 +44,8 @@ var Product = {
         var mask = this._getSpecDiv("MaskDiv");
 
         var popup = this._getSpecDiv("PopupDiv");
-        popup.html("Loading...");
-        popup.css({"border": "solid 1px red", "width": "300px", "height": "400px"});
+        popup.html("<img src='/images/loader.gif' width='16' height='16' alt='Loading...' />");
+        popup.css({"border": "0", "width": "300px", "height": "400px"});
         popup.show();
 
         var self = this;
@@ -50,6 +56,8 @@ var Product = {
         {
             self._log("Image is loaded, put it into DIV");
             popup.html(img);
+            img.className ="img-polaroid";
+            popup.width(jQuery(img).width() + 10).height(jQuery(img).height() + 10);
         }
 //        this._log("SRC of ImageToLoad: " + img.attr("src"));
 //        img.load();

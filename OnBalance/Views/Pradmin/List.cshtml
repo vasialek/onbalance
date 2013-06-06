@@ -5,6 +5,7 @@
 
     Html.ResourceManager()
         .AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.jQuery, "1.8.1", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Debug, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Microsoft)
+        .AddJsFile("~/bootstrap/js/bootstrap.js")
         .AddJsFile("~/scripts/product.js")
         .AddCssFile("~/css/admin.css");
 }
@@ -29,9 +30,9 @@
                 <td>
                     @if(item.Pos.Configuration.IsPhotosFromEshop)
                     {
-                        @Html.ImageLink("/images/productweb.png", "Product info at E-shop", item.PhotosUri.ToString(), new { width = 16, height = 16 }, new { @class = "ob-prphotos-link", target = "_blank" })
+                        @Html.ImageLink("/images/productweb.png", "Product info at E-shop", "#", new { width = 16, height = 16 }, new { @class = "ob-prinfo-link", target = "_blank" })
                     }
-                    @Html.ImageLink("/images/productphotos.png", "Photos from E-shop", "#", new { width = 16, height = 16 }, new { @class = "ob-prinfo-link" })
+                    @Html.ImageLink("/images/productphotos.png", "Photos from E-shop", item.PhotosUri.ToString(), new { width = 16, height = 16 }, new { @class = "ob-prphotos-link" })
                 </td>
                 <td>
                     @Html.Display(item.StatusName, new { @class = item.StatusCssStyle })
