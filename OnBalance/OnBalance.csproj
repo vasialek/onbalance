@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Controllers\BalanceController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BaseRepository.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\CategoryRepository.cs" />
     <Compile Include="Models\CategoryStructure.cs" />
     <Compile Include="Models\CategoryType.cs" />
     <Compile Include="Models\ChangePassword.cs" />
@@ -229,6 +231,8 @@
     <Content Include="Views\Shared\DisplayTemplates\Organization.cshtml" />
     <Content Include="Views\Balance\Edit.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CategoryTypeId.cshtml" />
+    <Content Include="Views\Category\List.cshtml" />
+    <Content Include="Views\Category\Edit.cshtml" />
     <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
     <Content Include="Views\Useradmin\CreateInPos.cshtml" />

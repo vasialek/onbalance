@@ -1,0 +1,53 @@
+﻿@model OnBalance.ViewModels.Categories.CategoryStructureViewModel
+
+@{
+    ViewBag.Title = "Edit category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink(OnBalance.MyConstants.Name, "index", "home")
+            <span class="divider">\</span>
+        </li>
+        <li>@ViewBag.Title</li>
+    </ul>
+
+    @using (Ajax.BeginForm("actionname", new AjaxOptions {UpdateTargetId= "elementid"}))
+    {
+        <table class="table table-hover table-bordered table-condensed table-striped">
+            <caption>
+                Parameters of category @Model.Category.Name</caption>
+            <thead>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Name
+                </th>
+            </thead>
+            <tbody>
+                @foreach(var item in Model.Category.Structure)
+                {
+                    <tr>
+                        <td>
+                            <span class="label@(item.StatusId == (byte)OnBalance.Status.Approved ? " label-success" : "")">@item.StatusName</span>
+                        </td>
+                        <td>@Html.EditorFor(x => item.FieldName)
+                        </td>
+                    </tr>
+            }
+                <tr class="info">
+                    <td>
+                    </td>
+                    <td>@Html.Editor("New[FieldName]")
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="button icon approve primary">@OnBalance.MyMessages.ButtonText.Save</button>
+    }
+
+</div>

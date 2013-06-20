@@ -10,17 +10,22 @@ namespace OnBalance.Models
     {
         protected Category _parent = null;
         protected CategoryType _categoryType = null;
+        protected CategoryStructure[] _categoryStructure = null;
 
         partial void OnCreated()
         {
             this._statusId = (byte)Status.Unknown;
         }
 
-        public CategoryStructure[] Strucutre
+        public CategoryStructure[] Structure
         {
             get
             {
-                return null;
+                if(_categoryStructure == null)
+                {
+                    _categoryStructure = new CategoryStructureRepository().GetStructure(Id);
+                }
+                return _categoryStructure;
             }
         }
 
@@ -54,6 +59,7 @@ namespace OnBalance.Models
                 return _categoryType == null ? "" : _categoryType.Name;
             }
         }
+
     }
 
     partial class ProductDetail

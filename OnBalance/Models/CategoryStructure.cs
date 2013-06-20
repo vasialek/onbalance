@@ -16,7 +16,7 @@ namespace OnBalance.Models
 
         public int CategoryId { get; set; }
 
-        public string Name { get; set; }
+        public string FieldName { get; set; }
 
     }
 
@@ -49,7 +49,7 @@ namespace OnBalance.Models
             CategoryStructure cs = _db.SingleOrDefault(x => x.Id == model.Id);
             if(cs != null)
             {
-                cs.Name = model.Name;
+                cs.FieldName = model.FieldName;
                 cs.StatusId = model.StatusId;
             }
         }

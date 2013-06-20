@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="vasialek_onbalance" Class="ProductDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=184.173.226.203;Initial Catalog=vasialek_onbalance;User ID=vasialek_onbalance_user" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="vasialek_onbalanceConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="vasialek_onbalance_user.product" Member="Products">
     <Type Name="Product">
       <Column Name="id" Member="Id" Storage="_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />

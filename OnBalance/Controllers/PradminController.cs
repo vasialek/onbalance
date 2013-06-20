@@ -199,7 +199,7 @@ namespace OnBalance.Controllers
                     Info("Updating category structure...");
                     foreach(var item in vm.CategoryStructure)
                     {
-                        InfoFormat("  Category structure: #{0, -8}. {1}", item.Id, item.Name);
+                        InfoFormat("  Category structure: #{0, -8}. {1}", item.Id, item.FieldName);
                         db.Update(item);
                     }
                 //}
@@ -208,7 +208,7 @@ namespace OnBalance.Controllers
                 {
                     bool.TryParse(Request["NewStatus"], out isNewApproved);
                     CategoryStructure cs = new CategoryStructure();
-                    cs.Name = newName;
+                    cs.FieldName = newName;
                     cs.StatusId = isNewApproved ? (byte)Status.Approved : (byte)Status.Deleted;
                     cs.CategoryId = vm.Category.Id;
                     db.Add(cs);

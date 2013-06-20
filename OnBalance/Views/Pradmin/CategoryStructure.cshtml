@@ -11,7 +11,7 @@
         @Html.Hidden("index", i)
         @Html.HiddenFor(x => CategoryStructure[i].Id)
         <div class="dtcell">
-            @Html.TextBoxFor(x => CategoryStructure[i].Name)
+            @Html.TextBoxFor(x => CategoryStructure[i].FieldName)
         </div>
         <div class="dtcell">
             @Html.CheckBox(ViewData.TemplateInfo.GetFullHtmlFieldName(string.Concat("CategoryStructure[", i, "].StatusId")), CategoryStructure[i].StatusId == (byte)OnBalance.Status.Approved)
