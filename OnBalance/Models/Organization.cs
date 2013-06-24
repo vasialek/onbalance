@@ -12,6 +12,7 @@ namespace OnBalance.Models
     {
 
         protected Organization _parent = null;
+        protected OrganizationConfiguration _config = null;
 
         partial void OnCreated()
         {
@@ -23,7 +24,21 @@ namespace OnBalance.Models
         /// <summary>
         /// Configuration of Organization/POS
         /// </summary>
-        public OrganizationConfig Configuration { get { return new OrganizationConfig(); } }
+        public OrganizationConfiguration Configuration
+        {
+            get
+            {
+                if(_config == null)
+                {
+                    _config = new OrganizationConfigurationRepository().Items.FirstOrDefault(x => x.OrganizationId == Id);
+                    if(_config == null)
+                    {
+                        _config = new OrganizationConfiguration();
+                    }
+                }
+                return _config;
+            }
+        }
 
 
         /// <summary>

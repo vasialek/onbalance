@@ -109,7 +109,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Organization.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Models\OrganizationConfig.cs" />
+    <Compile Include="Models\OrganizationConfiguration.cs" />
+    <Compile Include="Models\OrganizationConfigurationRepository.cs" />
     <Compile Include="Models\OrganizationRepository.cs" />
     <Compile Include="Models\ParamModel.cs" />
     <Compile Include="Models\ParamRepository.cs" />

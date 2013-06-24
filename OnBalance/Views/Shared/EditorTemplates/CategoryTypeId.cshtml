@@ -1,8 +1,6 @@
 ﻿@model int
 
 @{
-    // CSS for nice buttons :)
-    Html.ResourceManager().AddCssFile("~/css/gh-buttons.css");
     
     var list = new OnBalance.Models.CategoryTypeRepository().Items.ToList();
     var o = list.FirstOrDefault(x => x.Id == Model);
@@ -15,7 +13,7 @@
     <div>Current category type is <strong>@name</strong></div>
 }else
 {
-    <div>Category does <strong>not</strong> have specified type</div>
+    <div>Category does <strong>not</strong> have specified type [@Model]</div>
 }
 @Html.HiddenFor(x => Model, new { id = "CategoryTypeId" })
 <div id="CategoryTypeList" class="btn-group">

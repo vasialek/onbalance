@@ -92,7 +92,7 @@ namespace OnBalance.Models
             }
         }
 
-        public Uri PhotosUri
+        public string PhotosUri
         {
             get
             {

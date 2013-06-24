@@ -3,6 +3,11 @@
 @{
     ViewBag.Title = "Edit category";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Html.ResourceManager()
+        .AddJsFile("http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js")
+        .AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.UnobtrusiveMvc, "", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Min, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Microsoft)
+        .AddJsFile("~/scripts/category.js");
 }
 
 <div class="container">
@@ -15,18 +20,28 @@
         <li>@ViewBag.Title</li>
     </ul>
 
+    <table class="table">
+        <tr>
+            <td>@Model.Category.Name</td>
+            <td>@Model.Category.StatusName</td>
+        </tr>
+    </table>
+
     @using (Ajax.BeginForm("actionname", new AjaxOptions {UpdateTargetId= "elementid"}))
     {
+        @Html.EditorFor(x => Model.Category.CategoryTypeId, "CategoryTypeId")
         <table class="table table-hover table-bordered table-condensed table-striped">
             <caption>
                 Parameters of category @Model.Category.Name</caption>
             <thead>
-                <th>
-                    Status
-                </th>
-                <th>
-                    Name
-                </th>
+                <tr>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                </tr>
             </thead>
             <tbody>
                 @foreach(var item in Model.Category.Structure)
@@ -51,3 +66,11 @@
     }
 
 </div>
+
+<script type="text/javascript">
+
+    window.onload = function () {
+        Category.init(@Model.Category.Id, @Model.Category.CategoryTypeId);
+    }
+
+</script>

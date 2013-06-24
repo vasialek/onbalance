@@ -26,7 +26,8 @@ namespace OnBalance.Models
                 {
                     new CategoryType{ Id = 1, Name = "Ordinal product", Text = "Simple product - price, quantity and name" },
                     new CategoryType{ Id = 2, Name = "Extended product", Text = "Product with one dimension - name and list of price/quantity divided by parameter (size, color, etc)" },
-                    new CategoryType{ Id = 3, Name = "Multidimensional product", Text = "Complex product - name and several list of price/quantity divided by parameter" }
+                    new CategoryType{ Id = 3, Name = "Bidimensional product", Text = "Product with two dimensions - (size & color, size & weigth" },
+                    new CategoryType{ Id = 4, Name = "Multidimensional product", Text = "Complex product - name and several list of price/quantity divided by parameter" }
                 };
             }
         }

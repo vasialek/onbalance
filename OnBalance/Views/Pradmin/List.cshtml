@@ -32,7 +32,13 @@
                     {
                         @Html.ImageLink("/images/productweb.png", "Product info at E-shop", "#", new { width = 16, height = 16 }, new { @class = "ob-prinfo-link", target = "_blank" })
                     }
-                    @Html.ImageLink("/images/productphotos.png", "Photos from E-shop", item.PhotosUri.ToString(), new { width = 16, height = 16 }, new { @class = "ob-prphotos-link" })
+                    @if(item.Pos.Configuration.IsPhotosFromEshop)
+                    {
+                        string url = item.PhotosUri.ToString()
+                            .Replace("%CULTURE%", "lt")
+                            .Replace("%UID%", item.InternalCode);
+                        @Html.ImageLink("/images/productphotos.png", "Photos from E-shop", url, new { width = 16, height = 16 }, new { @class = "ob-prphotos-link" })
+                    }
                 </td>
                 <td>
                     @Html.Display(item.StatusName, new { @class = item.StatusCssStyle })
