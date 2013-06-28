@@ -9,7 +9,8 @@ var Category = {
     // Category types
     CATEGORY_TYPE_ORDINAL: 1,
     CATEGORY_TYPE_EXTENDED: 2,
-    CATEGORY_TYPE_MULTIDIMENSIONAL: 3,
+    CATEGORY_TYPE_BIDIMENSIONAL: 3,
+    CATEGORY_TYPE_MULTIDIMENSIONAL: 4,
 
     oCategoryTypeId: null,
 
@@ -53,16 +54,23 @@ var Category = {
         switch(categoryTypeId)
         {
             case this.CATEGORY_TYPE_ORDINAL:
-                if( this._currentCategoryType === this.CATEGORY_TYPE_EXTENDED || this._currentCategoryType === this.CATEGORY_TYPE_MULTIDIMENSIONAL )
+                if( this._currentCategoryType === this.CATEGORY_TYPE_EXTENDED || this._currentCategoryType === this.CATEGORY_TYPE_MULTIDIMENSIONAL || this._currentCategoryType === this.CATEGORY_TYPE_BIDIMENSIONAL )
                 {
                     this._displayError("CategoryTypeId", "Could not change current category type to be Ordinal!");
                     return false;
                 }
                 return true;
             case this.CATEGORY_TYPE_EXTENDED:
+                if( this._currentCategoryType === this.CATEGORY_TYPE_MULTIDIMENSIONAL || this._currentCategoryType === this.CATEGORY_TYPE_BIDIMENSIONAL )
+                {
+                    this._displayError("CategoryTypeId", "Could not change current category type to Extended!");
+                    return false;
+                }
+                return true;
+            case this.CATEGORY_TYPE_BIDIMENSIONAL:
                 if( this._currentCategoryType === this.CATEGORY_TYPE_MULTIDIMENSIONAL )
                 {
-                    this._displayError("CategoryTypeId", "Could not change Multidimensional category type to Extended!");
+                    this._displayError("CategoryTypeId", "Could not change current category type to Bidimensional!");
                     return false;
                 }
                 return true;
@@ -83,10 +91,10 @@ var Category = {
     {
         if(isOn)
         {
-            jQuery("#CategoryTypeId_" + categoryTypeId).addClass("primary");
+            jQuery("#CategoryTypeId_" + categoryTypeId).addClass("btn-primary");
         }else
         {
-            jQuery("#CategoryTypeId_" + categoryTypeId).removeClass("primary");
+            jQuery("#CategoryTypeId_" + categoryTypeId).removeClass("btn-primary");
         }
     },
 

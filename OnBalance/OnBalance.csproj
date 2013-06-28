@@ -225,7 +225,7 @@
     <Content Include="Views\Organization\Create.cshtml" />
     <Content Include="Views\Help\NotFound.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MyStatus.cshtml" />
-    <Content Include="Views\Pradmin\CategoryStructure.cshtml" />
+    <Content Include="Views\Category\CategoryStructure.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Category.cshtml" />
     <Content Include="Views\Pradmin\Create.cshtml" />
     <Content Include="Views\Organization\Edit.cshtml" />

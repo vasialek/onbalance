@@ -8,6 +8,14 @@
         .AddJsFile("http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js")
         .AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.UnobtrusiveMvc, "", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Min, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Microsoft)
         .AddJsFile("~/scripts/category.js");
+
+    var ajaxOptions = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        LoadingElementId = "LoadingDiv",
+        UpdateTargetId = "DynamicDiv",
+        OnFailure = "alert('Error saving Category structure!');"
+    };
 }
 
 <div class="container">
@@ -27,10 +35,19 @@
         </tr>
     </table>
 
-    @using (Ajax.BeginForm("actionname", new AjaxOptions {UpdateTargetId= "elementid"}))
+    @using (Ajax.BeginForm("dosave", ajaxOptions) )
     {
-        @Html.EditorFor(x => Model.Category.CategoryTypeId, "CategoryTypeId")
-        <table class="table table-hover table-bordered table-condensed table-striped">
+        @*@Html.EditorFor(x => Model.Category.CategoryTypeId, "CategoryTypeId")*@
+
+        <div id="LoadingDiv" style="display: none;">loading</div>
+        
+        @Html.EditorFor(x => Model.Category)
+
+        <div id="DynamicDiv">
+            @Html.Partial("CategoryStructure", Model.Category)
+        </div>
+        
+        @*<table class="table table-hover table-bordered table-condensed table-striped">
             <caption>
                 Parameters of category @Model.Category.Name</caption>
             <thead>
@@ -53,7 +70,7 @@
                         <td>@Html.EditorFor(x => item.FieldName)
                         </td>
                     </tr>
-            }
+                }
                 <tr class="info">
                     <td>
                     </td>
@@ -61,7 +78,7 @@
                     </td>
                 </tr>
             </tbody>
-        </table>
+        </table>*@
         <button class="button icon approve primary">@OnBalance.MyMessages.ButtonText.Save</button>
     }
 

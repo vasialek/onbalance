@@ -1,0 +1,29 @@
+﻿@model OnBalance.Models.Category
+
+@{
+    var CategoryStructure = new OnBalance.Models.CategoryStructureRepository().GetStructure(Model.Id);
+}
+
+<table class="table table-hover table-bordered table-condensed table-striped">
+@for(int i = 0; i < CategoryStructure.Count(); i++)
+{
+    <tr>
+        @Html.Hidden("index", i)
+        @Html.HiddenFor(x => CategoryStructure[i].Id)
+        <td>
+            @Html.TextBoxFor(x => CategoryStructure[i].FieldName)
+        </td>
+        <td>
+            @Html.CheckBox(ViewData.TemplateInfo.GetFullHtmlFieldName(string.Concat("CategoryStructure[", i, "].StatusId")), CategoryStructure[i].StatusId == (byte)OnBalance.Status.Approved)
+        </td>
+    </tr>
+}
+
+
+<tr>
+    <tr class="info">
+        <td>@Html.TextBox("NewName")</td>
+        <td>@Html.CheckBox("NewStatus", true)</td>
+    </tr>
+</tr>
+</table>
