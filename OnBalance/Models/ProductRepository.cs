@@ -122,5 +122,12 @@ namespace OnBalance.Models
             _dataContext.SubmitChanges();
         }
 
+
+        internal Product GetByUid(string uid)
+        {
+            return _dataContext
+                .Products
+                .FirstOrDefault(x => x.Uid.Equals(uid));
+        }
     }
 }

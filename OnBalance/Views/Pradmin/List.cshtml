@@ -30,7 +30,7 @@
                 <td>
                     @if(item.Pos.Configuration.IsPhotosFromEshop)
                     {
-                        @Html.ImageLink("/images/productweb.png", "Product info at E-shop", "#", new { width = 16, height = 16 }, new { @class = "ob-prinfo-link", target = "_blank" })
+                        @Html.ImageLink("/images/productweb.png", "Product info at E-shop", @item.Uid, new { width = 16, height = 16 }, new { @class = "ob-prinfo-link", target = "_blank" })
                     }
                     @if(item.Pos.Configuration.IsPhotosFromEshop)
                     {

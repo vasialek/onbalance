@@ -5,6 +5,10 @@ var Product = {
     _isConsole: false,
     screenH: 0,
     screenW: 0,
+    popupDiv: null,
+
+    isAjaxLoaded: true,
+    isAjaxPosted: true,
 
     init: function()
     {
@@ -19,12 +23,7 @@ var Product = {
         jQuery(".ob-prinfo-link").click(function(e){
             self._log("Displaying product info...");
             e.preventDefault();
-            jQuery(this).popover({
-                title: "Xxx Bbb",
-                content: function(){
-                    setTimeout(function(){return "xxx zzz";}, 5000);
-                }
-            });
+            var pos = self._displayProductInfo(jQuery(this).attr("href"), jQuery(this));
             return false;
         });
         jQuery(".ob-prphotos-link").click(function(e){
@@ -36,6 +35,67 @@ var Product = {
             e.preventDefault();
             return false;
         });
+    },
+
+    _displayProductInfo: function(productUid, oTarget)
+    {
+        var self = this;
+        var popup = this._prepareDivForLoading(this._getSpecDiv("PopupDiv"), oTarget);
+        var mask = this._prepareMask(popup);
+        jQuery.ajax({
+            url: "/balance/getproductinfo/" + productUid,
+            success: function(data){
+                self._onAjaxSuccess(data, popup, "information");
+            },
+            error: function(){
+                self._onAjaxError(popup, "information");
+            }
+        });
+    },
+
+    _onAjaxSuccess: function(data, oInfoDiv, typeOfInfo)
+    {
+        oInfoDiv.html(data);
+        var mask = this._getSpecDiv("MaskDiv").hide();
+    },
+
+    _onAjaxError: function(oInfoDiv, typeOfInfo)
+    {
+        oInfoDiv.hide();
+        var mask = this._getSpecDiv("MaskDiv").hide();
+        this._displayError("", "Error loading " + typeOfInfo);
+    },
+
+    _prepareMask: function(divToClose)
+    {
+        var self = this;
+        var mask = this._getSpecDiv("MaskDiv");
+        mask.css({
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: this.screenW,
+            height: this.screenH,
+            background: "#000",
+            opacity: 0.2,
+            "z-index": 100
+        }).click(function(){
+            // TODO: clean event handler on close
+            divToClose.hide();
+            mask.hide();
+        }).show();
+        return mask;
+    },
+
+    _prepareDivForLoading: function(oDiv, oTarget)
+    {
+        oDiv.css({
+            top: oTarget.position().top,
+            left: oTarget.position().left,
+            position: "absolute",
+            "z-index": 110
+        }).html("<img src='/images/loader.gif' width='16' height='16' alt='Loading...' />").show();
+        return oDiv;
     },
 
     _displayProductPhotos: function(href)
@@ -73,7 +133,7 @@ var Product = {
 //        });
     },
 
-    _getImgageToLoad: function()
+    _getImageToLoad: function()
     {
         var img = jQuery("#ImageToLoad");
         if( img.length < 1 )

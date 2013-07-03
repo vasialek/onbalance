@@ -434,6 +434,21 @@ namespace OnBalance.Controllers
             return View("List", Layout, list);
         }
 
+        public ActionResult GetProductInfo(string id)
+        {
+            Status s = Status.Approved;
+            Product p = new ProductRepository().GetByUid(id);
+            if( p == null )
+            {
+                return Json(new { Status = Status.Unknown }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new {
+                Status = s,
+                Name = p.Name,
+                ProductStatus = p.StatusId
+            }, JsonRequestBehavior.AllowGet);
+        }
     }
 
     public class PostBalanceViewModel
