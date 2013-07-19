@@ -1,0 +1,57 @@
+﻿@model IEnumerable<OnBalance.Models.BalanceItem>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>LGF @Model.Count() guns, updated at @ViewBag.UpdatedAt</h2>
+
+<table class="table table-condensed table-bordered table-striped">
+    <tr>
+        <th>
+            StatusName
+        </th>
+@*        <th>
+            PosId
+        </th>*@
+        <th>
+            Internal code
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            Price
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.StatusName)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.PosId)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.InternalCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+        </td>
+    </tr>
+}
+
+</table>

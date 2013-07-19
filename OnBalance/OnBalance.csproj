@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\..\MyTests\packages\HtmlAgilityPack.1.4.6\lib\Net40\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\eSPIS\eSPIS\Lib\log4net.dll</HintPath>
     </Reference>
@@ -68,6 +71,7 @@
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LgfController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Controllers\ParamController.cs" />
@@ -85,6 +89,8 @@
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
     <Compile Include="Helpers\AvHtmlHelper.cs" />
+    <Compile Include="Import\ImportLgf.cs" />
+    <Compile Include="Import\IPosImport.cs" />
     <Compile Include="Models\BalanceItem.cs" />
     <Compile Include="Models\BalanceItemRepository.cs" />
     <Compile Include="Models\BaseModel.cs" />
@@ -234,6 +240,7 @@
     <Content Include="Views\Shared\EditorTemplates\CategoryTypeId.cshtml" />
     <Content Include="Views\Category\List.cshtml" />
     <Content Include="Views\Category\Edit.cshtml" />
+    <Content Include="Views\Lgf\List.cshtml" />
     <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
     <Content Include="Views\Useradmin\CreateInPos.cshtml" />
