@@ -19,7 +19,7 @@
 
     @Html.Partial("MessagesAndErrors")
 
-    <table width="90%" class="table table-bordered table-striped table-condensed">
+    <table width="90%" class="table table-striped table-bordered table-condensed">
         <tr>
             <th>
                 Id
@@ -75,9 +75,11 @@
     }
 
     </table>
-
-        @*@Html.ImageLink("/images/add.png", "Create new", @Url.Action("create", string.IsNullOrEmpty(Request["parent"]) ? null : new{ id = Request["parent"] }), new { width = 16, height = 16 }, null)*@
-        <a class="btn btn-small btn-primary" href="@Url.Action("create", string.IsNullOrEmpty(Request["parent"]) ? null : new{ id = Request["parent"] })"><i class="icon-plus-sign icon-white"></i> Create</a>
-        @Html.ActionLink("List of companies", "list", null, new { @class = "btn btn-small" })
+        <div class="btn-group">
+            @Html.ActionLink("List of companies", "list", null, new { @class = "btn btn-mini" })
+            <a class="btn btn-mini btn-primary" href="@Url.Action("create", string.IsNullOrEmpty(Request["parent"]) ? null : new{ id = Request["parent"] })"><i class="icon-plus icon-white"></i> Create</a>
+        </div>
+        
+        
 
 </div>

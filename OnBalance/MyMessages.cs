@@ -13,7 +13,11 @@ namespace OnBalance
             public const string Login = "Login";
             public const string Save = "Save";
             public const string Back = "Back";
+            public const string BackToEdit = "Back to edit";
+            public const string BackToList = "Back to list";
+            public const string Create = "Create";
             public const string AreYouSure = "Are you sure?!";
+            public const string Reset = "Reset";
         }
 
         public class Parser
@@ -28,6 +32,11 @@ namespace OnBalance
         public class Balancer
         {
             public const string NoPendingLocalChanges = "No pending changes to be send to e-shop";
+        }
+
+        public class Categories
+        {
+            public const string ConfirmStructureReset = "Confirm structure reset and products deletion!";
         }
 
         public class Errors

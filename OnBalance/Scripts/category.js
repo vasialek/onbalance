@@ -32,6 +32,14 @@ var Category = {
         });
     },
 
+    resetStructure: function(categoryId, currentCategoryTypeId)
+    {
+        if( confirm("Do you want to reset category type and to delete all products?!") )
+        {
+            window.location.href = '/category/reset/' + categoryId;
+        }
+    },
+
     _onCategoryTypeIdChanged: function(categoryTypeId)
     {
         if( this._currentCategoryType !== categoryTypeId )

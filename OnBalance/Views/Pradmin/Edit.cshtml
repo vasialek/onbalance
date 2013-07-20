@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Edit";
-    Html.ResourceManager().AddCssFile("~/css/gh-buttons.css");
 }
 
 <h2>Edit</h2>
@@ -12,6 +11,9 @@
 
     @Html.EditorForModel()
 
-    <button class="button icon approve primary">@OnBalance.MyMessages.ButtonText.Save</button>
+    <div class="btn-group">
+        @Html.ActionLink(@OnBalance.MyMessages.ButtonText.BackToList, "list", new { id = Model.PosId }, new { @class = "btn btn-mini" })
+        <button class="btn btn-mini btn-primary"><i class="icon-ok icon-white"></i> @OnBalance.MyMessages.ButtonText.Save</button>
+    </div>
    
 }

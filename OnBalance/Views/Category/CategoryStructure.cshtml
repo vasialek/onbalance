@@ -2,19 +2,39 @@
 
 @{
     var CategoryStructure = new OnBalance.Models.CategoryStructureRepository().GetStructure(Model.Id);
+    var newItem = new OnBalance.Models.CategoryStructure{ CategoryId = Model.Id };
 }
 
 <table class="table table-hover table-bordered table-condensed table-striped">
+    <thead>
+        <tr>
+            <th><abbr title="Is this field work as dimension (filter)">Dimension</abbr></th>
+            <th>Field name</th>
+            <th>Status</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Default</th>
+            <th>I18n</th>
+        </tr>
+    </thead>
 @for(int i = 0; i < CategoryStructure.Count(); i++)
 {
     <tr>
         @Html.Hidden("index", i)
         @Html.HiddenFor(x => CategoryStructure[i].Id)
+        <td>@Html.CheckBoxFor(x => CategoryStructure[i].IsDimension)</td>
         <td>
             @Html.TextBoxFor(x => CategoryStructure[i].FieldName)
         </td>
         <td>
             @Html.CheckBox(ViewData.TemplateInfo.GetFullHtmlFieldName(string.Concat("CategoryStructure[", i, "].StatusId")), CategoryStructure[i].StatusId == (byte)OnBalance.Status.Approved)
+        </td>
+        <td>
+            @Html.TextBoxFor(x => CategoryStructure[i].FieldType)
+        </td>
+        <td>@Html.CheckBoxFor(x => CategoryStructure[i].IsRequired)</td>
+        <td>
+            @Html.TextBoxFor(x => CategoryStructure[i].FieldDefault)
         </td>
     </tr>
 }
@@ -22,8 +42,26 @@
 
 <tr>
     <tr class="info">
-        <td>@Html.TextBox("NewName")</td>
-        <td>@Html.CheckBox("NewStatus", true)</td>
+        @Html.HiddenFor(x => newItem.Id)
+        @Html.HiddenFor(x => newItem.CategoryId)
+        <td>@Html.CheckBoxFor(x => newItem.IsDimension)</td>
+        <td>
+            @Html.TextBoxFor(x => newItem.FieldName)
+        </td>
+        <td>
+            @Html.TextBoxFor(x => newItem.StatusId)
+            @*@Html.CheckBox(ViewData.TemplateInfo.GetFullHtmlFieldName(string.Concat("newItem.StatusId")), newItem.StatusId == (byte)OnBalance.Status.Approved)*@
+        </td>
+        <td>
+            @Html.TextBoxFor(x => newItem.FieldType)
+        </td>
+        <td>@Html.CheckBoxFor(x => newItem.IsRequired)</td>
+        <td>
+            @Html.TextBoxFor(x => newItem.FieldDefault)
+        </td>
+        <td>
+            @Html.CheckBoxFor(x => newItem.IsI18n)
+        </td>
     </tr>
 </tr>
 </table>

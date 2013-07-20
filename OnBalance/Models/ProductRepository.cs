@@ -129,5 +129,15 @@ namespace OnBalance.Models
                 .Products
                 .FirstOrDefault(x => x.Uid.Equals(uid));
         }
+
+        internal IQueryable<Category> GetCategoriesByOrganizationId(int organizationId, int offset, int limit)
+        {
+            return _dataContext
+                .Categories
+                .Where(x => x.OrganizationId == organizationId)
+                .OrderBy(x => x.Id)
+                .Skip(offset)
+                .Take(limit);
+        }
     }
 }

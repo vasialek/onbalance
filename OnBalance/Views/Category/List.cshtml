@@ -1,4 +1,4 @@
-﻿@model List<OnBalance.Models.Category>
+﻿@model OnBalance.ViewModels.Categories.PosCategoriesListViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -12,18 +12,20 @@
             @Html.ActionLink(OnBalance.MyConstants.Name, "index", "home")
             <span class="divider">\</span>
         </li>
-        <li>List of categories</li>
+        <li>Categories for POS @Model.Organization.Name</li>
     </ul>
 
     <table class="table table-hover table-bordered table-condensed table-striped">
         <caption>List of categories</caption>
         <thead>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Category type</th>
-            <th></th>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Category type</th>
+                <th></th>
+            </tr>
         </thead>
-        @foreach(var item in Model)
+        @foreach(var item in Model.Categories)
         {
             <tr>
                 <td>@item.Name</td>
@@ -37,4 +39,12 @@
     </table>
 
 
+</div><div class="bottom_links">
+    <div class="btn-group">
+        <a href="@Url.Action("list", new { id = Model.Organization.Id })" class="btn btn-mini" title="List of categories">@OnBalance.MyMessages.ButtonText.BackToList</a>
+        @if(Model.Organization.Id > 0)
+        {
+            <a href="@Url.Action("create", new { id = Model.Organization.Id })" class="btn btn-mini btn-primary" title="Create new product category"><i class="icon-plus icon-white"></i> @OnBalance.MyMessages.ButtonText.Create</a>
+        }
+    </div>
 </div>

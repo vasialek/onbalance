@@ -92,40 +92,6 @@ namespace OnBalance.Controllers
         }
 
         //
-        // GET: /pradmin/createcategory/500001
-
-        [Authorize]
-        public ActionResult CreateCategory(int id)
-        {
-            var model = new PosCategoryViewModel();
-            model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
-            model.Category = new Category { OrganizationId = id };
-            return View(model);
-        }
-
-        //
-        // POST: /pradmin/createcategory
-
-        [Authorize]
-        [HttpPost]
-        public ActionResult CreateCategory(PosCategoryViewModel model)
-        {
-            try
-            {
-                InfoFormat("User #{0} creating category...", User.Identity.Name);
-                var db = new ProductRepository();
-                model.Category = db.Save(model.Category);
-            } catch(Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                return View(model);
-            }
-
-            SetTempOkMessage("Category was successfully saved");
-            return RedirectToAction("categories", "pradmin", new { id = model.Category.OrganizationId });
-        }
-
-        //
         // GET: /pradmin/editcategory/1001
 
         [Authorize]

@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack">
-      <HintPath>..\..\MyTests\packages\HtmlAgilityPack.1.4.6\lib\Net40\HtmlAgilityPack.dll</HintPath>
+      <HintPath>D:\install\HtmlAgilityPack.1.4.6\Net40\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\eSPIS\eSPIS\Lib\log4net.dll</HintPath>
@@ -121,11 +121,7 @@
     <Compile Include="Models\ParamModel.cs" />
     <Compile Include="Models\ParamRepository.cs" />
     <Compile Include="Models\Product.cs" />
-    <Compile Include="Models\Product.designer.cs">
-      <DependentUpon>Product.dbml</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
+    <Compile Include="Models\ProductDetail.cs" />
     <Compile Include="Models\ProductRepository.cs" />
     <Compile Include="Models\SizeConvertor.designer.cs">
       <AutoGen>True</AutoGen>
@@ -165,14 +161,6 @@
     </None>
     <None Include="Models\Organization.dbml.layout">
       <DependentUpon>Organization.dbml</DependentUpon>
-    </None>
-    <None Include="Models\Product.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>Product.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Models\Product.dbml.layout">
-      <DependentUpon>Product.dbml</DependentUpon>
     </None>
     <None Include="Models\SizeConvertor.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
@@ -241,6 +229,8 @@
     <Content Include="Views\Category\List.cshtml" />
     <Content Include="Views\Category\Edit.cshtml" />
     <Content Include="Views\Lgf\List.cshtml" />
+    <Content Include="Views\Category\Create.cshtml" />
+    <Content Include="Views\Category\Reset.cshtml" />
     <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
     <Content Include="Views\Useradmin\CreateInPos.cshtml" />

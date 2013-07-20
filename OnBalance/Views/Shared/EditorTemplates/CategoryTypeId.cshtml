@@ -19,7 +19,7 @@
 <div id="CategoryTypeList" class="btn-group">
 @foreach(var item in list)
 {
-    <a id="@string.Concat("CategoryTypeId_", item.Id)" class="btn btn-mini @(item.Id == Model ? "btn-primary" : "")">@item.Name</a>
+    <a id="@string.Concat("CategoryTypeId_", item.Id)" class="btn btn-mini @(item.Id == Model ? "btn-primary" : "")" title="@item.Text" alt="@item.Text">@item.Name</a>
 }
 </div>
 

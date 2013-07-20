@@ -19,21 +19,67 @@ namespace OnBalance.Controllers
             return View("List", Layout, db.Categories);
         }
 
-        public ActionResult List()
+        public ActionResult List(int? id)
         {
             var db = new ProductRepository();
-            return View("List", Layout, db.Categories);
+            var model = new PosCategoriesListViewModel();
+
+            if(id.HasValue && id.Value > 0)
+            {
+                model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
+                model.Categories = db.GetCategoriesByOrganizationId(id.Value, 0, 100).ToList();
+            } else
+            {
+                model.Organization = new Organization { Name = "ALL" };
+                model.Categories = db.Categories.OrderBy(x => x.Name).ToList();
+            }
+            return View("List", Layout, model);
         }
 
-        public ActionResult DoSave(int id, CategoryStructureViewModel vm)
+        //
+        // GET: /category/create/500001
+
+        [Authorize]
+        public ActionResult Create(int id)
+        {
+            var model = new PosCategoryViewModel();
+            model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
+            model.Category = new Category { OrganizationId = id };
+            return View(model);
+        }
+
+        //
+        // POST: /category/create
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Create(PosCategoryViewModel model)
+        {
+            try
+            {
+                InfoFormat("User #{0} creating category...", User.Identity.Name);
+                var db = new ProductRepository();
+                model.Organization = new OrganizationRepository().GetById(model.Category.OrganizationId);
+                model.Category = db.Save(model.Category);
+            } catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+
+            SetTempOkMessage("Category was successfully saved");
+            return RedirectToAction("list", new { id = model.Category.OrganizationId });
+        }
+
+        public ActionResult DoSave(/*int id, */CategoryStructureViewModel vm, CategoryStructure newItem)
         {
             try
             {
                 var db = new CategoryStructureRepository();
                 var dbProduct = new ProductRepository();
                 //Category model = dbProduct.GetCategory(id);
-                string newName = Request["NewName"];
-                bool isNewApproved = false;
+                //string newName = Request["NewName"];
+                //bool isNewApproved = false;
 
                 InfoFormat("User #{0} updates Category #{1} to name: {2}, status: {3} ({4}), organization: #{5}", User.Identity.Name, vm.Category.Id, vm.Category.Name, vm.Category.StatusName, vm.Category.StatusId, vm.Category.OrganizationId);
                 //InfoFormat("User #{0} updates Category #{1} to name: {2}, status: {3} ({4}), organization: #{5}", User.Identity.Name, model.Id, model.Name, model.StatusName, model.StatusId, model.OrganizationId);
@@ -51,6 +97,8 @@ namespace OnBalance.Controllers
                 }
                 //}
 
+                db.Add(newItem);
+/*
                 if(string.IsNullOrEmpty(newName) == false)
                 {
                     bool.TryParse(Request["NewStatus"], out isNewApproved);
@@ -60,7 +108,7 @@ namespace OnBalance.Controllers
                     cs.CategoryId = vm.Category.Id;
                     db.Add(cs);
                 }
-
+*/
                 db.SubmitChanges();
 
                 return PartialView("CategoryStructure", vm.Category);
@@ -85,6 +133,32 @@ namespace OnBalance.Controllers
 
             //model.Organization = new OrganizationRepository().Items.Single(x => x.Id == model.Category.id);
             return View(vm);
+        }
+
+        //
+        // GET: /category/reset/1015
+
+        public ActionResult Reset(int id)
+        {
+            // TODO: ViewModel
+            InfoFormat("User #{0} going to reset Category #{1} structure...", User.Identity.Name, id);
+            return View(new ProductRepository().GetCategory(id));
+        }
+
+        //
+        // POST: /category/reset
+
+        [HttpPost]
+        public ActionResult Reset(int id, string confirm)
+        {
+            var db = new ProductRepository();
+            WarnFormat("User #{0} reset Category #{1} structure!", User.Identity.Name, id);
+            // TODO: delete products under this category
+            var c = db.GetCategory(id);
+            c.CategoryTypeId = new CategoryTypeRepository().Items.OrderBy(x => x.Id).First().Id;
+            db.SubmitChanges();
+
+            return RedirectToAction("edit", new { id = id });
         }
     }
 }

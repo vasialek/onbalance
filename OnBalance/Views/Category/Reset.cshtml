@@ -1,0 +1,28 @@
+﻿@model OnBalance.Models.Category
+
+@{
+    ViewBag.Title = "Reset";
+}
+
+<div class="container">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink(OnBalance.MyConstants.Name, "index", "home")
+            <span class="divider">\</span>
+        </li>
+        <li>@ViewBag.Title</li>
+    </ul>
+
+    @using(Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-inline" }))
+    {
+        <label class="checkbox">
+            <input type="checkbox" name="confirm" value="1" /> @OnBalance.MyMessages.Categories.ConfirmStructureReset
+        </label>
+        <div class="btn-group">
+            @Html.ActionLink(@OnBalance.MyMessages.ButtonText.BackToEdit, "edit", new { id = @Model.Id }, new { @class = "btn btn-mini btn-primary" })
+            <input type="submit" class="btn btn-mini btn-danger" value="@OnBalance.MyMessages.ButtonText.Reset" />
+        </div>
+    }
+
+</div>

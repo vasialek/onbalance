@@ -1,0 +1,35 @@
+﻿@model OnBalance.ViewModels.Categories.PosCategoryViewModel
+
+@{
+    ViewBag.Title = "Create category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Html.ResourceManager()
+        .AddJsFile("http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js")
+        .AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.UnobtrusiveMvc, "", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Min, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Microsoft)
+        .AddJsFile("~/scripts/category.js");
+}
+
+<h2>Create category for POS @Model.Organization.Name</h2>
+
+
+@using(Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(false)
+
+    @Html.EditorFor(x => x.Category)
+
+    <div class="btn-group">
+        <a href="@Url.Action("list", new { id = Model.Organization.Id })" class="btn btn-mini" title="List of categories">@OnBalance.MyMessages.ButtonText.BackToList</a>
+        <button class="btn btn-mini btn-primary"><i class="icon-ok icon-white"></i> @OnBalance.MyMessages.ButtonText.Save</button>
+    </div>
+
+}
+
+<script type="text/javascript">
+
+    window.onload = function () {
+        Category.init(@Model.Category.Id, @Model.Category.CategoryTypeId);
+    }
+
+</script>

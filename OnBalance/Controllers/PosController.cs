@@ -9,6 +9,11 @@ namespace OnBalance.Controllers
 {
     public class PosController : BaseController
     {
+        protected override void OnResultExecuting(ResultExecutingContext filterContext)
+        {
+            throw new NotSupportedException("Use Organization instead!");
+            base.OnResultExecuting(filterContext);
+        }
         //
         // GET: /pos/
 

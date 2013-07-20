@@ -37,6 +37,8 @@
 
     @using (Ajax.BeginForm("dosave", ajaxOptions) )
     {
+        @Html.HiddenFor(x => x.Category.Id)
+        
         @*@Html.EditorFor(x => Model.Category.CategoryTypeId, "CategoryTypeId")*@
 
         <div id="LoadingDiv" style="display: none;">loading</div>
@@ -79,7 +81,15 @@
                 </tr>
             </tbody>
         </table>*@
-        <button class="button icon approve primary">@OnBalance.MyMessages.ButtonText.Save</button>
+        <div class="btn-group">
+            @Html.ActionLink(OnBalance.MyMessages.ButtonText.BackToList, "list", new { id = Model.Category.OrganizationId }, new { @class = "btn btn-mini" })
+            <button class="btn btn-mini btn-primary"><i class="icon-ok icon-white"></i> @OnBalance.MyMessages.ButtonText.Save</button>
+            @if(Model.Category.CategoryTypeId != 1)
+            {
+                <button onclick="Category.resetStructure(@Model.Category.Id, @Model.Category.CategoryTypeId); return false;" class="btn btn-mini btn-danger"><i class="icon-exclamation-sign icon-white"></i> @OnBalance.MyMessages.ButtonText.Reset</button>
+            }
+        </div>
+        
     }
 
 </div>

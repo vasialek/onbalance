@@ -8,6 +8,8 @@ namespace OnBalance.Models
     public class CategoryStructure : BaseModel
     {
 
+        public enum FieldTypes : int { Int = 1, String, List };
+
         public int Id { get; set; }
 
         public int Priority { get; set; }
@@ -16,7 +18,28 @@ namespace OnBalance.Models
 
         public int CategoryId { get; set; }
 
+        /// <summary>
+        /// Gets/sets whether this field is used for filtering
+        /// </summary>
+        public bool IsDimension { get; set; }
+
         public string FieldName { get; set; }
+
+        public FieldTypes FieldType { get; set; }
+
+        /// <summary>
+        /// ID of list in case field type is List
+        /// </summary>
+        public object FieldValue { get; set; }
+
+        public object FieldDefault { get; set; }
+
+        public bool IsRequired { get; set; }
+
+        /// <summary>
+        /// In case data should be stored in I18N table
+        /// </summary>
+        public bool IsI18n { get; set; }
 
     }
 

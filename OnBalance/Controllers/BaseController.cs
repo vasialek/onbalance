@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Text;
 using log4net;
 using log4net.Config;
+using System.Text.RegularExpressions;
 
 namespace OnBalance.Controllers
 {
@@ -140,6 +141,13 @@ namespace OnBalance.Controllers
 
         #endregion
 
+        protected bool HasRequestParameter(string name)
+        {
+            // Get everything after '?' if any
+            string vars = Request.RawUrl.IndexOf('?') < 0 ? "" : Request.RawUrl.Substring(Request.RawUrl.IndexOf('?'));
+            Regex rx = new Regex(string.Concat("\\b", name, "\\b"));
+            return rx.IsMatch(vars);
+        }
 
         /// <summary>
         /// Writes message to TempData["ResultMsg"]
