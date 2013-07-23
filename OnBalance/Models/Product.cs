@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.Data.Linq;
 using System.Data.Linq.Mapping;
+using System.Web.Script.Serialization;
 namespace OnBalance.Models
 {
 
@@ -342,6 +343,7 @@ namespace OnBalance.Models
         }
 
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Product_ProductDetail", Storage = "_ProductDetails", ThisKey = "Id", OtherKey = "product_id")]
+        [ScriptIgnore]
         public EntitySet<ProductDetail> ProductDetails
         {
             get
@@ -355,6 +357,7 @@ namespace OnBalance.Models
         }
 
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Category_Product", Storage = "_Category", ThisKey = "CategoryId", OtherKey = "Id", IsForeignKey = true)]
+        [ScriptIgnore]
         public Category Category
         {
             get
@@ -421,6 +424,7 @@ namespace OnBalance.Models
         
         protected Organization _organization = null;
 
+        [ScriptIgnore]
         public Organization Pos
         {
             get
@@ -433,6 +437,7 @@ namespace OnBalance.Models
             }
         }
 
+        [ScriptIgnore]
         public string PhotosUri
         {
             get
@@ -441,6 +446,7 @@ namespace OnBalance.Models
             }
         }
 
+        [ScriptIgnore]
         public string StatusName
         {
             get
@@ -450,6 +456,7 @@ namespace OnBalance.Models
         }
 
         [ScaffoldColumn(false)]
+        [ScriptIgnore]
         public string StatusCssStyle
         {
             get
@@ -465,6 +472,7 @@ namespace OnBalance.Models
             }
         }
 
+        [ScriptIgnore]
         public IList<ProductDetail> Details
         {
             get
@@ -477,6 +485,7 @@ namespace OnBalance.Models
             }
         }
 
+        [ScriptIgnore]
         public string[] DetailsNames
         {
             get

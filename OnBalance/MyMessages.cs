@@ -39,6 +39,11 @@ namespace OnBalance
             public const string ConfirmStructureReset = "Confirm structure reset and products deletion!";
         }
 
+        public class Products
+        {
+            public const string PosIsNotFound = "Requested POS in not found!";
+        }
+
         public class Errors
         {
             public const string DataIsEmpty = "Data is empty!";

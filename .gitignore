@@ -14,6 +14,7 @@ OnBalance/ConnectionString.config
 OnBalance/test*.*
 OnBalance/log4net.xml
 OnBalance/OnBalance.csproj.user
+OnBalance/packages.config
 
 
 

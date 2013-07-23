@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Linq.Mapping;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace OnBalance.Models
 {
@@ -24,6 +25,7 @@ namespace OnBalance.Models
         /// <summary>
         /// Configuration of Organization/POS
         /// </summary>
+        [ScriptIgnore]
         public OrganizationConfiguration Configuration
         {
             get
@@ -44,6 +46,7 @@ namespace OnBalance.Models
         /// <summary>
         /// Gets parent Organization or null
         /// </summary>
+        [ScriptIgnore]
         public Organization Parent
         {
             get
@@ -64,6 +67,7 @@ namespace OnBalance.Models
         /// <summary>
         /// Gets list of all children
         /// </summary>
+        [ScriptIgnore]
         public IList<Organization> Children
         {
             get
@@ -75,6 +79,7 @@ namespace OnBalance.Models
         /// <summary>
         /// Gets name of status
         /// </summary>
+        [ScriptIgnore]
         public string StatusName
         {
             get

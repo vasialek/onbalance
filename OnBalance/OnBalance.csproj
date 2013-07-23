@@ -66,6 +66,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\BalanceController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
@@ -91,6 +92,8 @@
     <Compile Include="Helpers\AvHtmlHelper.cs" />
     <Compile Include="Import\ImportLgf.cs" />
     <Compile Include="Import\IPosImport.cs" />
+    <Compile Include="Models\ApiRequestParameters.cs" />
+    <Compile Include="Models\ApiResponseCodes.cs" />
     <Compile Include="Models\BalanceItem.cs" />
     <Compile Include="Models\BalanceItemRepository.cs" />
     <Compile Include="Models\BaseModel.cs" />
@@ -138,6 +141,7 @@
     <Compile Include="ObLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\Balance\OrganizationSchemaViewModel.cs" />
+    <Compile Include="ViewModels\BaseApiResponse.cs" />
     <Compile Include="ViewModels\Categories\CategoryStructure.cs" />
     <Compile Include="ViewModels\Categories\PosCategoriesListViewModel.cs" />
     <Compile Include="ViewModels\Categories\PosCategoryViewModel.cs" />

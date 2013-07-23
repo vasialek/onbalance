@@ -88,5 +88,14 @@ namespace OnBalance.Models
 	        }
         }
 
+
+        internal IList<Organization> GetListOfLastPos(int offset, int limit)
+        {
+
+            return Companies
+                .Skip(offset)
+                .Take(limit)
+                .ToList();
+        }
     }
 }

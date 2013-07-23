@@ -22,6 +22,12 @@ namespace OnBalance
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                "Api",
+                "api/v{version}/{action}/{id}/{items}",
+                new { controller = "api", action = "index", id = UrlParameter.Optional, items = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
