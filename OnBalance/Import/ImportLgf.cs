@@ -11,8 +11,8 @@ namespace OnBalance.Import
     public class ImportLgf : IPosImport
     {
 
-        protected string _url = "http://www.lgf.lt/index.php?1565547090";
-        //protected string _url = "D:\\temp\\lgf.htm";
+        //protected string _url = "http://www.lgf.lt/index.php?1565547090";
+        protected string _url = "D:\\temp\\lgf.htm";
 
         protected DateTime _documentDownloadedAt = DateTime.MinValue;
         protected HtmlDocument _document = null;

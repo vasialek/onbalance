@@ -18,6 +18,8 @@ namespace OnBalance
             public const string Create = "Create";
             public const string AreYouSure = "Are you sure?!";
             public const string Reset = "Reset";
+            public const string Search = "Search";
+            public const string Loading = "Loading...";
         }
 
         public class Parser
@@ -48,6 +50,7 @@ namespace OnBalance
         {
             public const string DataIsEmpty = "Data is empty!";
             public const string NoRecordsFound = "No records found!";
+            public const string AjaxLoadingError = "Error loading Ajax, please try a bit later!";
         }
 
     }

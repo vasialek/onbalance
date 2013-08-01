@@ -103,6 +103,7 @@
     <Compile Include="Models\CategoryStructure.cs" />
     <Compile Include="Models\CategoryType.cs" />
     <Compile Include="Models\ChangePassword.cs" />
+    <Compile Include="Models\IFilter.cs" />
     <Compile Include="Models\ObLog.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -145,6 +146,7 @@
     <Compile Include="ViewModels\Categories\CategoryStructure.cs" />
     <Compile Include="ViewModels\Categories\PosCategoriesListViewModel.cs" />
     <Compile Include="ViewModels\Categories\PosCategoryViewModel.cs" />
+    <Compile Include="ViewModels\lgf\GunsFilterViewModel.cs" />
     <Compile Include="ViewModels\Organizations\OrganizationEditViewModel.cs" />
     <Compile Include="ViewModels\PendingChangesViewModel.cs" />
     <Compile Include="ViewModels\Products\ProductsInPosViewModel.cs" />

@@ -16,6 +16,28 @@ namespace System.Web.Mvc
     public static class AvHtmlHelper
     {
 
+        public static HtmlString LoaderDiv(this HtmlHelper htmlHelper)
+        {
+            return LoaderDiv(htmlHelper, null);
+        }
+
+        public static HtmlString LoaderDiv(this HtmlHelper htmlHelper, object htmlAttributes)
+        {
+            TagBuilder div = new TagBuilder("div");
+            div.MergeAttributes(Common.DynamicObjectToDictionary(new { id = "LoaderDiv", style = "display: none;" }));
+            if(htmlAttributes != null)
+            {
+                div.MergeAttributes(Common.DynamicObjectToDictionary(htmlAttributes), true);
+            }
+            UrlHelper urlHelper = ((Controller)htmlHelper.ViewContext.Controller).Url;
+            
+            TagBuilder img = new TagBuilder("img");
+            img.MergeAttributes(Common.DynamicObjectToDictionary(new { width = 16, height = 16, alt = MyMessages.ButtonText.Loading, src = urlHelper.Content("~/images/loader.gif") }));
+
+            div.InnerHtml = img.ToString();
+            return new HtmlString(div.ToString());
+        }
+
         public static HtmlString Image(this HtmlHelper htmlHelper, string src, int w, int h, string alt, object htmlAttributes)
         {
             Dictionary<string, object> attributes = Common.DynamicObjectToDictionaryInsensitive(htmlAttributes);
@@ -36,7 +58,7 @@ namespace System.Web.Mvc
         /// <param name="htmlUrlAttributes">Object with attributes for URL</param>
         public static HtmlString ImageLink(this HtmlHelper htmlHelper, string imageSrc, string alt, string hrefLink, object htmlImageAttributes, object htmlUrlAttributes)
         {
-            UrlHelper urlHelper = ((Controller)htmlHelper.ViewContext.Controller).Url;
+            //UrlHelper urlHelper = ((Controller)htmlHelper.ViewContext.Controller).Url;
             TagBuilder img = new TagBuilder("img");
             // Merge provided image attributes (in object) with image attributes
             var attributes = Common.DynamicObjectToDictionaryInsensitive(htmlImageAttributes);

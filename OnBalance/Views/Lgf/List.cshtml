@@ -2,56 +2,77 @@
 
 @{
     ViewBag.Title = "List";
+    var filter = (OnBalance.ViewModels.lgf.GunsFilterViewModel)ViewBag.Filter;
+    var ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "DynamicDiv", OnFailure = "alert('" + OnBalance.MyMessages.Errors.AjaxLoadingError + "');"
+    };
+    
+    Html.ResourceManager().AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.jQuery, "1.8.1", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Min, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Microsoft).AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.UnobtrusiveMvc, "", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Min, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Microsoft);
 }
 
-<h2>LGF @Model.Count() guns, updated at @ViewBag.UpdatedAt</h2>
+<div id="DynamicDiv">
+    @Html.LoaderDiv()
 
-<table class="table table-condensed table-bordered table-striped">
-    <tr>
-        <th>
-            StatusName
-        </th>
-@*        <th>
-            PosId
-        </th>*@
-        <th>
-            Internal code
-        </th>
-        <th>
-            Name
-        </th>
-        <th>
-            Quantity
-        </th>
-        <th>
-            Price
-        </th>
-        <th></th>
-    </tr>
+    <h2>LGF @Model.Count() guns, updated at @ViewBag.UpdatedAt</h2>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.StatusName)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.PosId)
-        </td>*@
-        <td>
-            @Html.DisplayFor(modelItem => item.InternalCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Quantity)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-        </td>
-    </tr>
-}
+    @using(Ajax.BeginForm(null, null, ajaxOptions, new { @class = "form-inline" }))
+    {
+        @Html.LabelFor(x => filter.GunsTypes)
+        @Html.DropDownListFor(x => filter.GunsTypesSelectItems, filter.GunsTypesSelectItems)
+        <i class="separator"></i>
+        @Html.LabelFor(x => filter.SearchBy)
+        @Html.TextBoxFor(x => filter.SearchBy)
+        <input type="submit" class="button button-mini button-default" value="@OnBalance.MyMessages.ButtonText.Search" />
+    }
 
-</table>
+    <table class="table table-condensed table-bordered table-striped">
+        <tr>
+            <th>
+                StatusName
+            </th>
+    @*        <th>
+                PosId
+            </th>*@
+            <th>
+                Internal code
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusName)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.PosId)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.InternalCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+            </td>
+        </tr>
+    }
+
+    </table>
+</div>
