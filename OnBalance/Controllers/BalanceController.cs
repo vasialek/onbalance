@@ -83,7 +83,7 @@ namespace OnBalance.Controllers
                     {
                         Id = c.Id,
                         Name = c.Name,
-                        Sizes = dbProduct.GetAvailableSizes(c.Id)
+                        Sizes = dbProduct.GetAvailableSizes(c.Id) ?? new string[]{ "" }
                     });
 	            }
                 var orgVm = new OrganizationSchemaViewModel

@@ -45,9 +45,22 @@ namespace OnBalance.Models
         /// <summary>
         /// Returns list of ALL children by specified parent ID (parent is not included)
         /// </summary>
-        /// <param name="parentId"></param>
         public IList<Organization> GetByParentId(int parentId)
         {
+            return GetByParentId(parentId, false);
+        }
+
+        /// <summary>
+        /// Returns list of ALL children by specified parent ID (parent is included on request)
+        /// </summary>
+        public IList<Organization> GetByParentId(int parentId, bool includeParent)
+        {
+            if(includeParent)
+            {
+                return Items.Where(x => x.ParentId == parentId || x.Id == parentId)
+                    .Distinct()
+                    .ToList();
+            }
             return Items.Where(x => x.ParentId == parentId).ToList();
         }
 

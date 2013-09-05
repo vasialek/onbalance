@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Linq.Mapping;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace OnBalance.Models
 {
@@ -74,6 +75,7 @@ namespace OnBalance.Models
         }
 
         [ScaffoldColumn(false)]
+        [ScriptIgnore]
         public string CategoryTypeName
         {
             get

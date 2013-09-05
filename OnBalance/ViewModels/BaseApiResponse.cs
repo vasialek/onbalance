@@ -59,4 +59,15 @@ namespace OnBalance.ViewModels
             set;
         }
     }
+
+    public class ApiCategoriesListReponse : BaseApiResponse
+    {
+        public int total { get { return categories == null ? 0 : categories.Count; } }
+
+        public IList<Category> categories
+        {
+            get;
+            set;
+        }
+    }
 }

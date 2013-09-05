@@ -198,6 +198,8 @@ function getDetailsForCategory(categoryId)
  */
 function getCategoryById(categoryId)
 {
+    console.log("Searching for Category #" + categoryId);
+    console.log(YAHOO.OnBalance.organizations[0].Categories);
     for(var i = 0; i < YAHOO.OnBalance.organizations[0].Categories.length; i++)
     {
         if( YAHOO.OnBalance.organizations[0].Categories[i].id == categoryId )
@@ -218,6 +220,7 @@ function createTable(categoryId)
         { key: "code", label: "Code", sortable: true, width: 100, maxAutoWidth: 110, editor: new YAHOO.widget.TextboxCellEditor({ disableBtns: true }) }
     ];
     var details = getDetailsForCategory(categoryId);
+    //console.log(details);
     for(var i = 0; i < details.length; i++)
     {
         gResultFields[gResultFields.length] = { key: arDetails[i] };

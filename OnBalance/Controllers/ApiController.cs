@@ -33,22 +33,39 @@ namespace OnBalance.Controllers
             InfoFormat("RequestParameters: offset: {0}, limit: {1}, sort: {2}", rp.Offset, rp.Limit, rp.Sort);
 
             BaseApiResponse resp = new BaseApiResponse(ApiResponseCodes.BadRequest);
+            resp.message = "Unrecognized request, please specify what do you want.";
             switch(items)
             {
                 case "products":
                     resp = GetProductsInPos(id.HasValue ? id.Value : 0, rp);
                     break;
+                case "categories":
+                    resp = GetCategoriesInPos(id.HasValue ? id.Value : 0, rp);
+                    break;
                 default:
                     if(id.HasValue)
                     {
+                        rp.ParentId = id.Value;
                     }else
                     {
-                        resp = GetListOfPos(rp);
+                        rp.ParentId = 0;
                     }
+                    resp = GetListOfPos(rp);
                     break;
             }
 
             return Json(resp, JsonRequestBehavior.AllowGet);
+        }
+
+        protected BaseApiResponse GetCategoriesInPos(int posId, ApiRequestParameters rp)
+        {
+            ApiCategoriesListReponse resp = new ApiCategoriesListReponse();
+
+            var db = new CategoryRepository();
+            resp.categories = db.GetCategoriesBy(posId, 0, rp.Offset, rp.Limit);
+            resp.SetResponseCode(ApiResponseCodes.Ok);
+
+            return resp;
         }
 
         protected ApiPosListReponse GetListOfPos(ApiRequestParameters rp)
@@ -56,8 +73,20 @@ namespace OnBalance.Controllers
             ApiPosListReponse resp = new ApiPosListReponse();
 
             rp.SetLimitIfNotPositive(10);
-            resp.listOfPos = new OrganizationRepository().GetListOfLastPos(rp.Offset, rp.Limit);
-            InfoFormat("Got list of POS, offset {0}, limit: {1}. Total POS are {2}", rp.Offset, rp.Limit, resp.total);
+            //if(rp.ParentId > 0)
+            //{
+            //    resp.listOfPos = new OrganizationRepository().GetByParentId(rp.ParentId);
+            //    resp.message = string.Concat("List of POS by parent ", rp.ParentId);
+            //    InfoFormat("Got list of POS by parent ID: {0}, offset {1}, limit: {2}. Total POS are {3}", rp.ParentId, rp.Offset, rp.Limit, resp.total);
+            //} else
+            //{
+            //    resp.listOfPos = new OrganizationRepository().GetListOfLastPos(rp.Offset, rp.Limit);
+            //    InfoFormat("Got list of POS, offset {0}, limit: {1}. Total POS are {2}", rp.Offset, rp.Limit, resp.total);
+            //}
+            resp.listOfPos = new OrganizationRepository().GetByParentId(rp.ParentId, true);
+            resp.message = string.Concat("List of POS by parent ", rp.ParentId);
+            InfoFormat("Got list of POS by parent ID: {0}, offset {1}, limit: {2}. Total POS are {3}", rp.ParentId, rp.Offset, rp.Limit, resp.total);
+            resp.SetResponseCode(ApiResponseCodes.Ok);
             return resp;
         }
 

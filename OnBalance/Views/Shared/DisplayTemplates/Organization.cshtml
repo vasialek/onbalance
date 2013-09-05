@@ -8,7 +8,7 @@
             @Html.ImageLink("/images/productadmin.png", "Product list", Url.Action("list", "pradmin", new { id = Model.Id }), new { width = 12, height = 12 }, new { @class = "btn-mini" })
             @Html.ImageLink("/images/poscategories.png", "List of categories", Url.Action("list", "category", new { id = Model.Id }), new { width = 12, height = 12 }, new { @class = "btn-mini" })
             @Html.ImageLink("/images/import.png", "Import from file", Url.Action("parse", "pradmin", new { id = Model.Id }), new { width = 12, height = 12 }, new { @class = "btn-mini" })
-            @Html.ImageLink("/images/view.png", "Balance", Url.Action("list", "balance", new { id = Model.Id }), new { width = 12, height = 12 }, new { @class = "btn-mini" })
+            @Html.ImageLink("/images/view.png", "Balance", Url.Action("edit", "balance", new { id = Model.Id }), new { width = 12, height = 12 }, new { @class = "btn-mini" })
         </div>
     </div>
 </div>

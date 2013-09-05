@@ -14,9 +14,9 @@ namespace OnBalance.Models
 
         string SortByField { get; set; }
 
-        public int Offset { get; set; }
+        int Offset { get; set; }
 
-        public int Limit { get; set; }
+        int Limit { get; set; }
 
     }
 }

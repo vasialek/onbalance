@@ -18,10 +18,10 @@ namespace OnBalance.Controllers
             return Content("L.G.F.");
         }
 
-        public ActionResult List(GunsFilterViewModel? model)
+        public ActionResult List(GunsFilterViewModel model)
         {
             var lgf = new ImportLgf();
-            var filter = model.HasValue ? new GunsFilterViewModel(model) : new GunsFilterViewModel();
+            var filter = model;//.HasValue ? new GunsFilterViewModel(model) : new GunsFilterViewModel();
             filter.GunsTypes = new List<string> { "", "Pistoletas", "Revolveris" };
             
             InfoFormat("LGF was updated at {0}", ViewBag.UpdatedAt);

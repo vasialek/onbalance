@@ -7,6 +7,7 @@ namespace OnBalance.Models
 {
     public class ApiRequestParameters
     {
+        public int ParentId { get; set; }
         public int Offset { get; set; }
         public int Limit { get; set; }
         public string Sort { get; set; }
