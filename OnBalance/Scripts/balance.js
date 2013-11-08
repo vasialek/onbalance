@@ -99,7 +99,7 @@ YAHOO.OnBalance = {
             }
         }
     ],
-    contextMenu: [],
+    contextMenu: []
 
 };
 
@@ -233,11 +233,12 @@ function createTable(categoryId)
         };
     }
 
-    oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", arColumnsDefinitions, gDataSource, {
+    var oTable = new YAHOO.widget.ScrollingDataTable("MainBalanceDiv", arColumnsDefinitions, gDataSource, {
         initialLoad: false,
         height: "50em",
         selectionMode: "cell"
     });
+    oTable.setAttribute({width: "100%", height: "90%"});
 
     console.log("Created table:");
     console.log(oTable);
@@ -749,3 +750,73 @@ function createApplicationMenu(oSchema)
 
 }
 
+var Balance = {
+
+    _pos: {id: -1, name: ""},
+    _categories: [],
+
+    init: function(posId, posName)
+    {
+        this._log("Initializing OnBalance...");
+        this._pos = {id: posId, name: posName};
+        this._getInformationForPos(posId);
+    },
+
+    _getInformationForPos: function(posId)
+    {
+        this._log("Loading information for POS...");
+        var self = this;
+        BalanceTransport.loadCategoriesForPos(posId, function(oRequest, oParsedResponse, oPayload){
+            self._onListOfPosLoaded(oRequest, oParsedResponse, oPayload);
+        });
+    },
+
+    _onListOfPosLoaded: function(oRequest, oParsedResponse, oPayload)
+    {
+        this._log("Got list of POS:");
+        this._log(oParsedResponse);
+
+//        YAHOO.OnBalance.organizations = [];
+        _categories = [];
+        for(var i = 0; i < oParsedResponse.results.length; i++)
+        {
+            for(var j = 0; j < oParsedResponse.results[i].Categories.length; j++)
+            {
+                _categories[categories.length] = {
+                    id: oParsedResponse.results[i].Categories[j].Id,
+                    name: oParsedResponse.results[i].Categories[j].Name,
+                    sizes: oParsedResponse.results[i].Categories[j].Sizes
+                };
+            }
+//
+//            YAHOO.OnBalance.organizations[i] = {
+//                Id: oParsedResponse.results[i].Id,
+//                Name: oParsedResponse.results[i].Name,
+//                Categories: categories
+//            };
+        }
+    },
+
+    _log: function(msg)
+    {
+        if(console !== undefined)
+        {
+            console.log(msg);
+        }
+    }
+};
+
+var BalanceTransport = {
+    _baseUrl: "http://localhost:52293/",
+
+    loadCategoriesForPos: function(posId, successCallback)
+    {
+        var ds = new YAHOO.util.ScriptNodeDataSource(this._baseUrl + "balance/getschemaoforganizationslist/" + posId);
+        ds.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+        ds.responseSchema = {
+            resultsList: "Results"
+        }
+        ds.sendRequest("?", successCallback);
+    }
+
+};

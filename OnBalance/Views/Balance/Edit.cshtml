@@ -94,29 +94,50 @@
     <script type="text/javascript">
 
         window.onload = function () {
+
             var loader = new YAHOO.util.YUILoader({
-                require: ["datatable", "menu", "datasource", "json", "container", "connection", "button", "layout"]
+                require: ["datatable", "menu", "datasource", "json", "container", "connection", "button", "layout"],
+                onSuccess: function () {
+                    var layout = new YAHOO.widget.Layout({
+                        units: [
+                            { position: "top", body: "TopDiv", height: 50, gutter: "0 0 0 0" },
+                            { position: "center", body: "CenterDiv", scroll: true, gutter: "0 0 0 0" },
+                            { position: "bottom", body: "BottomDiv", height: 30, gutter: "0 0 0 0" }
+                        ]
+                    });
+                    layout.on("render", function(){
+                        Balance.init(@Model.Pos.Id, "@Model.Pos.Name");
+                    });
+                    layout.render();
+                }
+            });
+            loader.insert();
+
+            //Balance.init(@Model.Pos.Id, "@Model.Pos.Name");
+            /*
+            var loader = new YAHOO.util.YUILoader({
+            require: ["datatable", "menu", "datasource", "json", "container", "connection", "button", "layout"]
             , onSuccess: function () {
 
-                var layout = new YAHOO.widget.Layout({
-                    units: [
-                        { position: "top", body: "TopDiv", height: 50, gutter: "0 0 0 0" },
-                        { position: "center", body: "CenterDiv", scroll: true, gutter: "0 0 0 0" },
-                        { position: "bottom", body: "BottomDiv", height: 30, gutter: "0 0 0 0" }
-                    ]
-                });
+            var layout = new YAHOO.widget.Layout({
+            units: [
+            { position: "top", body: "TopDiv", height: 50, gutter: "0 0 0 0" },
+            { position: "center", body: "CenterDiv", scroll: true, gutter: "0 0 0 0" },
+            { position: "bottom", body: "BottomDiv", height: 30, gutter: "0 0 0 0" }
+            ]
+            });
 
-                layout.on('render', function () {
-                    onPageLoaded(@Model.Pos.Id);
-                });
+            layout.on('render', function () {
+            onPageLoaded(@Model.Pos.Id);
+            });
 
-                layout.render();
+            layout.render();
 
             }
             });
 
             loader.insert();
-
+            */
         }
 
 </script>
