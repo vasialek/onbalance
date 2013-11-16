@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using OnBalance.Domain.Entities;
 
 namespace OnBalance.Models
 {
@@ -30,7 +31,8 @@ namespace OnBalance.Models
         {
             get
             {
-                return new OrganizationRepository().GetById(OrganizationId);
+                throw new NotImplementedException("new OrganizationRepository()");
+                return null; //new OrganizationRepository().GetById(OrganizationId);
             }
         }
     }

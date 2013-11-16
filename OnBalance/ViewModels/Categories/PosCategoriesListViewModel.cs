@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using OnBalance.Domain.Entities;
-using OnBalance.Models;
 
 namespace OnBalance.ViewModels.Categories
 {
@@ -11,6 +10,6 @@ namespace OnBalance.ViewModels.Categories
     {
         public Organization Organization { get; set; }
 
-        public IList<OnBalance.Domain.Entities.Category> Categories { get; set; }
+        public IList<Category> Categories { get; set; }
     }
 }

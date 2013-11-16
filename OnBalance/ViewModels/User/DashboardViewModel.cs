@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using OnBalance.Models;
 using System.Web.Security;
+using OnBalance.Domain.Entities;
 
 namespace OnBalance.ViewModels.User
 {
@@ -12,9 +12,9 @@ namespace OnBalance.ViewModels.User
 
         public List<Organization> Shops { get; set; }
 
-        public List<Task> Imports { get; set; }
+        public List<OnBalance.Models.Task> Imports { get; set; }
 
-        public List<Task> Exports { get; set; }
+        public List<OnBalance.Models.Task> Exports { get; set; }
 
         /// <summary>
         /// Gets list of last created/registered users
@@ -29,8 +29,8 @@ namespace OnBalance.ViewModels.User
         public DashboardViewModel()
         {
             Shops = new List<Organization>();
-            Imports = new List<Task>();
-            Exports = new List<Task>();
+            Imports = new List<OnBalance.Models.Task>();
+            Exports = new List<OnBalance.Models.Task>();
             LastPos = new List<Organization>();
             LastUsers = new List<MembershipUser>();
         }
@@ -38,8 +38,9 @@ namespace OnBalance.ViewModels.User
 
         public void Init()
         {
-            var dbOrg = new OrganizationRepository();
-            Shops = dbOrg.Companies.ToList();
+            throw new NotImplementedException("Ninject OrganizationRepository");
+            //var dbOrg = new OrganizationRepository();
+            //Shops = dbOrg.Companies.ToList();
         }
     }
 }

@@ -85,7 +85,7 @@ namespace OnBalance.Models
 		private byte _StatusId;
 
         private int _parentId;
-
+		
 		private string _Name;
 		
 		private System.DateTime _CreatedAt;
@@ -176,8 +176,8 @@ namespace OnBalance.Models
                 }
             }
         }
-        
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Name = "name", Storage = "_Name", DbType = "VarChar(255) NOT NULL", CanBeNull = false)]
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="name", Storage="_Name", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
         [DisplayName("Name of organization")]
 		public string Name
 		{

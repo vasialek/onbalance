@@ -27,5 +27,10 @@ namespace OnBalance.Domain.Entities
 
         public int CategoryId { get; set; }
 
+
+        public IEnumerable<KeyValuePair<object, object>> GetQuantityForAllSizes()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

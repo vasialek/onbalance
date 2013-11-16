@@ -3,21 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using OnBalance.Models;
 using OnBalance.ViewModels.Categories;
 using OnBalance.Domain.Abstract;
+using OnBalance.Domain.Entities;
 
 namespace OnBalance.Controllers
 {
     public class CategoryController : BaseController
     {
         private ICategoryRepository _repository = null;
+        private IOrganizationRepository _organizationRepository = null;
+        private IProductRepository _productRepository = null;
 
         public int PageSize { get; set; }
 
-        public CategoryController(ICategoryRepository repository)
+        public CategoryController(ICategoryRepository repository, IOrganizationRepository organizationRepository, IProductRepository productRepository)
         {
             _repository = repository;
+            _organizationRepository = organizationRepository;
+            _productRepository = productRepository;
+
             PageSize = 30;
         }
 
@@ -39,9 +44,8 @@ namespace OnBalance.Controllers
 
             if(id.HasValue && id.Value > 0)
             {
-                throw new NotImplementedException("");
-                //model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
-                //model.Categories = _repository.GetCategoriesBy(model.Organization.Id, 0, 0, 100).ToList();
+                model.Organization = _organizationRepository.Organizations.Single(x => x.Id == id);
+                model.Categories = _repository.GetCategoriesBy(model.Organization.Id, 0, 0, 100).ToList();
             } else
             {
                 model.Organization = new Organization { Name = "ALL" };
@@ -57,7 +61,7 @@ namespace OnBalance.Controllers
         public ActionResult Create(int id)
         {
             var model = new PosCategoryViewModel();
-            model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
+            model.Organization = _organizationRepository.Organizations.Single(x => x.Id == id);
             model.Category = new Category { OrganizationId = id };
             return View(model);
         }
@@ -72,9 +76,8 @@ namespace OnBalance.Controllers
             try
             {
                 InfoFormat("User #{0} creating category...", User.Identity.Name);
-                var db = new ProductRepository();
-                model.Organization = new OrganizationRepository().GetById(model.Category.OrganizationId);
-                model.Category = db.Save(model.Category);
+                model.Organization = _organizationRepository.GetById(model.Category.OrganizationId);
+                model.Category = _repository.Save(model.Category);
             } catch(Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
@@ -89,15 +92,15 @@ namespace OnBalance.Controllers
         {
             try
             {
-                var db = new CategoryStructureRepository();
-                var dbProduct = new ProductRepository();
+                //var db = new OnBalance.Models.CategoryStructureRepository();
+                //var dbProduct = new ProductRepository();
                 //Category model = dbProduct.GetCategory(id);
                 //string newName = Request["NewName"];
                 //bool isNewApproved = false;
 
-                InfoFormat("User #{0} updates Category #{1} to name: {2}, status: {3} ({4}), organization: #{5}", User.Identity.Name, vm.Category.Id, vm.Category.Name, vm.Category.StatusName, vm.Category.StatusId, vm.Category.OrganizationId);
+                //InfoFormat("User #{0} updates Category #{1} to name: {2}, status: {3} ({4}), organization: #{5}", User.Identity.Name, vm.Category.Id, vm.Category.Name, vm.Category.StatusName, vm.Category.StatusId, vm.Category.OrganizationId);
                 //InfoFormat("User #{0} updates Category #{1} to name: {2}, status: {3} ({4}), organization: #{5}", User.Identity.Name, model.Id, model.Name, model.StatusName, model.StatusId, model.OrganizationId);
-                dbProduct.Save(vm.Category);
+                _productRepository.Save(vm.Category);
                 //UpdateModel<Category>(model, "Category__");
                 //dbProduct.SubmitChanges();
 
@@ -107,11 +110,11 @@ namespace OnBalance.Controllers
                 foreach(var item in vm.CategoryStructure)
                 {
                     InfoFormat("  Category structure: #{0, -8}. {1}", item.Id, item.FieldName);
-                    db.Update(item);
+                    _repository.Update(item);
                 }
                 //}
 
-                db.Add(newItem);
+                _repository.Add(newItem);
 /*
                 if(string.IsNullOrEmpty(newName) == false)
                 {
@@ -123,7 +126,7 @@ namespace OnBalance.Controllers
                     db.Add(cs);
                 }
 */
-                db.SubmitChanges();
+                _repository.SubmitChanges();
 
                 return PartialView("CategoryStructure", vm.Category);
             } catch(Exception ex)
@@ -141,8 +144,8 @@ namespace OnBalance.Controllers
         {
             CategoryStructureViewModel vm = new CategoryStructureViewModel();
             //var model = new Category();
-            var db = new ProductRepository();
-            vm.Category = db.GetCategory(id);
+            //var db = new ProductRepository();
+            vm.Category = _repository.GetCategory(id);
             if(vm.Category == null)
             {
                 ErrorFormat("User #{0} tries to edit non-existing category #{1}!", User.Identity.Name, id);
@@ -160,15 +163,15 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Edit(CategoryStructureViewModel vm)
         {
-            var db = new ProductRepository();
-            vm.Category = db.GetCategory(vm.Category.Id);
+            //var db = new ProductRepository();
+            vm.Category = _repository.GetCategory(vm.Category.Id);
             if(vm.Category == null)
             {
                 ErrorFormat("User #{0} tries to update non-existing category #{1}!", User.Identity.Name, vm.Category.Id);
                 return RedirectToAction("notfound", "help");
             }
 
-            db.Save(vm.Category);
+            _repository.Save(vm.Category);
             SetTempOkMessage("Category {0} was successfully updated", vm.Category.Name);
 
             return RedirectToAction("edit", new { id = vm.Category.Id });
@@ -181,7 +184,7 @@ namespace OnBalance.Controllers
         {
             // TODO: ViewModel
             InfoFormat("User #{0} going to reset Category #{1} structure...", User.Identity.Name, id);
-            return View(new ProductRepository().GetCategory(id));
+            return View(_repository.GetCategory(id));
         }
 
         //
@@ -190,12 +193,12 @@ namespace OnBalance.Controllers
         [HttpPost]
         public ActionResult Reset(int id, string confirm)
         {
-            var db = new ProductRepository();
+            //var db = new ProductRepository();
             WarnFormat("User #{0} reset Category #{1} structure!", User.Identity.Name, id);
             // TODO: delete products under this category
-            var c = db.GetCategory(id);
-            c.CategoryTypeId = new CategoryTypeRepository().Items.OrderBy(x => x.Id).First().Id;
-            db.SubmitChanges();
+            var c = _repository.GetCategory(id);
+            c.CategoryTypeId = _repository.Categories.OrderBy(x => x.Id).First().Id;
+            _repository.SubmitChanges();
 
             return RedirectToAction("edit", new { id = id });
         }

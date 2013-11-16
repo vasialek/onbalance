@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data.Linq;
 using System.Data.Linq.Mapping;
 using System.Web.Script.Serialization;
+using OnBalance.Domain.Entities;
 namespace OnBalance.Models
 {
 
@@ -431,7 +432,8 @@ namespace OnBalance.Models
             {
                 if(_organization == null)
                 {
-                    _organization = PosId > 0 ? new OrganizationRepository().GetById(PosId) : null;
+                    throw new NotImplementedException("Ninject new OrganizationRepository()");
+                    //_organization = PosId > 0 ? new OrganizationRepository().GetById(PosId) : null;
                 }
                 return _organization;
             }

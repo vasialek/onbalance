@@ -9,6 +9,7 @@ using OnBalance.Models;
 using OnBalance.Helpers;
 using System.Security.Cryptography;
 using System.Text;
+using OnBalance.Domain.Abstract;
 
 namespace OnBalance.Controllers
 {
@@ -122,9 +123,9 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Dashboard()
         {
-            var dbOrg = new OrganizationRepository();
+            IOrganizationRepository dbOrg = null;
             var dashboard = new DashboardViewModel();
-            dashboard.Shops = dbOrg.Items.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
+            dashboard.Shops = dbOrg.Organizations.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
             dashboard.Imports = new List<Task>()
             {
                 new Task{ Type = Task.TypeId.Import, Status = Status.Pending }
@@ -136,7 +137,7 @@ namespace OnBalance.Controllers
                 .OrderByDescending(x => x.CreationDate)
                 .Take(3)
                 .ToList();
-            dashboard.LastPos = dbOrg.Items
+            dashboard.LastPos = dbOrg.Organizations
                 .OrderByDescending(x => x.CreatedAt)
                 .Take(3)
                 .ToList();

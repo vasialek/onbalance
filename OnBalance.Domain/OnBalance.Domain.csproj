@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,12 +55,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\ICategoryRepository.cs" />
+    <Compile Include="Abstract\IOrganizationRepository.cs" />
     <Compile Include="Abstract\IProductRepository.cs" />
     <Compile Include="Concrete\EfCategoryRepository.cs" />
     <Compile Include="Concrete\EfDbContext.cs" />
+    <Compile Include="Concrete\EfOrganizationRepository.cs" />
     <Compile Include="Concrete\EfProductRepository.cs" />
     <Compile Include="Entities\BaseModel.cs" />
     <Compile Include="Entities\Category.cs" />
+    <Compile Include="Entities\CategoryStructure.cs" />
+    <Compile Include="Entities\CategoryType.cs" />
+    <Compile Include="Entities\Organization.cs" />
+    <Compile Include="Entities\OrganizationConfiguration.cs" />
     <Compile Include="Entities\Product.cs" />
     <Compile Include="Primitives\Status.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OnBalance.Domain.Primitives;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnBalance.Domain.Entities
 {
@@ -12,6 +13,7 @@ namespace OnBalance.Domain.Entities
         protected byte _statusId = 0;
 
         //[ScaffoldColumn(false)]
+        [NotMapped]
         public string StatusName
         {
             get
@@ -23,6 +25,7 @@ namespace OnBalance.Domain.Entities
         }
 
         //[ScaffoldColumn(false)]
+        [NotMapped]
         public virtual string StatusCssStyle
         {
             get

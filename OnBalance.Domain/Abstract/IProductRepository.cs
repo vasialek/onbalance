@@ -11,5 +11,22 @@ namespace OnBalance.Domain.Abstract
 
         IQueryable<Product> Products { get; }
 
+        IQueryable<Category> Categories { get; }
+
+        void Save(Category category);
+
+        Category GetCategory(int id);
+
+        Product GetById(int id);
+
+        void SubmitChanges();
+
+        IEnumerable<Product> GetLastInPos(int posId, int p, int p_2);
+
+        string[] GetAvailableSizes(int p);
+
+        void Update(Product product);
+
+        Product GetByUid(string id);
     }
 }

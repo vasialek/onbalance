@@ -4,11 +4,15 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using OnBalance.Models;
+using OnBalance.Domain.Abstract;
+using OnBalance.Domain.Entities;
 
 namespace OnBalance.Controllers
 {
     public class PosController : BaseController
     {
+        private IOrganizationRepository _organizationRepository = null;
+
         protected override void OnResultExecuting(ResultExecutingContext filterContext)
         {
             throw new NotSupportedException("Use Organization instead!");
@@ -31,8 +35,7 @@ namespace OnBalance.Controllers
             // Pass messages and errors to view
             SetTempMessagesToViewBag();
 
-            var db = new OrganizationRepository();
-            var shops = db.Items;
+            var shops = _organizationRepository.Organizations;
             if( shops == null )
             {
                 throw new Exception("No POS!");
@@ -47,7 +50,7 @@ namespace OnBalance.Controllers
         public ActionResult Edit(int id)
         {
             InfoFormat("User #{0} is editing POS #{1}...", User.Identity.Name, id);
-            var pos = new OrganizationRepository().Items.SingleOrDefault(x => x.Id == id);
+            var pos = _organizationRepository.GetById(id);
             return View(pos);
         }
 
@@ -59,8 +62,7 @@ namespace OnBalance.Controllers
         public ActionResult Edit(int id, Organization model)
         {
             InfoFormat("User #{0} is updating POS #{1}...", User.Identity.Name, id);
-            var db = new OrganizationRepository();
-            model = db.Items.SingleOrDefault(x => x.Id == id);
+            model = _organizationRepository.GetById(id);
             if( model == null )
             {
                 ErrorFormat("  Can't update non-existing POS #{0}!", id);
@@ -73,7 +75,7 @@ namespace OnBalance.Controllers
                 UpdateModel<Organization>(model);
                 if(ModelState.IsValid)
                 {
-                    db.SubmitChanges();
+                    _organizationRepository.SubmitChanges();
                 }
             } catch(Exception ex)
             {
@@ -126,7 +128,7 @@ namespace OnBalance.Controllers
                 {
                     model.UpdatedAt = DateTime.Now;
                 }
-                new OrganizationRepository().Save(model);
+                _organizationRepository.Save(model);
             }
         
         }

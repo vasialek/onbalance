@@ -12,19 +12,24 @@ using System.Net;
 using System.Collections.Specialized;
 using OnBalance.ViewModels.Products;
 using OnBalance.ViewModels.Categories;
+using OnBalance.Domain.Entities;
+using OnBalance.Domain.Abstract;
 
 namespace OnBalance.Controllers
 {
 
     public class PradminController : BaseController
     {
+        private IOrganizationRepository _organizationRepository = null;
+        private IProductRepository _productRepository = null;
+
         //
         // GET: /pradmin/
 
         [Authorize]
         public ActionResult Index()
         {
-            return List(new OrganizationRepository().Items.First().Id);
+            return List(_organizationRepository.Organizations.First().Id);
         }
 
         //
@@ -33,16 +38,15 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult List(int id)
         {
-            ProductRepository db = new ProductRepository();
             ProductsInPosViewModel productsList = new ProductsInPosViewModel();
-            productsList.Pos = new OrganizationRepository().Items.SingleOrDefault(x => x.Id == id);
+            productsList.Pos = _organizationRepository.Organizations.SingleOrDefault(x => x.Id == id);
             if( productsList.Pos == null )
             {
                 ErrorFormat("Trying to list products in non-existing POS #{0}!", id);
                 return HttpNotFound();
             }
 
-            productsList.Categories = db.Categories
+            productsList.Categories = _productRepository.Categories
                 .Where(x => x.OrganizationId == productsList.Pos.Id)
                 .ToList();
 
@@ -55,7 +59,7 @@ namespace OnBalance.Controllers
             int offset = (page - 1) * perPage;
 
             InfoFormat("Displaying list of products in POS #{0}, skipping {1}, taking {2} products", id, offset, perPage);
-            productsList.Products = db.GetLastInPos(id, offset, perPage)
+            productsList.Products = _productRepository.GetLastInPos(id, offset, perPage)
                 .OrderBy(x => x.Id)
                 .ToList();
             DebugFormat("  got {0} products...", productsList.Products.Count);
@@ -71,8 +75,8 @@ namespace OnBalance.Controllers
         {
             var model = new PosCategoriesListViewModel();
             var db = new ProductRepository();
-            model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
             throw new NotImplementedException("Need to Ninject CategoryRepository!");
+            //model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
             //model.Categories = db.Categories.Where(x => x.OrganizationId == model.Organization.Id).ToList();
             return View(model);
         }
@@ -96,7 +100,8 @@ namespace OnBalance.Controllers
             CategoryStructureViewModel vm = new CategoryStructureViewModel();
             //var model = new Category();
             var db = new ProductRepository();
-            vm.Category = db.GetCategory(id);
+            throw new NotImplementedException("vm.Category = db.GetCategory(id)");
+            //vm.Category = db.GetCategory(id);
             if( vm.Category == null )
             {
                 ErrorFormat("User #{0} tries to edit non-existing category #{1}!", User.Identity.Name, id);
@@ -113,11 +118,11 @@ namespace OnBalance.Controllers
         [HttpPost]
         public ActionResult EditCategory(int id, FormCollection f)
         {
-            Category model = null;
+            OnBalance.Domain.Entities.Category model = null;
             try
             {
                 var db = new ProductRepository();
-                model = db.GetCategory(id);
+                model = _productRepository.GetCategory(id);
                 if(model == null)
                 {
                     ErrorFormat("User #{0} tries to update non-existing category #{1}!", User.Identity.Name, id);
@@ -144,15 +149,16 @@ namespace OnBalance.Controllers
         {
             try
             {
-                var db = new CategoryStructureRepository();
+                var db = new OnBalance.Domain.Entities.CategoryStructureRepository();
                 var dbProduct = new ProductRepository();
                 //Category model = dbProduct.GetCategory(id);
                 string newName = Request["NewName"];
                 bool isNewApproved = false;
 
-                InfoFormat("User #{0} updates Category #{1} to name: {2}, status: {3} ({4}), organization: #{5}", User.Identity.Name, vm.Category.Id, vm.Category.Name, vm.Category.StatusName, vm.Category.StatusId, vm.Category.OrganizationId);
+                //InfoFormat("User #{0} updates Category #{1} to name: {2}, status: {3} ({4}), organization: #{5}", User.Identity.Name, vm.Category.Id, vm.Category.Name, vm.Category.StatusName, vm.Category.StatusId, vm.Category.OrganizationId);
                 //InfoFormat("User #{0} updates Category #{1} to name: {2}, status: {3} ({4}), organization: #{5}", User.Identity.Name, model.Id, model.Name, model.StatusName, model.StatusId, model.OrganizationId);
-                dbProduct.Save(vm.Category);
+                throw new NotImplementedException("dbProduct.Save(vm.Category)");
+                //dbProduct.Save(vm.Category);
                 //UpdateModel<Category>(model, "Category__");
                 //dbProduct.SubmitChanges();
 
@@ -162,14 +168,15 @@ namespace OnBalance.Controllers
                     foreach(var item in vm.CategoryStructure)
                     {
                         InfoFormat("  Category structure: #{0, -8}. {1}", item.Id, item.FieldName);
-                        db.Update(item);
+                        throw new NotImplementedException("db.Update(item)");
+                        //db.Update(item);
                     }
                 //}
 
                 if(string.IsNullOrEmpty(newName) == false)
                 {
                     bool.TryParse(Request["NewStatus"], out isNewApproved);
-                    CategoryStructure cs = new CategoryStructure();
+                    OnBalance.Domain.Entities.CategoryStructure cs = new OnBalance.Domain.Entities.CategoryStructure();
                     cs.FieldName = newName;
                     cs.StatusId = isNewApproved ? (byte)Status.Approved : (byte)Status.Deleted;
                     cs.CategoryId = vm.Category.Id;
@@ -196,7 +203,6 @@ namespace OnBalance.Controllers
             InfoFormat("Loading products for POS ID #{0}...", posId);
 
             ProductRepository db = new ProductRepository();
-            OrganizationRepository dbPos = new OrganizationRepository();
 
             StringBuilder sbMain = new StringBuilder();
             StringBuilder sb = new StringBuilder();
@@ -396,14 +402,13 @@ namespace OnBalance.Controllers
         public ActionResult Create(int id)
         {
             InfoFormat("Creating product in POS with ID #{0}", id);
-            var db = new OrganizationRepository();
-            Organization pos = db.Items.SingleOrDefault(x => x.Id == id);
+            Organization pos = _organizationRepository.GetById(id);
             if( pos == null )
             {
                 return RedirectToAction("notfound", "help");
             }
 
-            Product model = new Product();
+            OnBalance.Domain.Entities.Product model = new OnBalance.Domain.Entities.Product();
             model.PosId = pos.Id;
             model.CategoryId = int.Parse(Request["category"]);
             return View(model);
@@ -411,7 +416,7 @@ namespace OnBalance.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult Create(Product model)
+        public ActionResult Create(OnBalance.Domain.Entities.Product model)
         {
             try
             {
@@ -434,8 +439,7 @@ namespace OnBalance.Controllers
         public ActionResult Edit(int id)
         {
             InfoFormat("Editing product with ID #{0}", id);
-            ProductRepository db = new ProductRepository();
-            Product model = db.GetById(id);
+            OnBalance.Domain.Entities.Product model = _productRepository.GetById(id);
             if(model == null)
             {
                 ErrorFormat("User #{0} trying to edit non-existing product with ID: {1}!", User.Identity.Name, id);
@@ -450,15 +454,14 @@ namespace OnBalance.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult Edit(Product model)
+        public ActionResult Edit(OnBalance.Domain.Entities.Product model)
         {
             if( ModelState.IsValid )
             {
-                ProductRepository db = new ProductRepository();
-                model = db.Items.SingleOrDefault(x => x.Id == model.Id);
-                UpdateModel<Product>(model);
+                model = _productRepository.GetById(model.Id);
+                UpdateModel<OnBalance.Domain.Entities.Product>(model);
                 //db.Update(model);
-                db.SubmitChanges();
+                _productRepository.SubmitChanges();
                 return RedirectToAction("Edit", new { id = model.Id });
             }
 

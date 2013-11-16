@@ -43,12 +43,22 @@ namespace OnBalance.Infrastructure
             //var categoryMock = new Mock<ICategoryRepository>();
             //categoryMock.Setup(x => x.Categories)
             //    .Returns(new List<Category> {
-            //        new Category { Id = 2, Name = "Light alcohol", PosId = 1, ParentId = 0, StatusId = (byte)OnBalance.Domain.Primitives.Status.Approved },
-            //        new Category { Id = 2, Name = "Food", PosId = 1, ParentId = 0, StatusId = (byte)OnBalance.Domain.Primitives.Status.Approved },
-            //        new Category { Id = 3, Name = "Men shoes", PosId = 1, ParentId = 0, StatusId = (byte)OnBalance.Domain.Primitives.Status.Approved }
+            //        new Category { Id = 2, Name = "Light alcohol", OrganizationId = 1, ParentId = 0, StatusId = (byte)OnBalance.Domain.Primitives.Status.Approved },
+            //        new Category { Id = 2, Name = "Food", OrganizationId = 1, ParentId = 0, StatusId = (byte)OnBalance.Domain.Primitives.Status.Approved },
+            //        new Category { Id = 3, Name = "Men shoes", OrganizationId = 1, ParentId = 0, StatusId = (byte)OnBalance.Domain.Primitives.Status.Approved }
             //    }.AsQueryable());
             //_ninjectKernel.Bind<ICategoryRepository>().ToConstant(categoryMock.Object);
             _ninjectKernel.Bind<ICategoryRepository>().To<EfCategoryRepository>();
+
+            // Organizations
+            //_ninjectKernel.Bind<IOrganizationRepository>().To<EfOrganizationRepository>();
+            var organizationRepositoryMock = new Mock<IOrganizationRepository>();
+            organizationRepositoryMock.Setup(x => x.Organizations)
+                .Returns(new List<Organization> {
+                    new Organization { Id = 1, Name = "first", ParentId = 0, StatusId = (byte)Status.Approved, CreatedAt = DateTime.Now }
+                }.AsQueryable());
+            _ninjectKernel.Bind<IOrganizationRepository>()
+                .ToConstant(organizationRepositoryMock.Object);
         }
 
     }

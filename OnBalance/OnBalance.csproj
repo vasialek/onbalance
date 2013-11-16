@@ -117,18 +117,8 @@
       <DependentUpon>ObLog.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\ObLogRepository.cs" />
-    <Compile Include="Models\Organization.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>Organization.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Organization.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Organization.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Models\OrganizationConfiguration.cs" />
     <Compile Include="Models\OrganizationConfigurationRepository.cs" />
-    <Compile Include="Models\OrganizationRepository.cs" />
     <Compile Include="Models\ParamModel.cs" />
     <Compile Include="Models\ParamRepository.cs" />
     <Compile Include="Models\Product.cs" />
@@ -166,14 +156,6 @@
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>ObLog.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Models\Organization.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>Organization.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Models\Organization.dbml.layout">
-      <DependentUpon>Organization.dbml</DependentUpon>
     </None>
     <None Include="Models\SizeConvertor.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>

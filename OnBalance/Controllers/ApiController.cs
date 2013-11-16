@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using OnBalance.Models;
 using OnBalance.ViewModels;
 using System.Net;
+using OnBalance.Domain.Abstract;
 
 namespace OnBalance.Controllers
 {
     public class ApiController : BaseController
     {
+        private IOrganizationRepository _organizationRepository = null;
+        private IProductRepository _productRepository = null;
+        private ICategoryRepository _categoryRepository = null;
 
         public const string CURRENT_API_VERSION = "v1";
 
@@ -28,11 +31,11 @@ namespace OnBalance.Controllers
         public ActionResult Pos(int? id, string items)
         {
             InfoFormat("API: /pos: ID: {0}, items: {1}", id, items);
-            ApiRequestParameters rp = new ApiRequestParameters();
+            OnBalance.Models.ApiRequestParameters rp = new OnBalance.Models.ApiRequestParameters();
             TryUpdateModel(rp);
             InfoFormat("RequestParameters: offset: {0}, limit: {1}, sort: {2}", rp.Offset, rp.Limit, rp.Sort);
 
-            BaseApiResponse resp = new BaseApiResponse(ApiResponseCodes.BadRequest);
+            BaseApiResponse resp = new BaseApiResponse(OnBalance.Models.ApiResponseCodes.BadRequest);
             resp.message = "Unrecognized request, please specify what do you want.";
             switch(items)
             {
@@ -57,18 +60,17 @@ namespace OnBalance.Controllers
             return Json(resp, JsonRequestBehavior.AllowGet);
         }
 
-        protected BaseApiResponse GetCategoriesInPos(int posId, ApiRequestParameters rp)
+        protected BaseApiResponse GetCategoriesInPos(int posId, OnBalance.Models.ApiRequestParameters rp)
         {
             ApiCategoriesListReponse resp = new ApiCategoriesListReponse();
 
-            var db = new CategoryRepository();
-            resp.categories = db.GetCategoriesBy(posId, 0, rp.Offset, rp.Limit);
-            resp.SetResponseCode(ApiResponseCodes.Ok);
+            resp.categories = _categoryRepository.GetCategoriesBy(posId, 0, rp.Offset, rp.Limit).ToList();
+            resp.SetResponseCode(OnBalance.Models.ApiResponseCodes.Ok);
 
             return resp;
         }
 
-        protected ApiPosListReponse GetListOfPos(ApiRequestParameters rp)
+        protected ApiPosListReponse GetListOfPos(OnBalance.Models.ApiRequestParameters rp)
         {
             ApiPosListReponse resp = new ApiPosListReponse();
 
@@ -83,35 +85,35 @@ namespace OnBalance.Controllers
             //    resp.listOfPos = new OrganizationRepository().GetListOfLastPos(rp.Offset, rp.Limit);
             //    InfoFormat("Got list of POS, offset {0}, limit: {1}. Total POS are {2}", rp.Offset, rp.Limit, resp.total);
             //}
-            resp.listOfPos = new OrganizationRepository().GetByParentId(rp.ParentId, true);
+            resp.listOfPos = _organizationRepository.GetByParentId(rp.ParentId, true);
             resp.message = string.Concat("List of POS by parent ", rp.ParentId);
             InfoFormat("Got list of POS by parent ID: {0}, offset {1}, limit: {2}. Total POS are {3}", rp.ParentId, rp.Offset, rp.Limit, resp.total);
-            resp.SetResponseCode(ApiResponseCodes.Ok);
+            resp.SetResponseCode(OnBalance.Models.ApiResponseCodes.Ok);
             return resp;
         }
 
 
-        protected ApiProductsListResponse GetProductsInPos(int posId, ApiRequestParameters rp)
+        protected ApiProductsListResponse GetProductsInPos(int posId, OnBalance.Models.ApiRequestParameters rp)
         {
             ApiProductsListResponse resp = new ApiProductsListResponse();
             if(posId < 1)
             {
                 ErrorFormat("Bad ID of POS (ID: {0}) to retrieve products!", posId);
-                resp.SetResponseCode(ApiResponseCodes.BadRequest);
+                resp.SetResponseCode(OnBalance.Models.ApiResponseCodes.BadRequest);
             }
 
-            var pos = new OrganizationRepository().GetById(posId);
+            var pos = _organizationRepository.GetById(posId);
             if(pos == null)
             {
                 ErrorFormat("Could not retrieve products for non-existing POS (ID: {0})!", posId);
-                resp.SetResponseCode(ApiResponseCodes.NotFound);
+                resp.SetResponseCode(OnBalance.Models.ApiResponseCodes.NotFound);
                 resp.message = MyMessages.Products.PosIsNotFound;
                 return resp;
             }
 
             rp.SetLimitIfNotPositive(10);
             InfoFormat("API: getting list of product in POS #{0}, parameters: {1}", posId, rp);
-            var products = new ProductRepository().GetLastInPos(posId, rp.Offset, rp.Limit);
+            var products = _productRepository.GetLastInPos(posId, rp.Offset, rp.Limit);
             resp.products = products.ToList();
 
             return resp;

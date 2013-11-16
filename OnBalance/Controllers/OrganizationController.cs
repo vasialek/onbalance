@@ -5,11 +5,20 @@ using System.Web;
 using System.Web.Mvc;
 using OnBalance.Models;
 using OnBalance.ViewModels.Organizations;
+using OnBalance.Domain.Entities;
+using OnBalance.Domain.Abstract;
 
 namespace OnBalance.Controllers
 {
     public class OrganizationController : BaseController
     {
+        private IOrganizationRepository _repository = null;
+
+        public OrganizationController(IOrganizationRepository repository)
+        {
+            _repository = repository;
+        }
+
         //
         // GET: /organization/
 
@@ -24,12 +33,11 @@ namespace OnBalance.Controllers
         public ActionResult List(/*int id*/)
         {
             SetTempMessagesToViewBag();
-            OrganizationRepository db = new OrganizationRepository();
-            var companies = db.Companies;
+            var companies = _repository.Companies;
             int parentId = 0;
             if(int.TryParse(Request["parent"], out parentId))
             {
-                companies = db.Items
+                companies = _repository.Organizations
                     .Where(x => x.ParentId == parentId || x.Id == parentId)
                     .OrderBy(x => x.ParentId);
             }
@@ -59,7 +67,7 @@ namespace OnBalance.Controllers
         {
             try
             {
-                new OrganizationRepository().Save(model);
+                _repository.Save(model);
                 SetTempOkMessage("New company {0} was created", model.Name);
                 return RedirectToAction("list");
             } catch( Exception ex )
@@ -79,8 +87,7 @@ namespace OnBalance.Controllers
         public ActionResult Edit(int id)
         {
             InfoFormat("User #{0} is going to edit Organization #{1}", User.Identity.Name, id);
-            var db = new OrganizationRepository();
-            Organization model = db.Items.SingleOrDefault(x => x.Id == id);
+            Organization model = _repository.Organizations.SingleOrDefault(x => x.Id == id);
             if(model == null)
             {
                 WarnFormat("Non-existing organization #{0}!", id);
@@ -89,9 +96,9 @@ namespace OnBalance.Controllers
 
             OrganizationEditViewModel viewModel = new OrganizationEditViewModel();
             viewModel.Organization = model;
-            viewModel.Parent = db.GetById(model.ParentId);
-            viewModel.Children = db.GetByParentId(model.Id);
-            viewModel.Users = db.GetUsersInOrganization(model.Id);
+            viewModel.Parent = _repository.GetById(model.ParentId);
+            viewModel.Children = _repository.GetByParentId(model.Id);
+            viewModel.Users = _repository.GetUsersInOrganization(model.Id);
 
             return View(viewModel);
         }
@@ -106,10 +113,9 @@ namespace OnBalance.Controllers
             try
             {
                 InfoFormat("User #{0} going to update Organization #{1}", User.Identity.Name, model.Organization.Id);
-                var db = new OrganizationRepository();
-                var record = db.GetById(model.Organization.Id);
+                var record = _repository.GetById(model.Organization.Id);
                 UpdateModel(record, "Organization");
-                db.SubmitChanges();
+                _repository.SubmitChanges();
                 SetTempOkMessage("Organization {0} was successfully updated", model.Organization.Name);
                 return RedirectToAction("list", new { parent = model.Organization.ParentId == 0 ? model.Organization.Id : model.Organization.ParentId });
             } catch(Exception ex)
@@ -126,7 +132,7 @@ namespace OnBalance.Controllers
         public ActionResult MoveTo(int id)
         {
             InfoFormat("User #{0} is going to move Organization #{1}", User.Identity.Name, id);
-            Organization model = new OrganizationRepository().Items.SingleOrDefault(x => x.Id == id);
+            Organization model = _repository.Organizations.SingleOrDefault(x => x.Id == id);
             if(model == null)
             {
                 WarnFormat("Non-existing organization #{0}!", id);
@@ -142,8 +148,7 @@ namespace OnBalance.Controllers
         [HttpPost]
         public ActionResult MoveTo(int id, int newParentId)
         {
-            OrganizationRepository db = new OrganizationRepository();
-            Organization model = db.Items.SingleOrDefault(x => x.Id == id);
+            Organization model = _repository.Organizations.SingleOrDefault(x => x.Id == id);
             if(model == null)
             {
                 SetTempErrorMessage("Could not move non-existing organization #{0}!", id);
@@ -153,10 +158,10 @@ namespace OnBalance.Controllers
             try
             {
                 // Select new parent from companies (where parent_id == 0)
-                Organization parent = db.Companies.Single(x => x.Id == newParentId);
+                Organization parent = _repository.Companies.Single(x => x.Id == newParentId);
                 UpdateModel(model);
                 model.ParentId = parent.Id;
-                db.SubmitChanges();
+                _repository.SubmitChanges();
 
                 SetTempOkMessage("Organization {0} was moved under company {1}", model.Name, parent.Name);
                 return RedirectToAction("list");

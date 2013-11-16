@@ -5,18 +5,22 @@ using System.Web;
 using System.Web.Mvc;
 using System.Net;
 using System.Collections.Specialized;
-using OnBalance.Models;
 using System.Text;
 using System.Text.RegularExpressions;
 using OnBalance.Helpers;
 using OnBalance.ViewModels.Balance;
 using OnBalance.ViewModels.Products;
+using OnBalance.Domain.Entities;
+using OnBalance.Domain.Abstract;
 
 namespace OnBalance.Controllers
 {
 
     public class BalanceController : BaseController
     {
+        private IOrganizationRepository _organizationRepository = null;
+        private IProductRepository _productRepository = null;
+
         //
         // GET: /balance/get
 
@@ -32,12 +36,9 @@ namespace OnBalance.Controllers
                 InfoFormat("  Applying filter by category ID: {0}", categoryId);
             }
 
-            ProductRepository db = new ProductRepository();
-            OrganizationRepository dbPos = new OrganizationRepository();
-
             StringBuilder sbMain = new StringBuilder();
             StringBuilder sb = new StringBuilder();
-            var products = db.Items
+            var products = _productRepository.Products
                 .Where(x => x.PosId == posId && x.StatusId == (byte)Status.Approved);
             if( categoryId > 0 )
             {
@@ -68,14 +69,13 @@ namespace OnBalance.Controllers
         public JsonpResult GetSchemaOfOrganizationsList(int id)
         {
             List<OrganizationSchemaViewModel> pos = new List<OrganizationSchemaViewModel>();
-            var dbProduct = new ProductRepository();
-            var orgs = new OrganizationRepository().Items
+            var orgs = _organizationRepository.Organizations
                 .Where(x => x.Id.Equals(id) || x.ParentId.Equals(id) && x.StatusId == (byte)Status.Approved)
                 .ToList();
 
             foreach(var item in orgs)
             {
-                var categories = dbProduct.Categories.Where(x => x.OrganizationId == item.Id);
+                var categories = _productRepository.Categories.Where(x => x.OrganizationId == item.Id);
                 List<CategoryStructureViewModel> cs = new List<CategoryStructureViewModel>();
                 foreach (var c in categories)
 	            {
@@ -83,7 +83,7 @@ namespace OnBalance.Controllers
                     {
                         Id = c.Id,
                         Name = c.Name,
-                        Sizes = dbProduct.GetAvailableSizes(c.Id) ?? new string[]{ "" }
+                        Sizes = _productRepository.GetAvailableSizes(c.Id) ?? new string[] { "" }
                     });
 	            }
                 var orgVm = new OrganizationSchemaViewModel
@@ -114,11 +114,9 @@ namespace OnBalance.Controllers
             throw new Exception("Use GetSchemaOfOrganizationsList method instead!");
 
             InfoFormat("Preparing JSON schema for main page (shops, categories). POS ID is {0}", id);
-            OrganizationRepository dbOrg = new OrganizationRepository();
             OrganizationSchemaViewModel orgVm = new OrganizationSchemaViewModel();
-            ProductRepository dbProduct = new ProductRepository();
 
-            Organization pos = dbOrg.GetById(id);
+            Organization pos = _organizationRepository.GetById(id);
             orgVm.Id = pos.Id;
             orgVm.Name = pos.Name;
 
@@ -127,13 +125,13 @@ namespace OnBalance.Controllers
             orgVm.ReceivedAt = Common.GetTimestamp(DateTime.Now);
 
             var categories = new List<CategoryStructureViewModel>();
-            foreach(var c in dbProduct.Categories.Where(x => x.OrganizationId == pos.Id))
+            foreach(var c in _productRepository.Categories.Where(x => x.OrganizationId == pos.Id))
             {
                 categories.Add(new CategoryStructureViewModel
                 {
                     Id = c.Id,
                     Name = c.Name,
-                    Sizes = dbProduct.GetAvailableSizes(c.Id)
+                    Sizes = _productRepository.GetAvailableSizes(c.Id)
                 });
             }
             //int catId = 1000;
@@ -183,7 +181,7 @@ namespace OnBalance.Controllers
             List<OrganizationViewModel> shops = new List<OrganizationViewModel>();
             //var q = dbOrg.Items
             //    .Where(x => x.StatusId == (byte)Status.Approved && (x.Id == id || x.ParentId == id));
-            var q = dbOrg.GetByParentId(pos.ParentId);
+            var q = _organizationRepository.GetByParentId(pos.ParentId);
             InfoFormat("Organization which belong to organization #{0}", id);
             foreach(var item in q)
             {
@@ -210,9 +208,9 @@ namespace OnBalance.Controllers
         public ActionResult DoSyncFromPos()
         {
             int temp;
-            List<BalanceItem> list = new List<BalanceItem>();
+            List<OnBalance.Models.BalanceItem> list = new List<OnBalance.Models.BalanceItem>();
             StringBuilder sb = new StringBuilder();
-            BalanceItemRepository db = new BalanceItemRepository();
+            OnBalance.Models.BalanceItemRepository db = new OnBalance.Models.BalanceItemRepository();
             try
             {
                 string getBalanceUrl = "http://gjsportland.com/index.php/lt/balance/get?_token=12345";
@@ -228,7 +226,7 @@ namespace OnBalance.Controllers
                 // List all products in JSON
                 while( m.Success )
                 {
-                    BalanceItem bi = new BalanceItem();
+                    OnBalance.Models.BalanceItem bi = new OnBalance.Models.BalanceItem();
                     string line = m.Groups[2].Value;
                     Match matchLine = regex.Match(line);
                     string uid = matchLine.Groups[2].Value;
@@ -285,7 +283,7 @@ namespace OnBalance.Controllers
         // GET: /balance/dosend
 
         //[HttpPost]
-        public ActionResult DoSend(BalanceItem[] items)
+        public ActionResult DoSend(OnBalance.Models.BalanceItem[] items)
         {
             try
             {
@@ -340,8 +338,8 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Confirm(int id)
         {
-            var db = new BalanceItemRepository();
-            var item = new BalanceItemRepository().Items.SingleOrDefault(x => x.Id == id);
+            var db = new OnBalance.Models.BalanceItemRepository();
+            var item = new OnBalance.Models.BalanceItemRepository().Items.SingleOrDefault(x => x.Id == id);
             if(item == null)
             {
                 return HttpNotFound();
@@ -355,8 +353,7 @@ namespace OnBalance.Controllers
         [HttpPost]
         public ActionResult Confirm(int id, string confirm)
         {
-            var dbProducts = new ProductRepository();
-            var dbBalanceItems = new BalanceItemRepository();
+            var dbBalanceItems = new OnBalance.Models.BalanceItemRepository();
             InfoFormat("Going to confirm updated product ID #{0} from POS", id);
             var item = dbBalanceItems.Items.SingleOrDefault(x => x.Id == id);
             if(item == null)
@@ -365,7 +362,7 @@ namespace OnBalance.Controllers
             }
 
             InfoFormat("Searching for product with code: [{0}]", item.InternalCode);
-            var product = dbProducts.Items.SingleOrDefault(x => x.InternalCode == item.InternalCode);
+            var product = _productRepository.Products.SingleOrDefault(x => x.InternalCode == item.InternalCode);
             if(product == null)
             {
                 return HttpNotFound();
@@ -377,7 +374,7 @@ namespace OnBalance.Controllers
             }
             product.Price = item.Price;
             InfoFormat("Going to save changes from POS to Online Balance System DB...");
-            dbProducts.Update(product);
+            _productRepository.Update(product);
 
             item.StatusId = (byte)Status.Completed;
             dbBalanceItems.Save(item);
@@ -391,7 +388,7 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return List(new OrganizationRepository().Items.FirstOrDefault().Id);
+            return List(_organizationRepository.Organizations.FirstOrDefault().Id);
         }
 
         //
@@ -401,16 +398,14 @@ namespace OnBalance.Controllers
         public ActionResult Edit(int id)
         {
             ProductsInPosViewModel pb = new ProductsInPosViewModel();
-            ProductRepository db = new ProductRepository();
-            OrganizationRepository dbPos = new OrganizationRepository();
 
             InfoFormat("Selecting products for POS #{0}", id);
-            pb.Pos = dbPos.GetById(id);
-            pb.Products = db.Items
+            pb.Pos = _organizationRepository.GetById(id);
+            pb.Products = _productRepository.Products
                 .Where(x => x.PosId == id && x.StatusId == (byte)Status.Approved)
                 .Take(100)
                 .ToList();
-            pb.Organizations = dbPos.Items.ToList();
+            pb.Organizations = _organizationRepository.Organizations.ToList();
             return View(pb);
         }
 
@@ -420,7 +415,7 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult List(int id)
         {
-            BalanceItemRepository db = new BalanceItemRepository();
+            OnBalance.Models.BalanceItemRepository db = new OnBalance.Models.BalanceItemRepository();
             int currentPage = 0;
             int.TryParse(Request["p"], out currentPage);
             
@@ -437,7 +432,7 @@ namespace OnBalance.Controllers
         public ActionResult GetProductInfo(string id)
         {
             Status s = Status.Approved;
-            Product p = new ProductRepository().GetByUid(id);
+            Product p = _productRepository.GetByUid(id);
             if( p == null )
             {
                 return Json(new { Status = Status.Unknown }, JsonRequestBehavior.AllowGet);
@@ -462,7 +457,7 @@ namespace OnBalance.Controllers
 
         public int Total { get { return Results == null ? 0 : Results.Length; } }
 
-        public BalanceItem[] Results { get; set; }
+        public OnBalance.Models.BalanceItem[] Results { get; set; }
     }
 
 }

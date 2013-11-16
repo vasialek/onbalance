@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using OnBalance.Models;
+using OnBalance.Domain.Entities;
 
 namespace OnBalance.ViewModels
 {
@@ -12,7 +12,7 @@ namespace OnBalance.ViewModels
     public class BaseApiResponse
     {
 
-        protected ApiResponseCodes _responseCode;
+        protected OnBalance.Models.ApiResponseCodes _responseCode;
 
         /// <summary>
         /// Like HTTP response code - 200, 404, etc..
@@ -22,16 +22,16 @@ namespace OnBalance.ViewModels
         public string message { get; set; }
 
         public BaseApiResponse()
-            : this(ApiResponseCodes.Ok)
+            : this(OnBalance.Models.ApiResponseCodes.Ok)
         {
         }
 
-        public BaseApiResponse(ApiResponseCodes responseCode)
+        public BaseApiResponse(OnBalance.Models.ApiResponseCodes responseCode)
         {
             SetResponseCode(responseCode);
         }
 
-        public void SetResponseCode(ApiResponseCodes responseCode)
+        public void SetResponseCode(OnBalance.Models.ApiResponseCodes responseCode)
         {
             _responseCode = responseCode;
             message = "";
