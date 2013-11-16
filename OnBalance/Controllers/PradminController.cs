@@ -72,12 +72,8 @@ namespace OnBalance.Controllers
             var model = new PosCategoriesListViewModel();
             var db = new ProductRepository();
             model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
-            model.Categories = db.Categories.Where(x => x.OrganizationId == model.Organization.Id).ToList();
-            //model.Categories = (from c in db.Items
-            //                  where c.PosId == id
-            //                  select c.Category)
-            //                  .Distinct()
-            //                  .ToList();
+            throw new NotImplementedException("Need to Ninject CategoryRepository!");
+            //model.Categories = db.Categories.Where(x => x.OrganizationId == model.Organization.Id).ToList();
             return View(model);
         }
 

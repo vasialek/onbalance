@@ -5,33 +5,47 @@ using System.Web;
 using System.Web.Mvc;
 using OnBalance.Models;
 using OnBalance.ViewModels.Categories;
+using OnBalance.Domain.Abstract;
 
 namespace OnBalance.Controllers
 {
     public class CategoryController : BaseController
     {
+        private ICategoryRepository _repository = null;
+
+        public int PageSize { get; set; }
+
+        public CategoryController(ICategoryRepository repository)
+        {
+            _repository = repository;
+            PageSize = 30;
+        }
+
         //
         // GET: /category/
 
         public ActionResult Index()
         {
-            var db = new ProductRepository();
-            return View("List", Layout, db.Categories);
+            var model = new PosCategoriesListViewModel();
+            model.Organization = new Organization { Name = "ALL" };
+            model.Categories = _repository.Categories.ToList();
+            //var db = new ProductRepository();
+            return View("List", Layout, model);
         }
 
-        public ActionResult List(int? id)
+        public ViewResult List(int? id)
         {
-            var db = new ProductRepository();
             var model = new PosCategoriesListViewModel();
 
             if(id.HasValue && id.Value > 0)
             {
-                model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
-                model.Categories = new CategoryRepository().GetCategoriesBy(model.Organization.Id, 0, 0, 100).ToList();
+                throw new NotImplementedException("");
+                //model.Organization = new OrganizationRepository().Items.Single(x => x.Id == id);
+                //model.Categories = _repository.GetCategoriesBy(model.Organization.Id, 0, 0, 100).ToList();
             } else
             {
                 model.Organization = new Organization { Name = "ALL" };
-                model.Categories = db.Categories.OrderBy(x => x.Name).ToList();
+                model.Categories = _repository.Categories.OrderBy(x => x.Name).ToList();
             }
             return View("List", Layout, model);
         }

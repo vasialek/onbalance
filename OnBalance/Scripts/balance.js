@@ -750,10 +750,35 @@ function createApplicationMenu(oSchema)
 
 }
 
+var BalanceTopMenu = {
+
+    _listOfPos: [],
+    _menuItems: null,
+
+    setPos: function(listOfPos, doNotRender)
+    {
+        this._listOfPos = listOfPos;
+        if(doNotRender !== false)
+        {
+            this.renderMenu();
+        }
+    },
+
+    renderMenu: function()
+    {
+        var menu = new YAHOO.widget.MenuBar("mymenubar", {
+            itemdata: this._menuItems
+        });
+        menu.render(document.body);
+    }
+
+};
+
 var Balance = {
 
     _pos: {id: -1, name: ""},
     _categories: [],
+    _listOfPos: [],
 
     init: function(posId, posName)
     {
@@ -777,24 +802,21 @@ var Balance = {
         this._log(oParsedResponse);
 
 //        YAHOO.OnBalance.organizations = [];
-        _categories = [];
+        listOfPos = [];
         for(var i = 0; i < oParsedResponse.results.length; i++)
         {
             for(var j = 0; j < oParsedResponse.results[i].Categories.length; j++)
             {
-                _categories[categories.length] = {
+                listOfPos[categories.length] = {
                     id: oParsedResponse.results[i].Categories[j].Id,
                     name: oParsedResponse.results[i].Categories[j].Name,
                     sizes: oParsedResponse.results[i].Categories[j].Sizes
                 };
             }
-//
-//            YAHOO.OnBalance.organizations[i] = {
-//                Id: oParsedResponse.results[i].Id,
-//                Name: oParsedResponse.results[i].Name,
-//                Categories: categories
-//            };
         }
+
+        this._log("Got " + listOfPos.length + " POS, displaying in menu");
+        BalanceTopMenu.setPos(listOfPos, true);
     },
 
     _log: function(msg)
@@ -808,13 +830,15 @@ var Balance = {
 
 var BalanceTransport = {
     _baseUrl: "http://localhost:52293/",
+    //_baseUrl: "http://localhost:52293/api/v1/",
 
     loadCategoriesForPos: function(posId, successCallback)
     {
         var ds = new YAHOO.util.ScriptNodeDataSource(this._baseUrl + "balance/getschemaoforganizationslist/" + posId);
+        //var ds = new YAHOO.util.ScriptNodeDataSource(this._baseUrl + "pos/getschemaoforganizationslist/" + posId);
         ds.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
         ds.responseSchema = {
-            resultsList: "Results"
+            resultsList: "listOfPos"
         }
         ds.sendRequest("?", successCallback);
     }

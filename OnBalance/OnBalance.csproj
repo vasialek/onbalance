@@ -40,6 +40,12 @@
     <Reference Include="log4net">
       <HintPath>..\..\eSPIS\eSPIS\Lib\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.1.1309.1617\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>D:\install\Ninject-3.0.0.15-release-net-3.5\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -92,6 +98,7 @@
     <Compile Include="Helpers\AvHtmlHelper.cs" />
     <Compile Include="Import\ImportLgf.cs" />
     <Compile Include="Import\IPosImport.cs" />
+    <Compile Include="Infrastructure\NinjectControllerFactory.cs" />
     <Compile Include="Models\ApiRequestParameters.cs" />
     <Compile Include="Models\ApiResponseCodes.cs" />
     <Compile Include="Models\BalanceItem.cs" />
@@ -332,6 +339,12 @@
       <DependentUpon>ObLog.dbml</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OnBalance.Domain\OnBalance.Domain.csproj">
+      <Project>{2569C3E0-A81E-4395-BD68-931AF55C37B9}</Project>
+      <Name>OnBalance.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -348,7 +361,7 @@
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
+          <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>52293</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>

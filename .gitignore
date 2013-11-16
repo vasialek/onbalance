@@ -11,10 +11,23 @@ OnBalance/logs/
 OnBalance/ConnectionString.config
 *.sln
 *.bak
+*.xml
+*.nunit
 OnBalance/test*.*
 OnBalance/log4net.xml
 OnBalance/OnBalance.csproj.user
 OnBalance/packages.config
 
+OnBalance.Domain/bin/
+OnBalance.Domain/bin/Debug/
+OnBalance.Domain/bin/Release/
+OnBalance.Domain/obj/
+OnBalance.Domain/packages.xml
+
+OnBalance.UnitTests/bin/
+OnBalance.UnitTests/bin/Debug/
+OnBalance.UnitTests/bin/Release/
+OnBalance.UnitTests/obj/
+OnBalance.UnitTest/packages.xml
 
 
