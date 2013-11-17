@@ -24,22 +24,28 @@ namespace OnBalance.Controllers
 
         public ActionResult Index()
         {
-            return List();
+            return List(null);
         }
 
         //
         // GET: /organization/list
 
-        public ActionResult List(/*int id*/)
+        public ViewResult List(int? id)
         {
             SetTempMessagesToViewBag();
-            var companies = _repository.Companies;
-            int parentId = 0;
-            if(int.TryParse(Request["parent"], out parentId))
+            var companies = new List<Organization>();
+            int parentId = id.HasValue ? id.Value : 0;
+
+            if(parentId > 0)
+            {
+                companies = _repository.GetByParentId(parentId, true).ToList();
+            } else
             {
                 companies = _repository.Organizations
-                    .Where(x => x.ParentId == parentId || x.Id == parentId)
-                    .OrderBy(x => x.ParentId);
+                    .Where(x => x.StatusId.Equals((byte)Status.Approved))
+                    .OrderBy(x => x.ParentId)
+                    .OrderBy(x => x.Name)
+                    .ToList();
             }
             //if( id.HasValue )
             //{

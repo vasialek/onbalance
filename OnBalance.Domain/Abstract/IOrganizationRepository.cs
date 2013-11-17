@@ -13,16 +13,16 @@ namespace OnBalance.Domain.Abstract
 
         IQueryable<Organization> Companies { get; }
 
-        Organization GetById(int p);
+        Organization GetById(int organizationId);
+
+        IList<Organization> GetByParentId(int parentOrganizationId);
+
+        IList<Organization> GetByParentId(int parentOrganizationId, bool includeParent);
+
+        IList<MembershipUser> GetUsersInOrganization(int organizationId);
 
         void Save(Organization model);
 
-        IList<Organization> GetByParentId(int p);
-
-        IList<MembershipUser> GetUsersInOrganization(int p);
-
         void SubmitChanges();
-
-        IList<Organization> GetByParentId(int p, bool p_2);
     }
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OnBalance.Models.Organization>
+﻿@model IEnumerable<OnBalance.Domain.Entities.Organization>
 
 @{
     ViewBag.Title = "List";
@@ -56,7 +56,7 @@
                 @Html.Encode(item.ParentId)
             </td>
             <td>
-                @Html.ActionLink(item.Name, "list", new { parent = item.Id })
+                @Html.ActionLink(item.Name, "list", new { id = item.Id })
             </td>
             <td>
                 @Html.Encode(String.Format("{0:g}", item.CreatedAt))
@@ -65,8 +65,8 @@
                 @Html.Encode(String.Format("{0:g}", item.UpdatedAt))
             </td>
             <td>
-                <a href="Url.Action("edit", new { id = item.Id })" title="Edit organization" cl__ass="btn btn-mini"><i class="icon-edit"></i></a>
-                <a href="Url.Action("moveto", new { id = item.Id })" title="Move POS to..." cl__ass="btn btn-mini"><i class="icon-arrow-right"></i></a>
+                <a href="@Url.Action("edit", new { id = item.Id })" title="Edit organization" cl__ass="btn btn-mini"><i class="icon-edit"></i></a>
+                <a href="@Url.Action("moveto", new { id = item.Id })" title="Move POS to..." cl__ass="btn btn-mini"><i class="icon-arrow-right"></i></a>
                 @*@Html.ImageLink("/images/edit.png", "Edit organization", Url.Action("edit", new { id = item.Id }), new { width = 16, height = 16 }, null)*@
                 @*@Html.ImageLink("/images/posmoveto.png", "Move POS to...", Url.Action("moveto", new { id = item.Id }), new { width = 16, height = 16 }, null)*@
             </td>

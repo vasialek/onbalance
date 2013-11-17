@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Categories\CategoriesTest.cs" />
+    <Compile Include="Organizations\TestOrganizationRepository.cs" />
+    <Compile Include="Organizations\OrganizationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

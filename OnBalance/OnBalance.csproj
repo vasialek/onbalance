@@ -82,7 +82,6 @@
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Controllers\ParamController.cs" />
-    <Compile Include="Controllers\PosController.cs" />
     <Compile Include="Controllers\PradminController.cs" />
     <Compile Include="Controllers\SizeController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -117,8 +116,6 @@
       <DependentUpon>ObLog.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\ObLogRepository.cs" />
-    <Compile Include="Models\OrganizationConfiguration.cs" />
-    <Compile Include="Models\OrganizationConfigurationRepository.cs" />
     <Compile Include="Models\ParamModel.cs" />
     <Compile Include="Models\ParamRepository.cs" />
     <Compile Include="Models\Product.cs" />

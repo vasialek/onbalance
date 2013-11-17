@@ -1,4 +1,4 @@
-﻿@model OnBalance.Models.Organization
+﻿@model OnBalance.Domain.Entities.Organization
 
 @{
     ViewBag.Title = "MoveTo";
@@ -8,7 +8,7 @@
 <h2>Move @Model.Name to other company</h2>
     @using( Html.BeginForm() )
     {
-        foreach( var c in new OnBalance.Models.OrganizationRepository().Companies.Where(x => x.Id != Model.Id) )
+@*        foreach( var c in new OnBalance.Models.OrganizationRepository().Companies.Where(x => x.Id != Model.Id) )
         {
         
             <div>
@@ -17,6 +17,6 @@
             </div>
         
         }
-        <input type="submit" value="Move" />
+*@        <input type="submit" value="Move" />
         @Html.ActionLink("Back to list of companies", "list")
     }

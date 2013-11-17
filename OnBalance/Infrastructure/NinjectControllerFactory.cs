@@ -51,14 +51,16 @@ namespace OnBalance.Infrastructure
             _ninjectKernel.Bind<ICategoryRepository>().To<EfCategoryRepository>();
 
             // Organizations
-            //_ninjectKernel.Bind<IOrganizationRepository>().To<EfOrganizationRepository>();
-            var organizationRepositoryMock = new Mock<IOrganizationRepository>();
-            organizationRepositoryMock.Setup(x => x.Organizations)
-                .Returns(new List<Organization> {
-                    new Organization { Id = 1, Name = "first", ParentId = 0, StatusId = (byte)Status.Approved, CreatedAt = DateTime.Now }
-                }.AsQueryable());
-            _ninjectKernel.Bind<IOrganizationRepository>()
-                .ToConstant(organizationRepositoryMock.Object);
+            _ninjectKernel.Bind<IOrganizationRepository>().To<EfOrganizationRepository>();
+            //var organizationRepositoryMock = new Mock<IOrganizationRepository>();
+            //organizationRepositoryMock.Setup(x => x.Organizations)
+            //    .Returns(new List<Organization> {
+            //        new Organization { Id = 1, Name = "first", ParentId = 0, StatusId = (byte)Status.Approved, CreatedAt = DateTime.Now },
+            //        new Organization { Id = 2, Name = "second", ParentId = 0, StatusId = (byte)Status.Approved, CreatedAt = DateTime.Now },
+            //        new Organization { Id = 1, Name = "first subpos1", ParentId = 1, StatusId = (byte)Status.Approved, CreatedAt = DateTime.Now }
+            //    }.AsQueryable());
+            //_ninjectKernel.Bind<IOrganizationRepository>()
+            //    .ToConstant(organizationRepositoryMock.Object);
         }
 
     }

@@ -5,6 +5,7 @@ using System.Text;
 using OnBalance.Domain.Abstract;
 using OnBalance.Domain.Entities;
 using System.Web.Security;
+using OnBalance.Domain.Primitives;
 
 namespace OnBalance.Domain.Concrete
 {
@@ -29,14 +30,26 @@ namespace OnBalance.Domain.Concrete
             get { return Organizations; }
         }
 
-        public void Save(Organization model)
-        {
-            
-        }
-
         public IList<Organization> GetByParentId(int parentOrganizationId)
         {
-            return Organizations.ToList();
+            return GetByParentId(parentOrganizationId, false);
+        }
+
+        public IList<Organization> GetByParentId(int parentOrganizationId, bool includeParent)
+        {
+            // Returns all items which belongs to parent and parent itself
+            if(includeParent)
+            {
+                return Organizations
+                    .Where(x => x.StatusId == (byte)Status.Approved)
+                    .Where(x => x.ParentId.Equals(parentOrganizationId) || x.Id.Equals(parentOrganizationId))
+                    .ToList();
+            }
+
+            return Organizations
+                .Where(x => x.StatusId == (byte)Status.Approved)
+                .Where(x => x.ParentId.Equals(parentOrganizationId))
+                .ToList();
         }
 
         public IList<MembershipUser> GetUsersInOrganization(int organizationId)
@@ -44,15 +57,15 @@ namespace OnBalance.Domain.Concrete
             return null;
         }
 
+        public void Save(Organization model)
+        {
+
+        }
+
         public void SubmitChanges()
         {
             
         }
 
-
-        public IList<Organization> GetByParentId(int p, bool p_2)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

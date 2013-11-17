@@ -15,6 +15,13 @@ namespace OnBalance.Controllers
 {
     public class UserController : BaseController
     {
+        private IOrganizationRepository _organizationRepository = null;
+
+        public UserController(IOrganizationRepository organizationRepository)
+        {
+            _organizationRepository = organizationRepository;
+        }
+
         //
         // GET: /user/
 
@@ -123,9 +130,8 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Dashboard()
         {
-            IOrganizationRepository dbOrg = null;
             var dashboard = new DashboardViewModel();
-            dashboard.Shops = dbOrg.Organizations.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
+            dashboard.Shops = _organizationRepository.Organizations.ToList(); //.Where(x => x.UserId == User.Identity.Name).ToList();
             dashboard.Imports = new List<Task>()
             {
                 new Task{ Type = Task.TypeId.Import, Status = Status.Pending }
@@ -137,7 +143,7 @@ namespace OnBalance.Controllers
                 .OrderByDescending(x => x.CreationDate)
                 .Take(3)
                 .ToList();
-            dashboard.LastPos = dbOrg.Organizations
+            dashboard.LastPos = _organizationRepository.Organizations
                 .OrderByDescending(x => x.CreatedAt)
                 .Take(3)
                 .ToList();

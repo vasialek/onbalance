@@ -38,9 +38,7 @@ namespace OnBalance.ViewModels.User
 
         public void Init()
         {
-            throw new NotImplementedException("Ninject OrganizationRepository");
-            //var dbOrg = new OrganizationRepository();
-            //Shops = dbOrg.Companies.ToList();
+            Shops = new List<Organization>();
         }
     }
 }
