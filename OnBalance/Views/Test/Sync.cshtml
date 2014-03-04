@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "Sync";
+}
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+<h2>Sync</h2>
+
+<button id="SyncButton">Sync from POS</button>
+
+<div id="SyncPopupDiv" style="display: none;">
+    <div id="DeleteLoading" style="display: none;"><img src="images/ajax-loading.gif" alt="Loading" /></div>
+    <div id="SyncContent">...</div>
+</div>
+
+<script type="text/javascript">
+
+    jQuery(function () {
+        Sync.init();
+        $("#SyncButton")
+            .button()
+            .click(function () {
+                $("#SyncPopupDiv").dialog("open");
+            });
+    });
+
+    function console_log(msg) {
+        console.log(msg);
+    }
+
+    var Sync = {
+        syncDialog: null,
+        loadingDiv: null,
+        contentDiv: null,
+
+        init: function () {
+            this.syncDialog = $("#SyncPopupDiv");
+            this.loadingDiv = $("#DeleteLoading");
+            this.contentDiv = $("#SyncContent");
+            this._initDialog();
+        },
+
+        _initDialog: function () {
+            var self = this;
+            this.syncDialog.dialog({
+                autoOpen: false,
+                width: 700,
+                height: 450,
+                title: "Synchronization window",
+                buttons: [
+                    {
+                        text: "Confirm",
+                        click: function () {
+                            console_log("Confirmed, going to sync all items from POS...");
+                            $(this).dialog("close");
+                        }
+                    }
+                ],
+                open: function () {
+                    console_log("Opening Sync dialog...");
+                    self._loadContent();
+                },
+                close: function () {
+                    console_log("closing Sync dialog");
+                    self.loadingDiv.hide();
+                }
+            });
+
+        },
+
+        _loadContent: function () {
+            console_log("Loading content to sync...");
+            var self = this;
+            this.loadingDiv.show();
+            this.contentDiv.html("");
+            $.ajax({
+                url: "/Test/GetSync/",
+                success: function (data, status, xhr) {
+                    console_log("Sync content is loaded");
+                    self.contentDiv.html(data);
+                    self.contentDiv.show();
+                    self.loadingDiv.hide();
+                },
+                error: function (status, xhr) {
+                    console_log("Failed to load Sync");
+                }
+            });
+        }
+    };
+
+</script>

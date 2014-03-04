@@ -1,0 +1,36 @@
+﻿@model IEnumerable<OnBalance.Models.BalanceItem>
+
+<table class="table table-bordered table-condensed table-striped">
+    <tr>
+        <th>
+            UID
+        </th>
+        <th>
+            Product code/name
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Price (release)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.InternalCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PriceOfRelease)
+        </td>
+    </tr>
+}
+
+</table>
