@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 
 namespace OnBalance.Controllers
 {
+
     public class TestController : BaseController
     {
 
@@ -48,6 +49,30 @@ namespace OnBalance.Controllers
             //return View(bi);
         }
 
+        public ActionResult ChangeQuantity(int id)
+        {
+            bool status = false;
+            string message = "";
+            int quantity = 0;
+
+            try
+            {
+                int dQnt = int.Parse(Request["dQnt"]);
+                quantity += dQnt;
+                status = true;
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
+
+            return Json(new { 
+                Staus = status,
+                Message = message,
+                Quantity = quantity
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         //
         // POST: /test/index
 
@@ -55,6 +80,11 @@ namespace OnBalance.Controllers
         public ActionResult Index(BalanceItem model)
         {
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Grid()
+        {
+            return View();
         }
 
         public ActionResult Sync()
