@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using OnBalance.Domain.Primitives;
+using System.ComponentModel.DataAnnotations;
 
 namespace OnBalance.Domain.Entities
 {
@@ -27,6 +29,19 @@ namespace OnBalance.Domain.Entities
 
         public int CategoryId { get; set; }
 
+        public Organization Pos { get { return new Organization(); } }
+
+        public string PhotosUri { get { return ""; } }
+
+        public string StatusName
+        {
+            get
+            {
+                IQueryable<Status> statuses = Enum.GetValues(typeof(Status)).AsQueryable().Cast<Status>();
+                string name = statuses.SingleOrDefault(x => (int)x == StatusId).ToString();
+                return name ?? StatusId.ToString();
+            }
+        }
 
         public IEnumerable<KeyValuePair<object, object>> GetQuantityForAllSizes()
         {

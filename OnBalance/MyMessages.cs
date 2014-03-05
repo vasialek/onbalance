@@ -34,6 +34,8 @@ namespace OnBalance
         public class Balancer
         {
             public const string NoPendingLocalChanges = "No pending changes to be send to e-shop";
+            public const string RemotePendingChanges = "Remote changes";
+            public const string LocalPendingChanges = "Local changes";
         }
 
         public class Categories

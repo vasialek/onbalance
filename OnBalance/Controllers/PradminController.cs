@@ -23,6 +23,21 @@ namespace OnBalance.Controllers
         private IOrganizationRepository _organizationRepository = null;
         private IProductRepository _productRepository = null;
 
+        public PradminController(IProductRepository productRepository, IOrganizationRepository organisationRepository)
+        {
+            if(productRepository == null)
+            {
+                throw new ArgumentNullException("productRepository");
+            }
+            if(organisationRepository == null)
+            {
+                throw new ArgumentNullException("organisationRepository");
+            }
+
+            _productRepository = productRepository;
+            _organizationRepository = organisationRepository;
+        }
+
         //
         // GET: /pradmin/
 

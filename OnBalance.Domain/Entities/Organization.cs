@@ -28,7 +28,13 @@ namespace OnBalance.Domain.Entities
         public OrganizationConfiguration Configuration { get; set; }
 
         [NotMapped]
-        public IList<Organization> Children { get; set; }
+        public IList<Organization> Children
+        {
+            get
+            {
+                return new List<Organization>();
+            }
+        }
 
     }
 }

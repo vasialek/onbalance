@@ -4,7 +4,7 @@
     Layout = null;
 
     Html.ResourceManager()
-        .AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.jQuery, "1.8.1", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Debug, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Microsoft)
+        //.AddJsLibrary(OnBalance.Helpers.HtmlResourcesAggregator.Libraries.jQuery, "1.8.1", OnBalance.Helpers.HtmlResourcesAggregator.ScriptFormats.Debug, OnBalance.Helpers.HtmlResourcesAggregator.Cdns.Google)
         .AddJsFile("~/bootstrap/js/bootstrap.js")
         .AddJsFile("~/scripts/product.js")
         .AddCssFile("~/css/admin.css");
@@ -20,6 +20,10 @@
         }
 
     <div class="container-fluid">
+        <div class="btn-group">
+            <button id="RemoteChangesButton" class="btn btn-mini">@OnBalance.MyMessages.Balancer.RemotePendingChanges</button>
+            <button id="LocalChangesButton" class="btn btn-mini">@OnBalance.MyMessages.Balancer.LocalPendingChanges</button>
+        </div>
     <table class="table table-hover table-bordered table-condensed table-striped">
         <caption>Products of @Model.Pos.Name</caption>
         <tbody>
@@ -41,7 +45,7 @@
                     }
                 </td>
                 <td>
-                    @Html.Display(item.StatusName, new { @class = item.StatusCssStyle })
+                    @Html.Display(item.StatusName, new { @class = item.StatusId == (int)OnBalance.Status.Approved ? "label-success" : "label-inverse" })
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.InternalCode)
@@ -62,7 +66,7 @@
                 
                 </td>
             </tr>
-            <tr>
+            @*<tr>
                 <td colspan="7">
                     @if(item.Category != null)
                     {
@@ -70,7 +74,7 @@
                     }
                     @Html.DisplayFor(x => item.Details, "ProductDetail")
                 </td>
-            </tr>
+            </tr>*@
         }
         </tbody>
     </table>
@@ -78,8 +82,96 @@
 
 </div>
 
+<div id="SyncPopupDiv" style="display: none;">
+    <div id="DeleteLoading" style="display: none;"><img src="@Url.Content("~/images/loader.gif")" alt="Loading" /></div>
+    <div id="SyncContent">...</div>
+</div>
+
+
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
 <script type="text/javascript">
-    window.onload = function () {
-        Product.init();
+    var gBaseUrl = "/";
+
+    jQuery(function () {
+        //Product.init();
+        Sync.init();
+        $("#RemoteChangesButton")
+            .button()
+            .click(function () {
+                $("#SyncPopupDiv").dialog("open");
+            });
+
+    });
+
+    var Sync = {
+        syncDialog: null,
+        loadingDiv: null,
+        contentDiv: null,
+
+        init: function () {
+            console_log("Initializing Sync...");
+            this.syncDialog = $("#SyncPopupDiv");
+            this.loadingDiv = $("#DeleteLoading");
+            this.contentDiv = $("#SyncContent");
+            this._initDialog();
+        },
+
+        _initDialog: function () {
+            var self = this;
+            this.syncDialog.dialog({
+                autoOpen: false,
+                width: 700,
+                height: 450,
+                title: "Synchronization window",
+                buttons: [
+                    {
+                        text: "Confirm",
+                        click: function () {
+                            console_log("Confirmed, going to sync all items from POS...");
+                            $(this).dialog("close");
+                        }
+                    }
+                ],
+                open: function () {
+                    console_log("Opening Sync dialog...");
+                    self._loadContent();
+                },
+                close: function () {
+                    console_log("closing Sync dialog");
+                    self.loadingDiv.hide();
+                }
+            });
+
+        },
+
+        _loadContent: function () {
+            console_log("Loading content to sync...");
+            var self = this;
+            this.loadingDiv.show();
+            this.contentDiv.html("");
+            $.ajax({
+                url: gBaseUrl + "balance/getremotechanges/666/",
+                success: function (data, status, xhr) {
+                    console_log("Sync content is loaded");
+                    self.contentDiv.html(data);
+                    self.contentDiv.show();
+                    self.loadingDiv.hide();
+                },
+                error: function (status, xhr) {
+                    console_log("Failed to load Sync");
+                }
+            });
+        }
+    };
+
+    function console_log(msg) {
+        console.log(msg);
     }
+
 </script>
+
+

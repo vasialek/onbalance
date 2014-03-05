@@ -1,0 +1,55 @@
+﻿@model IEnumerable<OnBalance.Models.BalanceItem>
+
+<table class="table table-bordered table-condensed table-striped">
+    <tr>
+        <th>
+            UID
+        </th>
+        <th>
+            Product code/name
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Price (release)
+        </th>
+    </tr>
+
+@foreach(var item in Model)
+{
+    <tr>
+        <td>
+            <div style="width: 50px; font-size: xx-small; overflow: hidden;">@Html.DisplayFor(modelItem => item.InternalCode)</div>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PriceOfRelease)
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <div style="min-width: 300px; border: solid 1px darkgray;">
+                <div style="float: left; font-size: x-small; text-align: right; padding-right: 3px;">
+                    <strong>Size:</strong><br />
+                    Quantity:
+                </div>
+                @foreach(var kvp in item.QuantityForSizes)
+                {
+                    <div style="float: left; width: 30px; font-size: x-small; text-align: center;">
+                        <strong>@kvp.Key</strong><br />@kvp.Value
+                    </div>
+                }
+                <div style="clear: both;" />
+            </div>
+        </td>
+    </tr>
+}
+
+</table>
+

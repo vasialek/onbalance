@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using OnBalance.Domain.Entities;
+using OnBalance.Domain.Concrete;
 
 namespace OnBalance.ViewModels.User
 {
@@ -38,7 +39,8 @@ namespace OnBalance.ViewModels.User
 
         public void Init()
         {
-            Shops = new List<Organization>();
+            //Shops = new List<Organization>();
+            Shops = new EfOrganizationRepository().GetByParentId(500013).ToList();
         }
     }
 }

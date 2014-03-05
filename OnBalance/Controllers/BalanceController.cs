@@ -12,6 +12,7 @@ using OnBalance.ViewModels.Balance;
 using OnBalance.ViewModels.Products;
 using OnBalance.Domain.Entities;
 using OnBalance.Domain.Abstract;
+using Newtonsoft.Json;
 
 namespace OnBalance.Controllers
 {
@@ -203,6 +204,34 @@ namespace OnBalance.Controllers
         }
 
         //
+        // GET: /balance/getremotechanges/1234
+
+        public ActionResult GetRemoteChanges(int id)
+        {
+            try
+            {
+                string getBalanceUrl = "http://gjsportland.com/index.php/lt/balance/get?_token=12345";
+                InfoFormat("Going to download changes from POS: {0}", getBalanceUrl);
+                WebClient wc = new WebClient();
+                string resp = wc.DownloadString(getBalanceUrl);
+                DebugFormat("Changes: {0}", resp);
+
+                var exchanges = JsonConvert.DeserializeObject<List<ExchangeJson>>(resp);
+                var model = exchanges.Select(x => new OnBalance.Models.BalanceItem
+                {
+                    InternalCode = x.uid,
+                    ProductName = string.Concat(x.code, ". ", x.name),
+                    Price = x.pr / 100,
+                    QuantityForSizes = x.sizes
+                }).ToList();
+                return PartialView("", model);
+            } catch(Exception ex)
+            {
+                return Content(ex.Message);
+            }
+        }
+
+        //
         // GET: /balance/dosyncfrompos/1234
 
         public ActionResult DoSyncFromPos()
@@ -246,7 +275,7 @@ namespace OnBalance.Controllers
                         mSize = mSize.NextMatch();
                     }
 
-                    db.Save(bi);
+                    //db.Save(bi);
 
                     list.Add(bi);
                     m = m.NextMatch();
