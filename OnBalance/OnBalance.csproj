@@ -109,6 +109,7 @@
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BaseRepository.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\CategoryListItem.cs" />
     <Compile Include="Models\CategoryRepository.cs" />
     <Compile Include="Models\CategoryStructure.cs" />
     <Compile Include="Models\CategoryType.cs" />

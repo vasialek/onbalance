@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using OnBalance.Domain.Abstract;
 using OnBalance.Domain.Entities;
+using OnBalance.Domain.Primitives;
 
 namespace OnBalance.Domain.Concrete
 {
-    class EfProductRepository : IProductRepository
+    public class EfProductRepository : IProductRepository
     {
         private EfDbContext _dbContext = new EfDbContext();
 
@@ -42,7 +43,11 @@ namespace OnBalance.Domain.Concrete
 
         public IEnumerable<Product> GetLastInPos(int posId, int p, int p_2)
         {
-            throw new NotImplementedException();
+            return Products
+                .Where(x => x.PosId == posId && x.StatusId != (byte)Status.Deleted)
+                .OrderByDescending(x => x.Id)
+                .Skip(p)
+                .Take(p_2);
         }
 
 

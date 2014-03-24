@@ -30,5 +30,10 @@ namespace OnBalance.Domain.Entities
         
         //protected CategoryStructure[] _categoryStructure = null { get; set; }
 
+
+        public Category()
+        {
+
+        }
     }
 }

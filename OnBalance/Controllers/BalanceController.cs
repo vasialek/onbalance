@@ -433,6 +433,9 @@ namespace OnBalance.Controllers
             pb.Products = _productRepository.Products
                 .Where(x => x.PosId == id && x.StatusId == (byte)Status.Approved)
                 .Take(100)
+                .Select(x => new Models.Product {
+                    
+                })
                 .ToList();
             pb.Organizations = _organizationRepository.Organizations.ToList();
             return View(pb);

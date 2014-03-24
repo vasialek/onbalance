@@ -30,14 +30,15 @@ namespace OnBalance.Infrastructure
         private void AddBindings()
         {
             // Mock ProductRepository
-            Mock<IProductRepository> productMock = new Mock<IProductRepository>();
-            productMock.Setup(x => x.Products)
-                .Returns(new List<Product> {
-                    new Product { Id = 666001, CategoryId = 1, InternalCode = "internal_001", Name = "Beer", PosId = 1, Price = 10m, StatusId = (byte)Status.Approved, Uid = "uid_0001", UserId = "TestUser" },
-                    new Product { Id = 666002, CategoryId = 2, InternalCode = "internal_002", Name = "Cheese", PosId = 1, Price = 15m, StatusId = (byte)Status.Approved, Uid = "uid_0002", UserId = "TestUser" },
-                    new Product { Id = 666001, CategoryId = 1, InternalCode = "internal_003", Name = "Beer light", PosId = 1, Price = 5m, StatusId = (byte)Status.Approved, Uid = "uid_0003", UserId = "TestUser" }
-                }.AsQueryable());
-            _ninjectKernel.Bind<IProductRepository>().ToConstant(productMock.Object);
+            //Mock<IProductRepository> productMock = new Mock<IProductRepository>();
+            //productMock.Setup(x => x.Products)
+            //    .Returns(new List<Product> {
+            //        new Product { Id = 666001, CategoryId = 1, InternalCode = "internal_001", Name = "Beer", PosId = 1, Price = 10m, StatusId = (byte)Status.Approved, Uid = "uid_0001", UserId = "TestUser" },
+            //        new Product { Id = 666002, CategoryId = 2, InternalCode = "internal_002", Name = "Cheese", PosId = 1, Price = 15m, StatusId = (byte)Status.Approved, Uid = "uid_0002", UserId = "TestUser" },
+            //        new Product { Id = 666001, CategoryId = 1, InternalCode = "internal_003", Name = "Beer light", PosId = 1, Price = 5m, StatusId = (byte)Status.Approved, Uid = "uid_0003", UserId = "TestUser" }
+            //    }.AsQueryable());
+            //_ninjectKernel.Bind<IProductRepository>().ToConstant(productMock.Object);
+            _ninjectKernel.Bind<IProductRepository>().To<EfProductRepository>();
 
             // Mock CategoryRepository
             //var categoryMock = new Mock<ICategoryRepository>();

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using OnBalance.Domain.Entities;
 
 namespace OnBalance.ViewModels.Products
 {
@@ -11,19 +10,19 @@ namespace OnBalance.ViewModels.Products
         /// <summary>
         /// Shop we are listing
         /// </summary>
-        public Organization Pos { get; set; }
+        public OnBalance.Domain.Entities.Organization Pos { get; set; }
 
-        public IList<Product> Products { get; set; }
+        public IList<OnBalance.Models.Product> Products { get; set; }
 
-        public IList<Category> Categories { get; set; }
+        public IList<OnBalance.Models.CategoryListItem> Categories { get; set; }
 
-        public IList<Organization> Organizations { get; set; }
+        public IList<OnBalance.Domain.Entities.Organization> Organizations { get; set; }
 
         public ProductsInPosViewModel()
         {
-            Products = new List<Product>();
-            Categories = new List<Category>();
-            Organizations = new List<Organization>();
+            Products = new List<OnBalance.Models.Product>();
+            Categories = new List<OnBalance.Models.CategoryListItem>();
+            Organizations = new List<OnBalance.Domain.Entities.Organization>();
         }
     }
 }

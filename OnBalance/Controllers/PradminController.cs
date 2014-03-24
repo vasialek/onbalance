@@ -61,9 +61,20 @@ namespace OnBalance.Controllers
                 return HttpNotFound();
             }
 
-            productsList.Categories = _productRepository.Categories
-                .Where(x => x.OrganizationId == productsList.Pos.Id)
-                .ToList();
+            //productsList.Categories = _productRepository.Categories.Select(x => new CategoryListItem(null)).ToList();
+
+            //productsList.Categories = _productRepository.Categories
+            //    .Where(x => x.OrganizationId == productsList.Pos.Id)
+            //    .Select(x => new CategoryListItem(x))
+            //    //.Select(x => new OnBalance.Models.Category {
+            //    //    Id = x.Id,
+            //    //    Name = x.Name,
+            //    //    OrganizationId = x.OrganizationId,
+            //    //    ParentId = x.ParentId,
+            //    //    StatusId = x.StatusId,
+            //    //    CategoryTypeId = x.CategoryTypeId,
+            //    //})
+            //    .ToList();
 
             int perPage = 50;
             int page = 0;
@@ -76,6 +87,17 @@ namespace OnBalance.Controllers
             InfoFormat("Displaying list of products in POS #{0}, skipping {1}, taking {2} products", id, offset, perPage);
             productsList.Products = _productRepository.GetLastInPos(id, offset, perPage)
                 .OrderBy(x => x.Id)
+                .Select(x => new OnBalance.Models.Product{
+                    Id = x.Id,
+                    Name = x.Name,
+                    PosId = x.PosId,
+                    Price = x.Price,
+                    StatusId = x.StatusId,
+                    InternalCode = x.InternalCode,
+                    CategoryId = x.CategoryId,
+                    Uid = x.Uid,
+                    UserId = x.UserId,
+                })
                 .ToList();
             DebugFormat("  got {0} products...", productsList.Products.Count);
 
