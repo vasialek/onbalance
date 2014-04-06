@@ -9,7 +9,7 @@ namespace OnBalance.Models
     public class ProductRepository : BaseRepository
     {
 
-        protected ProductDataContext _dataContext = new ProductDataContext(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString());
+        //protected ProductDataContext _dataContext = new ProductDataContext(ConfigurationManager.ConnectionStrings["OnlineBalanceConnectionString"].ToString());
 
         /// <summary>
         /// Little cache for available parameter names
@@ -19,14 +19,19 @@ namespace OnBalance.Models
 
         public IQueryable<Product> Items
         {
-            get { return _dataContext.Products; }
+            get
+            {
+                throw new NotImplementedException("ProductDataContext is removed, use EF!"); 
+                //return _dataContext.Products;
+            }
         }
 
         public IList<Category> Categories
         {
             get
             {
-                return _dataContext.Categories.ToList();
+                throw new NotImplementedException("ProductDataContext is removed, use EF!");
+                //return _dataContext.Categories.ToList();
             }
         }
 
@@ -64,7 +69,8 @@ namespace OnBalance.Models
 
         public Category GetCategory(int id)
         {
-            return _dataContext.Categories.SingleOrDefault(x => x.Id == id);
+            throw new NotImplementedException("ProductDataContext is removed, use EF!");
+            //return _dataContext.Categories.SingleOrDefault(x => x.Id == id);
         }
 
         public void Update(Product model)
@@ -76,8 +82,9 @@ namespace OnBalance.Models
 
         public void Save(Product model)
         {
-            _dataContext.Products.InsertOnSubmit(model);
-            _dataContext.SubmitChanges();
+            throw new NotImplementedException("ProductDataContext is removed, use EF!");
+            //_dataContext.Products.InsertOnSubmit(model);
+            //_dataContext.SubmitChanges();
         }
 
         /// <summary>
@@ -87,16 +94,17 @@ namespace OnBalance.Models
         {
             if(model.Id < 1)
             {
-                _dataContext.Categories.InsertOnSubmit(model);
+                throw new NotImplementedException("ProductDataContext is removed, use EF!");
+                //_dataContext.Categories.InsertOnSubmit(model);
             }else
             {
-                Category entity = _dataContext.Categories.SingleOrDefault(x => x.Id.Equals(model.Id));
-                entity.Name = model.Name;
-                entity.OrganizationId = model.OrganizationId;
-                entity.ParentId = model.ParentId;
-                entity.StatusId = model.StatusId;
-                entity.CategoryTypeId = model.CategoryTypeId;
-                //_dataContext.Categories.Attach(model);
+                throw new NotImplementedException("ProductDataContext is removed, use EF!");
+                //Category entity = _dataContext.Categories.SingleOrDefault(x => x.Id.Equals(model.Id));
+                //entity.Name = model.Name;
+                //entity.OrganizationId = model.OrganizationId;
+                //entity.ParentId = model.ParentId;
+                //entity.StatusId = model.StatusId;
+                //entity.CategoryTypeId = model.CategoryTypeId;
             }
             _dataContext.SubmitChanges();
             return model;
@@ -125,9 +133,10 @@ namespace OnBalance.Models
 
         internal Product GetByUid(string uid)
         {
-            return _dataContext
-                .Products
-                .FirstOrDefault(x => x.Uid.Equals(uid));
+            throw new NotImplementedException("ProductDataContext is removed, use EF!");
+            //return _dataContext
+            //    .Products
+            //    .FirstOrDefault(x => x.Uid.Equals(uid));
         }
 
     }

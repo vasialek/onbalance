@@ -87,7 +87,8 @@ namespace OnBalance.Controllers
             InfoFormat("Displaying list of products in POS #{0}, skipping {1}, taking {2} products", id, offset, perPage);
             productsList.Products = _productRepository.GetLastInPos(id, offset, perPage)
                 .OrderBy(x => x.Id)
-                .Select(x => new OnBalance.Models.Product{
+                .Select(x => new OnBalance.Models.Product
+                {
                     Id = x.Id,
                     Name = x.Name,
                     PosId = x.PosId,
@@ -97,6 +98,7 @@ namespace OnBalance.Controllers
                     CategoryId = x.CategoryId,
                     Uid = x.Uid,
                     UserId = x.UserId,
+                    Pos = new Organization { Configuration = new OrganizationConfiguration() }
                 })
                 .ToList();
             DebugFormat("  got {0} products...", productsList.Products.Count);
@@ -257,10 +259,10 @@ namespace OnBalance.Controllers
             {
 
                 sb.Clear();
-                foreach(var kvp in p.GetQuantityForAllSizes())
-                {
-                    sb.AppendFormat(", '{0}': {1}", kvp.Key, kvp.Value);
-                }
+                //foreach(var kvp in p.GetQuantityForAllSizes())
+                //{
+                //    sb.AppendFormat(", '{0}': {1}", kvp.Key, kvp.Value);
+                //}
 
                 sbMain.AppendFormat("{{ name: \"{0}\", code: \"{1}\", price_minor: '{2}', amount: {3} {4} }},", p.Name, p.InternalCode, p.PosId, 0, sb.ToString());
             }
