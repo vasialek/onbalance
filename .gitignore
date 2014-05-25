@@ -17,6 +17,7 @@ OnBalance/test*.*
 OnBalance/log4net.xml
 OnBalance/OnBalance.csproj.user
 OnBalance/packages.config
+OnBalance.UnitTests/packages.config
 
 OnBalance.Domain/bin/
 OnBalance.Domain/bin/Debug/
@@ -30,4 +31,10 @@ OnBalance.UnitTests/bin/Release/
 OnBalance.UnitTests/obj/
 OnBalance.UnitTest/packages.xml
 
+OnBalance/UpgradeLog.htm
+OnBalance/Backup/
 
+
+OnBalance.Domain/packages.config
+OnBalance.UnitTests/packages.config
+UpgradeLog.htm
