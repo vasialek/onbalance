@@ -38,3 +38,6 @@ OnBalance/Backup/
 OnBalance.Domain/packages.config
 OnBalance.UnitTests/packages.config
 UpgradeLog.htm
+*.dll
+*.pdb
+*.cache
