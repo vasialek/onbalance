@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\Install\log4net-1.2.13\bin\net\4.0\release\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -53,10 +56,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ObLog4NetLogger.cs" />
+    <Compile Include="ParseGjFileTest.cs" />
     <Compile Include="ParseLineTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OnBalance.Core\OnBalance.Core.csproj">
+      <Project>{a2d7571e-436a-454a-b220-12cca35c6bb0}</Project>
+      <Name>OnBalance.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OnBalance.Parsers\OnBalance.Parsers.csproj">
       <Project>{99d90559-4b38-46d2-8a12-73253838f1bd}</Project>
       <Name>OnBalance.Parsers</Name>

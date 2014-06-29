@@ -41,3 +41,5 @@ UpgradeLog.htm
 *.dll
 *.pdb
 *.cache
+OnBalance.Parsers/obj/Debug/OnBalance.Parsers.csproj.FileListAbsolute.txt
+OnBalance.ParsersUnitTest/obj/Debug/OnBalance.ParsersUnitTest.csproj.FileListAbsolute.txt
