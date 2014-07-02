@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace OnBalance.Parsers.Parsers
 {
@@ -25,6 +26,9 @@ namespace OnBalance.Parsers.Parsers
             _logger = logger;
         }
 
+        private IList<BalanceParseError> _errors = null;
+        public IList<BalanceParseError> Errors { get { return _errors == null ? new List<BalanceParseError>() : _errors; } }
+
         public IList<ParsedItem> ParseFileContent(string[] lines)
         {
             if (lines == null || lines.Length < 1)
@@ -36,20 +40,30 @@ namespace OnBalance.Parsers.Parsers
             string currentCategoryName = "";
             var parsed = new List<ParsedItem>();
             string[] cells;
+            _errors = new List<BalanceParseError>();
+
             for (int i = 0; i < lines.Length; i++)
             {
-                cells = lines[i].Split(new char[] { '\t' });
-                if (IsLineCategoryName(cells))
+                try
                 {
-                    currentCategoryName = cells[0].Trim();
-                }
-                else
-                {
-                    var pi = ParseLine(cells);
-                    if (pi != null)
+                    cells = lines[i].Split(new char[] { '\t' });
+                    if (IsLineCategoryName(cells))
                     {
-                        pi.CategoryName = currentCategoryName;
+                        currentCategoryName = cells[0].Trim();
                     }
+                    else
+                    {
+                        var pi = ParseLine(cells);
+                        if (pi != null)
+                        {
+                            pi.CategoryName = currentCategoryName;
+                            parsed.Add(pi);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _errors.Add(new BalanceParseError(i, lines[i], ex.Message, ex));
                 }
             }
 
@@ -95,15 +109,25 @@ namespace OnBalance.Parsers.Parsers
                 ParsedItem pi = new ParsedItem();
                 string sizeName;
 
+                _logger.Debug("Parsing:");
                 for (int i = 0; i < cells.Length; i++)
                 {
+                    _logger.DebugFormat("  cells[{0}]: {1}", i, cells[i]);
                     if (IsCodeAndProductNameField(i))
                     {
-                        ParseCodeAndProductName(pi, cells[i].Trim());
+                        if (string.IsNullOrEmpty(cells[i]))
+                        {
+                            throw new ArgumentNullException("Product code/name field is empty");
+                        }
+                        pi.ProductName = cells[i].Trim();
                     }
                     else if (IsCodeField(i))
                     {
-                        if (string.IsNullOrEmpty(cells[i]) == false)
+                        // If code cell is empty - extract from product name "super skate G 05415"
+                        if (string.IsNullOrEmpty(cells[i]))
+                        {
+                            pi = ExtractInternalCodeFromName(pi);
+                        }else
                         {
                             pi.InternalCode = cells[i].Trim();
                         }
@@ -118,7 +142,14 @@ namespace OnBalance.Parsers.Parsers
                     }
                     else if (IsPriceOfReleaseField(i))
                     {
-                        pi.PriceOfRelease = ParseDecimal(cells[i].Trim(), "Price of release");
+                        if (string.IsNullOrWhiteSpace(cells[i]))
+                        {
+                            _logger.WarnFormat("    price of release at index {0} is empty!", i);
+                        }
+                        else
+                        {
+                            pi.PriceOfRelease = ParseDecimal(cells[i].Trim(), "Price of release"); 
+                        }
                     }
                     else
                     {
@@ -137,6 +168,20 @@ namespace OnBalance.Parsers.Parsers
             {
                 throw;
             }
+        }
+
+        private Regex _rxNameAndCode = new Regex(@"(\b)([A-Z])([\ ]{0,1})([\d]+)", RegexOptions.CultureInvariant | RegexOptions.Singleline);
+        private ParsedItem ExtractInternalCodeFromName(ParsedItem pi)
+        {
+            // super skate G 05415
+            // cc a.t. Q 23572
+            Match m = _rxNameAndCode.Match(pi.ProductName);
+            if (m.Success)
+            {
+                pi.InternalCode = string.Concat(m.Groups[2].Value.ToUpper(), " ", m.Groups[4].Value.Trim());
+                pi.ProductName = pi.ProductName.Substring(0, m.Index).Trim();
+            }
+            return pi;
         }
 
         private bool IsCodeAndProductNameField(int i)
@@ -161,25 +206,25 @@ namespace OnBalance.Parsers.Parsers
 
         private bool IsPriceOfReleaseField(int i)
         {
-            return i == 25;
+            return i == 24;
         }
 
-        private void ParseCodeAndProductName(ParsedItem pi, string s)
-        {
-            if (string.IsNullOrEmpty(s))
-            {
-                throw new ArgumentNullException("Product code/name field is empty");
-            }
+        //private void ParseCodeAndProductName(ParsedItem pi, string s)
+        //{
+        //    if (string.IsNullOrEmpty(s))
+        //    {
+        //        throw new ArgumentNullException("Product code/name field is empty");
+        //    }
 
-            string[] ar = s.Split(new char[] { ' ' });
-            if (ar == null)
-            {
-                throw new ArgumentException("No separator (space) between product name and code: " + s);
-            }
+        //    string[] ar = s.Split(new char[] { ' ' });
+        //    if (ar == null)
+        //    {
+        //        throw new ArgumentException("No separator (space) between product name and code: " + s);
+        //    }
 
-            pi.ProductName = ar[0].Trim();
-            pi.InternalCode = string.Join(" ", ar, 1, ar.Length - 1);
-        }
+        //    pi.ProductName = ar[0].Trim();
+        //    pi.InternalCode = string.Join(" ", ar, 1, ar.Length - 1);
+        //}
 
         private int ParseInt(string s, string fieldName)
         {

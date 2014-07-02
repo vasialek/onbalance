@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Preview";
+
+    var ajaxOptions = new AjaxOptions() {
+        LoadingElementId = "LoadingDiv"
+    };
+}
+
+<h2>Preview data</h2>
+
+@using(Ajax.BeginForm("preview", ajaxOptions))
+{
+    @Html.TextArea("Data", new { style = "font-family: Courier New; height: 500px; width: 800px" })<br />
+    <button class="btn btn-mini btn-primary">Preview</button>
+}
+
