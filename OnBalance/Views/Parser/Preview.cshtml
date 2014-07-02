@@ -2,29 +2,18 @@
 
 @{
     ViewBag.Title = "Preview";
+    string prevCategoryName = "_____________";
 }
 
 <h2>Preview</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
+<table class="table table-bordered table-condensed table-striped">
     <tr>
         <th>
-            IsOk
+            Name
         </th>
         <th>
-            LineNr
-        </th>
-        <th>
-            CategoryName
-        </th>
-        <th>
-            ProductName
-        </th>
-        <th>
-            InternalCode
+            Code
         </th>
         <th>
             Quantity
@@ -33,22 +22,20 @@
             Price
         </th>
         <th>
-            PriceOfRelease
+            Price (release)
         </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
+    if (item.CategoryName.Equals(prevCategoryName) == false)
+    {
+        prevCategoryName = item.CategoryName;
+        <tr>
+            <td colspan="6"><strong>@item.CategoryName</strong></td>
+        </tr>
+    }
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsOk)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LineNr)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CategoryName)
-        </td>
         <td>
             @Html.DisplayFor(modelItem => item.ProductName)
         </td>
@@ -64,12 +51,25 @@
         <td>
             @Html.DisplayFor(modelItem => item.PriceOfRelease)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        <td style="width: @(item.CalculateTotalQuantity() * 32)px;">
+            <div style="display: table-row;">
+            @foreach (var s in item.Sizes)
+            {
+                <div style="display: table-cell; width: 30px; font-size: x-small; font-family: 'Courier New'; padding-right: 5px;">
+                    @s.Size<br />@s.Quantity
+                </div>
+            }
+            </div>
         </td>
     </tr>
 }
+    <tr>
+        <td colspan="6">
+            <div class="btn-group">
+                @Html.ActionLink(OnBalance.MyMessages.ButtonText.Back, "edit", null, new { @class = "btn btn-mini" })
+                @Html.ActionLink("Import", "import", null, new { @class = "btn btn-mini btn-primary" })
+            </div>
+        </td>
+    </tr>
 
 </table>

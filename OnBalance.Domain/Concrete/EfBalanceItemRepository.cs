@@ -18,7 +18,13 @@ namespace OnBalance.Domain.Concrete
 
         public void Save(Entities.BalanceItem item)
         {
-            throw new NotImplementedException();
+            _dbContext.BalanceItems.Add(item);
+        }
+
+
+        public void SubmitChanges()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

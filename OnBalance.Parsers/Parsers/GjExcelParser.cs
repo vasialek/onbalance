@@ -170,7 +170,13 @@ namespace OnBalance.Parsers.Parsers
             }
         }
 
+        // super skate G 05415
         private Regex _rxNameAndCode = new Regex(@"(\b)([A-Z])([\ ]{0,1})([\d]+)", RegexOptions.CultureInvariant | RegexOptions.Singleline);
+        // NK 429716-104
+        private Regex _rxNameCodeDashed = new Regex(@"(\s)(\d+)(\-)(\d+)", RegexOptions.CultureInvariant | RegexOptions.Singleline);
+        // terex 043980
+        private Regex _rxNameCodeDigits = new Regex(@"(\s)(\d+)", RegexOptions.CultureInvariant | RegexOptions.Singleline);
+
         private ParsedItem ExtractInternalCodeFromName(ParsedItem pi)
         {
             // super skate G 05415
@@ -180,7 +186,27 @@ namespace OnBalance.Parsers.Parsers
             {
                 pi.InternalCode = string.Concat(m.Groups[2].Value.ToUpper(), " ", m.Groups[4].Value.Trim());
                 pi.ProductName = pi.ProductName.Substring(0, m.Index).Trim();
+                return pi;
             }
+
+            // NK 429716-104
+            m = _rxNameCodeDashed.Match(pi.ProductName);
+            if (m.Success)
+            {
+                pi.InternalCode = string.Concat(m.Groups[2].Value.Trim(), "-", m.Groups[4].Value.Trim());
+                pi.ProductName = pi.ProductName.Substring(0, m.Index).Trim();
+                return pi;
+            }
+
+            // terex 043980
+            m = _rxNameCodeDigits.Match(pi.ProductName);
+            if (m.Success)
+            {
+                pi.InternalCode = m.Groups[2].Value.Trim();
+                pi.ProductName = pi.ProductName.Substring(0, m.Index).Trim();
+                return pi;
+            }
+
             return pi;
         }
 

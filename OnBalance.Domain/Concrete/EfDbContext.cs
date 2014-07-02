@@ -14,5 +14,12 @@ namespace OnBalance.Domain.Concrete
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Organization> Organizations { get; set; }
+
+        /// <summary>
+        /// Balance items for syncing between OBS and POS
+        /// </summary>
+        public DbSet<BalanceItem> BalanceItems { get; set; }
+
+        public DbSet<ProductDetail> ProductDetails { get; set; }
     }
 }

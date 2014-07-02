@@ -52,5 +52,45 @@ namespace OnBalance.ParsersUnitTest
             ItemSizeQuantity size = pi.Sizes.First(x => x.Size == "43");
             Assert.AreEqual(6, size.Quantity, "Expected to 6 products with size 43. Got: " + size.Quantity);
         }
+
+        [TestMethod]
+        public void Test_InternalCode_Is_Only_Digits()
+        {
+            string s = "terex 043980		1	170							36,5		38												240																									";
+
+            ParsedItem pi = _gjExcelParser.ParseLine(s);
+
+            string expS;
+            decimal expD;
+
+            expS = "terex";
+            Assert.AreEqual(expS, pi.ProductName, "Expected name: " + expS + ", got: " + pi.ProductName);
+            expS = "043980";
+            Assert.AreEqual(expS, pi.InternalCode, "Expected internal code: " + expS + ", got: " + pi.InternalCode);
+            expD = 170m;
+            Assert.AreEqual(expD, pi.Price, "Expected price: " + expD + ", got: " + pi.Price);
+            expD = 240;
+            Assert.AreEqual(expD, pi.PriceOfRelease, "Expected price of release: " + expD + ", got: " + pi.PriceOfRelease);
+        }
+
+        [TestMethod]
+        public void Test_InternalCode_Is_Dash_Digits()
+        {
+            string s = "NK 429716-104		1	144,49				42,5									48,5								260																													";
+
+            ParsedItem pi = _gjExcelParser.ParseLine(s);
+
+            string expS;
+            decimal expD;
+
+            expS = "NK";
+            Assert.AreEqual(expS, pi.ProductName, "Expected name: " + expS + ", got: " + pi.ProductName);
+            expS = "429716-104";
+            Assert.AreEqual(expS, pi.InternalCode, "Expected internal code: " + expS + ", got: " + pi.InternalCode);
+            expD = 144.49m;
+            Assert.AreEqual(expD, pi.Price, "Expected price: " + expD + ", got: " + pi.Price);
+            expD = 260;
+            Assert.AreEqual(expD, pi.PriceOfRelease, "Expected price of release: " + expD + ", got: " + pi.PriceOfRelease);
+        }
     }
 }

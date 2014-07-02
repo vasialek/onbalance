@@ -15,9 +15,15 @@ namespace OnBalance.Domain.Abstract
 
         void Save(Category category);
 
+        void Save(Product product);
+
+        void Save(ProductDetail productDetail);
+
         Category GetCategory(int id);
 
         Product GetById(int id);
+
+        IList<ProductDetail> GetDetailsByProduct(int productId);
 
         void SubmitChanges();
 

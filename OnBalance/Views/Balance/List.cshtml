@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<OnBalance.Models.BalanceItem>
 
-<table border="0" cellspacing="0">
+<table border="0" cellspacing="0" class="table table-bordered table-condensed table-striped">
     <tr>
         <th>
             Status
@@ -21,8 +21,11 @@
             Price
         </th>
         <th>
-            Price of release
+            Is new
         </th>
+        @*<th>
+            Price of release
+        </th>*@
         <th>Actions</th>
     </tr>
 
@@ -49,21 +52,21 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.PriceOfRelease)
-            </td>
-            <td>
+            </td>*@
+            @*<td>
                 @Html.DisplayFor(modelItem => item._DbFieldIsNew)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.IsNew)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.HasLocalChanges)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.HasRemoteChanges)
-            </td>
+            </td>*@
             <td>
                 @if(item.Status == OnBalance.Status.Approved)
                 {

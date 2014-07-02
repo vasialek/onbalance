@@ -12,7 +12,7 @@ using System.Net;
 using System.Collections.Specialized;
 using OnBalance.ViewModels.Products;
 using OnBalance.ViewModels.Categories;
-using OnBalance.Domain.Entities;
+//using OnBalance.Domain.Entities;
 using OnBalance.Domain.Abstract;
 
 namespace OnBalance.Controllers
@@ -98,7 +98,7 @@ namespace OnBalance.Controllers
                     CategoryId = x.CategoryId,
                     Uid = x.Uid,
                     UserId = x.UserId,
-                    Pos = new Organization { Configuration = new OrganizationConfiguration() }
+                    Pos = new OnBalance.Domain.Entities.Organization { Configuration = new OnBalance.Domain.Entities.OrganizationConfiguration() }
                 })
                 .ToList();
             DebugFormat("  got {0} products...", productsList.Products.Count);
@@ -441,7 +441,7 @@ namespace OnBalance.Controllers
         public ActionResult Create(int id)
         {
             InfoFormat("Creating product in POS with ID #{0}", id);
-            Organization pos = _organizationRepository.GetById(id);
+            var pos = _organizationRepository.GetById(id);
             if( pos == null )
             {
                 return RedirectToAction("notfound", "help");
@@ -485,7 +485,18 @@ namespace OnBalance.Controllers
                 return new HttpNotFoundResult();
             }
 
-            return View(model);
+            return View(new Product {
+                Id = model.Id,
+                Name = model.Name,
+                CategoryId = model.CategoryId,
+                CreatedAt = model.CreatedAt,
+                InternalCode = model.InternalCode,
+                PosId = model.PosId,
+                Price = model.Price,
+                StatusId = model.StatusId,
+                UserId = model.UserId,
+                Uid = model.Uid,
+            });
         }
 
         //
@@ -499,7 +510,7 @@ namespace OnBalance.Controllers
             {
                 model = _productRepository.GetById(model.Id);
                 UpdateModel<OnBalance.Domain.Entities.Product>(model);
-                //db.Update(model);
+                _productRepository.Update(model);
                 _productRepository.SubmitChanges();
                 return RedirectToAction("Edit", new { id = model.Id });
             }

@@ -12,16 +12,16 @@
         }
     };
 
-    throw new Exception("Ninject OrganizationRepository()");
-    new OnBalance.Models.OrganizationRepository()
-        .Companies
-        .ToList()
-        .ForEach(x => shops.Add(new SelectListItem
-        {
-            Text = x.Name,
-            Value = x.Id.ToString(),
-            Selected = Model.PosId > 0 ? x.Equals(Model.PosId) : false
-        }));
+    //throw new Exception("Ninject OrganizationRepository()");
+    //new OnBalance.Models.OrganizationRepository()
+    //    .Companies
+    //    .ToList()
+    //    .ForEach(x => shops.Add(new SelectListItem
+    //    {
+    //        Text = x.Name,
+    //        Value = x.Id.ToString(),
+    //        Selected = Model.PosId > 0 ? x.Equals(Model.PosId) : false
+    //    }));
     
 }
 
@@ -83,8 +83,8 @@
     @Html.ValidationMessageFor(model => model.CreatedAt)
 </div>
 
-@foreach(var s in Model.ProductDetails)
+@*@foreach(var s in Model.ProductDetails)
 {
     int idx = Model.ProductDetails.IndexOf(s);
     <div style="padding-left: 20px;">@Html.EditorFor(x => Model.ProductDetails[idx])</div>
-}
+}*@

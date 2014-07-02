@@ -25,6 +25,15 @@ namespace OnBalance.Domain.Concrete
             throw new NotImplementedException();
         }
 
+        public void Save(Product product)
+        {
+            _dbContext.Products.Add(product);
+        }
+
+        public void Save(ProductDetail productDetail)
+        {
+            _dbContext.ProductDetails.Add(productDetail);
+        }
 
         public Category GetCategory(int id)
         {
@@ -33,12 +42,12 @@ namespace OnBalance.Domain.Concrete
 
         public Product GetById(int id)
         {
-            throw new NotImplementedException();
+            return Products.FirstOrDefault(x => x.Id == id);
         }
 
         public void SubmitChanges()
         {
-            
+            _dbContext.SaveChanges();
         }
 
         public IEnumerable<Product> GetLastInPos(int posId, int p, int p_2)
@@ -65,6 +74,15 @@ namespace OnBalance.Domain.Concrete
         public Product GetByUid(string id)
         {
             throw new NotImplementedException();
+        }
+
+        public IList<ProductDetail> GetDetailsByProduct(int productId)
+        {
+            return _dbContext
+                .ProductDetails
+                .Where(x => x.ProductId == productId)
+                .ToList();
+            
         }
     }
 }

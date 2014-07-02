@@ -62,6 +62,9 @@ namespace OnBalance.Infrastructure
             //    }.AsQueryable());
             //_ninjectKernel.Bind<IOrganizationRepository>()
             //    .ToConstant(organizationRepositoryMock.Object);
+
+            // Balance items
+            _ninjectKernel.Bind<IBalanceItemRepository>().To<EfBalanceItemRepository>();
         }
 
     }

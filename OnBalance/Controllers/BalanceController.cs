@@ -10,9 +10,9 @@ using System.Text.RegularExpressions;
 using OnBalance.Helpers;
 using OnBalance.ViewModels.Balance;
 using OnBalance.ViewModels.Products;
-using OnBalance.Domain.Entities;
 using OnBalance.Domain.Abstract;
 using Newtonsoft.Json;
+using OnBalance.Models;
 
 namespace OnBalance.Controllers
 {
@@ -21,6 +21,27 @@ namespace OnBalance.Controllers
     {
         private IOrganizationRepository _organizationRepository = null;
         private IProductRepository _productRepository = null;
+        private IBalanceItemRepository _balanceItemsRepository = null;
+
+        public BalanceController(IProductRepository productRepository, IOrganizationRepository organisationRepository, IBalanceItemRepository balanceItemsRepository)
+        {
+            if (productRepository == null)
+            {
+                throw new ArgumentNullException("productRepository");
+            }
+            if (organisationRepository == null)
+            {
+                throw new ArgumentNullException("organisationRepository");
+            }
+            if (balanceItemsRepository == null)
+            {
+                throw new ArgumentNullException("balanceItemsRepository");
+            }
+
+            _productRepository = productRepository;
+            _organizationRepository = organisationRepository;
+            _balanceItemsRepository = balanceItemsRepository;
+        }
 
         //
         // GET: /balance/get
@@ -117,7 +138,7 @@ namespace OnBalance.Controllers
             InfoFormat("Preparing JSON schema for main page (shops, categories). POS ID is {0}", id);
             OrganizationSchemaViewModel orgVm = new OrganizationSchemaViewModel();
 
-            Organization pos = _organizationRepository.GetById(id);
+            var pos = _organizationRepository.GetById(id);
             orgVm.Id = pos.Id;
             orgVm.Name = pos.Name;
 
@@ -239,7 +260,7 @@ namespace OnBalance.Controllers
             int temp;
             List<OnBalance.Models.BalanceItem> list = new List<OnBalance.Models.BalanceItem>();
             StringBuilder sb = new StringBuilder();
-            OnBalance.Models.BalanceItemRepository db = new OnBalance.Models.BalanceItemRepository();
+            //OnBalance.Models.BalanceItemRepository db = new OnBalance.Models.BalanceItemRepository();
             try
             {
                 string getBalanceUrl = "http://gjsportland.com/index.php/lt/balance/get?_token=12345";
@@ -367,13 +388,21 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult Confirm(int id)
         {
-            var db = new OnBalance.Models.BalanceItemRepository();
-            var item = new OnBalance.Models.BalanceItemRepository().Items.SingleOrDefault(x => x.Id == id);
-            if(item == null)
+            //var db = new OnBalance.Models.BalanceItemRepository();
+            var itemDbo = _balanceItemsRepository.BalanceItems.SingleOrDefault(x => x.Id == id);
+            if(itemDbo == null)
             {
                 return HttpNotFound();
             }
-            return View("Confirm", item);
+            return View("Confirm", new BalanceItem {
+                Id = itemDbo.Id,
+                PosId = itemDbo.PosId,
+                ProductName = itemDbo.ProductName,
+                Price = itemDbo.Price,
+                InternalCode = itemDbo.InternalCode,
+                Quantity = itemDbo.Quantity,
+                StatusId = itemDbo.StatusId
+            });
         }
 
         //
@@ -382,9 +411,9 @@ namespace OnBalance.Controllers
         [HttpPost]
         public ActionResult Confirm(int id, string confirm)
         {
-            var dbBalanceItems = new OnBalance.Models.BalanceItemRepository();
+            //var dbBalanceItems = new OnBalance.Models.BalanceItemRepository();
             InfoFormat("Going to confirm updated product ID #{0} from POS", id);
-            var item = dbBalanceItems.Items.SingleOrDefault(x => x.Id == id);
+            var item = _balanceItemsRepository.BalanceItems.SingleOrDefault(x => x.Id == id);
             if(item == null)
             {
                 return HttpNotFound();
@@ -406,7 +435,7 @@ namespace OnBalance.Controllers
             _productRepository.Update(product);
 
             item.StatusId = (byte)Status.Completed;
-            dbBalanceItems.Save(item);
+            _balanceItemsRepository.Save(item);
 
             return RedirectToAction("list", new { id = item.PosId });
         }
@@ -447,33 +476,46 @@ namespace OnBalance.Controllers
         [Authorize]
         public ActionResult List(int id)
         {
-            OnBalance.Models.BalanceItemRepository db = new OnBalance.Models.BalanceItemRepository();
+            // List all not-synced products between OBS and POS
+
             int currentPage = 0;
             int.TryParse(Request["p"], out currentPage);
             
             currentPage = currentPage > 0 ? currentPage : 1;
             int perPage = 50;
             int offset = (currentPage - 1) * perPage;
-            var list = db.Items
+            var list = _balanceItemsRepository.BalanceItems
                 .Where(x => x.PosId == id)
+                .OrderByDescending(x => x.Id)
                 .Skip(offset)
-                .Take(perPage);
+                .Take(perPage)
+                .Select(x => new BalanceItem {
+                    Id = x.Id,
+                    InternalCode = x.InternalCode,
+                    PosId = x.PosId,
+                    Price = x.Price,
+                    //PriceOfRelease = x.PriceOfRelease,
+                    ProductName = x.ProductName,
+                    Quantity = x.Quantity,
+                    StatusId = x.StatusId,
+                    //IsNew = x._DbFieldIsNew == 'Y',
+                });
             return View("List", Layout, list);
         }
 
         public ActionResult GetProductInfo(string id)
         {
             Status s = Status.Approved;
-            Product p = _productRepository.GetByUid(id);
-            if( p == null )
+            var productDbo = _productRepository.GetByUid(id);
+            if (productDbo == null)
             {
                 return Json(new { Status = Status.Unknown }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(new {
                 Status = s,
-                Name = p.Name,
-                ProductStatus = p.StatusId
+                Name = productDbo.Name,
+                ProductStatus = productDbo.StatusId
             }, JsonRequestBehavior.AllowGet);
         }
     }

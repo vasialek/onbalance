@@ -9,7 +9,7 @@ namespace OnBalance.Domain.Abstract
     public interface IBalanceItemRepository
     {
         IQueryable<BalanceItem> BalanceItems { get; }
-
         void Save(BalanceItem item);
+        void SubmitChanges();
     }
 }

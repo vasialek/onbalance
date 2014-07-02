@@ -4,13 +4,47 @@
     ViewBag.Title = "Confirm";
 }
 
-<h2>Confirm</h2>
+<h2>Confirm product update</h2>
 
 @using( Html.BeginForm() )
 {
 
-    <div>Confirm?!</div>
     <input type="checkbox" name="confirm" />
-    <input type="submit" />
+    <div class="label label-important">Do you want to update product in Online Balance System with product from Point of Service?</div>
+    <br /><br />
+    <div>
+        <table class="table table-bordered table-condensed table-striped">
+            <colgroup>
+                <col width="20%" />
+                <col width="40%" />
+                <col width="40%" />
+            </colgroup>
+            <tr>
+                <th>Property</th>
+                <th>Online Balance System</th>
+                <th>Point of Service</th>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(x => Model.ProductName)</td>
+                <td>???</td>
+                <td>@Html.DisplayFor(x => Model.ProductName)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(x => Model.Quantity)</td>
+                <td>???</td>
+                <td>@Html.DisplayFor(x => Model.Quantity)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(x => Model.Price)</td>
+                <td>???</td>
+                <td>@Html.DisplayFor(x => Model.Price)</td>
+            </tr>
+        </table>
+    </div>
+    <div class="btn-group">
+        <input type="submit" class="btn btn-small btn-primary" value="@OnBalance.MyMessages.ButtonText.Confirm" />
+        <a class="btn btn-small">@OnBalance.MyMessages.ButtonText.Back</a>
+    </div>
+    
     
 }

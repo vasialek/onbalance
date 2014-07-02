@@ -20,6 +20,7 @@ namespace OnBalance
             public const string Reset = "Reset";
             public const string Search = "Search";
             public const string Loading = "Loading...";
+            public const string Confirm = "Confirm";
         }
 
         public class Parser

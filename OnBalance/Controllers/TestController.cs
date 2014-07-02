@@ -8,6 +8,7 @@ using OnBalance.Domain.Abstract;
 using System.Text;
 using Newtonsoft.Json;
 using OnBalance.ViewModels.Balance;
+using OnBalance.Domain.Concrete;
 
 namespace OnBalance.Controllers
 {
@@ -17,9 +18,13 @@ namespace OnBalance.Controllers
 
         private ICategoryRepository _repository = null;
 
-        public TestController(ICategoryRepository repository)
+        public TestController(ICategoryRepository repositoryRepository)
         {
-            _repository = repository;
+            if (repositoryRepository == null)
+            {
+                throw new ArgumentNullException("repositoryRepository");
+            }
+            _repository = repositoryRepository;
         }
 
         //
@@ -27,17 +32,31 @@ namespace OnBalance.Controllers
 
         public ActionResult Index()
         {
-            _repository.Categories.ToList();
-            return Content("OK");
-            StringBuilder sb = new StringBuilder();
-            foreach(var item in _repository.Categories.ToList())
+            try
             {
-                sb.AppendLine(item.Name);
+                StringBuilder sb = new StringBuilder();
+                //_repository.Categories.ToList();
+                var db = new EfProductRepository();
+                var p = db.GetById(100006);
+                foreach (var item in p.ProductDetails)
+                {
+                    sb.AppendLine(item.ParameterValue);
+                }
+                return Content(sb.ToString());
+                //foreach(var item in _repository.Categories.ToList())
+                //{
+                //    sb.AppendLine(item.Name);
+                //}
+                //return Content(sb.ToString());
+                //InfoFormat("Test/Index...");
+                //BalanceItem bi = new BalanceItem();
+                //return View(bi);
             }
-            return Content(sb.ToString());
-            //InfoFormat("Test/Index...");
-            //BalanceItem bi = new BalanceItem();
-            //return View(bi);
+            catch (Exception ex)
+            {
+                Logger.Error("Error in Test", ex);
+                return Content(ex.Message);
+            }
         }
 
         public ActionResult ChangeQuantity(int id)
