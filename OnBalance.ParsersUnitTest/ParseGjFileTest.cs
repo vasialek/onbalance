@@ -8,12 +8,12 @@ namespace OnBalance.ParsersUnitTest
     [TestClass]
     public class ParseGjFileTest
     {
-        private GjExcelParser _gjParser = null;
+        private GjExcelParserShoes _gjParser = null;
 
         [TestInitialize]
         public void Init()
         {
-            _gjParser = new GjExcelParser(new ObLog4NetLogger("GjParserTest"));
+            _gjParser = new GjExcelParserShoes(new ObLog4NetLogger("GjParserTest"));
         }
 
         [TestMethod]

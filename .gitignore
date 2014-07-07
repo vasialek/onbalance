@@ -43,3 +43,8 @@ UpgradeLog.htm
 *.cache
 OnBalance.Parsers/obj/Debug/OnBalance.Parsers.csproj.FileListAbsolute.txt
 OnBalance.ParsersUnitTest/obj/Debug/OnBalance.ParsersUnitTest.csproj.FileListAbsolute.txt
+UpgradeLog2.htm
+OnBalance.Core/obj/Debug/OnBalance.Core.csproj.FileListAbsolute.txt
+OnBalance.ParsersUnitTest/bin/Debug/OnBalance.ParsersUnitTest.dll.config
+doc/import/2014-07-01/SANDELIAI DRABUZIAI.sxc
+doc/import/2014-07-01/SANDELIAI KEDAI.sxc

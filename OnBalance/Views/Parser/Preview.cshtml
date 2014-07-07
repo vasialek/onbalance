@@ -3,9 +3,21 @@
 @{
     ViewBag.Title = "Preview";
     string prevCategoryName = "_____________";
+    var sizeNames = (List<OnBalance.Parsers.ItemSizeQuantity>)ViewBag.SizeNames;
+    var categories = ViewBag.CategoryNames as List<string>;
 }
 
-<h2>Preview</h2>
+<h2>Preview. Parsed: @Model.Count()</h2>
+
+<div>
+    @if(categories != null)
+    {
+        foreach (string cn in categories)
+        {
+            @cn<br />
+        }
+    }
+</div>
 
 <table class="table table-bordered table-condensed table-striped">
     <tr>
@@ -24,7 +36,10 @@
         <th>
             Price (release)
         </th>
-        <th></th>
+        @foreach (var s in sizeNames)
+        {
+            <th>@s.Size</th>
+        }
     </tr>
 
 @foreach (var item in Model) {
@@ -51,16 +66,11 @@
         <td>
             @Html.DisplayFor(modelItem => item.PriceOfRelease)
         </td>
-        <td style="width: @(item.CalculateTotalQuantity() * 32)px;">
-            <div style="display: table-row;">
-            @foreach (var s in item.Sizes)
-            {
-                <div style="display: table-cell; width: 30px; font-size: x-small; font-family: 'Courier New'; padding-right: 5px;">
-                    @s.Size<br />@s.Quantity
-                </div>
-            }
-            </div>
-        </td>
+        @foreach (var s in sizeNames)
+        {
+            var qnt = item.Sizes.FirstOrDefault(x => x.Size == s.Size);
+            <td>@(qnt == null ? "" : qnt.Quantity.ToString())</td>
+        }
     </tr>
 }
     <tr>

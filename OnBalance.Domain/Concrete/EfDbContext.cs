@@ -21,5 +21,11 @@ namespace OnBalance.Domain.Concrete
         public DbSet<BalanceItem> BalanceItems { get; set; }
 
         public DbSet<ProductDetail> ProductDetails { get; set; }
+
+        //public EfDbContext(string connectionString)
+        //    : base(connectionString)
+        //{
+
+        //}
     }
 }

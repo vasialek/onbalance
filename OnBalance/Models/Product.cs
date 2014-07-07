@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -43,5 +44,45 @@ namespace OnBalance.Models
         public string PhotosUri { get; set; }
 
         public string StatusName { get { return StatusId.ToString(); } }
+
+        public Product()
+        {
+
+        }
+
+        public Product(OnBalance.Domain.Entities.Product product)
+        {
+            Id = product.Id;
+            CategoryId = product.CategoryId;
+            CreatedAt = product.CreatedAt;
+            InternalCode = product.InternalCode;
+            Name = product.Name;
+            PosId = product.PosId;
+            Price = product.Price;
+            StatusId = product.StatusId;
+            Uid = product.Uid;
+            UserId = product.UserId;
+            ProductDetails = product.ProductDetails.Select(x => new OnBalance.Models.ProductDetail {
+                id = x.Id,
+                parameter_value = x.ParameterValue,
+                quantity = x.Quantity,
+                price_minor = x.PriceMinor,
+                price_release_minor = x.PriceReleaseMinor,
+                product_id = x.ProductId,
+
+            }).ToList();
+        }
+
+        public int QuantityCalculated
+        {
+            get
+            {
+                return ProductDetails == null ? 0 : ProductDetails.Sum(x => x.quantity);
+            }
+        }
+
+        public decimal PriceFirst { get { return ProductDetails == null ? 0m : ProductDetails.First().price_minor / 100; } }
+
+        public decimal PriceReleaseFirst { get { return ProductDetails == null ? 0m : ProductDetails.First().price_release_minor / 100; } }
     }
 }

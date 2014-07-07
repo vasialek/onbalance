@@ -15,7 +15,7 @@ namespace OnBalance.ParsersUnitTest
         [TestInitialize]
         public void Init()
         {
-            _gjExcelParser = new GjExcelParser(new ObLog4NetLogger(typeof(ParseLineTest).Name));
+            _gjExcelParser = new GjExcelParserShoes(new ObLog4NetLogger(typeof(ParseLineTest).Name));
         }
 
         [TestMethod]

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Text;
-using log4net;
-using log4net.Config;
+//using log4net;
+//using log4net.Config;
 using System.Text.RegularExpressions;
 
 namespace OnBalance.Controllers
@@ -38,27 +38,40 @@ namespace OnBalance.Controllers
         //    }
         //}
 
-        ILog _log = null;
-        public ILog Logger
-        {
-            get
-            {
-                if( _log == null )
-                {
-                    _log = LogManager.GetLogger("OnBalance");
-                    XmlConfigurator.Configure();
-                }
-                return _log;
+        //ILog _log = null;
+        //public ILog Logger
+        //{
+        //    get
+        //    {
+        //        if( _log == null )
+        //        {
+        //            _log = LogManager.GetLogger("OnBalance");
+        //            XmlConfigurator.Configure();
+        //        }
+        //        return _log;
             
-            }
-        }
+        //    }
+        //}
+
+        private OnBalance.Core.IObLogger _logger = null;
 
         public BaseController()
+            : this(new Core.ObFakeLogger())
         {
-            _isDebugEnabled = Logger.IsDebugEnabled;
-            _isInfoEnabled = Logger.IsInfoEnabled;
-            _isWarnEnabled = Logger.IsWarnEnabled;
-            _isErrorEnabled = Logger.IsErrorEnabled;
+        }
+
+        public BaseController(OnBalance.Core.IObLogger logger)
+        {
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
+
+            _logger = logger;
+            _isDebugEnabled = false; //Logger.IsDebugEnabled;
+            _isInfoEnabled = false; //Logger.IsInfoEnabled;
+            _isWarnEnabled = false;// Logger.IsWarnEnabled;
+            _isErrorEnabled = false; // Logger.IsErrorEnabled;
 
             //Info("Calling SetTempMessagesToViewBag() in BaseController...");
             //// Prepare messages and errors in TempData for use in views
@@ -71,7 +84,7 @@ namespace OnBalance.Controllers
         {
             if(_isInfoEnabled)
             {
-                Logger.Debug(msg);
+                //Logger.Debug(msg);
             }
         }
 
@@ -79,7 +92,7 @@ namespace OnBalance.Controllers
         {
             if(_isDebugEnabled)
             {
-                Logger.DebugFormat(fmt, args);
+                //Logger.DebugFormat(fmt, args);
             }
         }
 
@@ -87,7 +100,7 @@ namespace OnBalance.Controllers
         {
             if(_isInfoEnabled)
             {
-                Logger.Info(msg);
+                //_logger.Info(msg);
             }
         }
 
@@ -95,7 +108,7 @@ namespace OnBalance.Controllers
         {
             if(_isInfoEnabled)
             {
-                Logger.InfoFormat(fmt, args);
+                //Logger.InfoFormat(fmt, args);
             }
         }
 
@@ -103,7 +116,7 @@ namespace OnBalance.Controllers
         {
             if(_isWarnEnabled)
             {
-                Logger.Warn(msg);
+                //Logger.Warn(msg);
             }
         }
 
@@ -111,7 +124,7 @@ namespace OnBalance.Controllers
         {
             if(_isWarnEnabled)
             {
-                Logger.WarnFormat(fmt, args);
+                //Logger.WarnFormat(fmt, args);
             }
         }
 
@@ -119,7 +132,7 @@ namespace OnBalance.Controllers
         {
             if(_isErrorEnabled)
             {
-                Logger.Error(msg);
+                //Logger.Error(msg);
             }
         }
 
@@ -127,7 +140,7 @@ namespace OnBalance.Controllers
         {
             if(_isErrorEnabled)
             {
-                Logger.Error(msg, ex);
+                //Logger.Error(msg, ex);
             }
         }
 
@@ -135,7 +148,7 @@ namespace OnBalance.Controllers
         {
             if(_isErrorEnabled)
             {
-                Logger.ErrorFormat(fmt, args);
+                //Logger.ErrorFormat(fmt, args);
             }
         }
 

@@ -47,7 +47,8 @@ namespace OnBalance.Domain.Entities
             {
                 if (_productDetails == null)
                 {
-                    _productDetails = new OnBalance.Domain.Concrete.EfProductRepository().GetDetailsByProduct(Id);
+                    //_productDetails = new OnBalance.Domain.Concrete.EfProductRepository().GetDetailsByProduct(Id);
+                    _productDetails = new List<ProductDetail>();
                 }
                 return _productDetails;
             }

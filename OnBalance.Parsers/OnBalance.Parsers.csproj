@@ -41,7 +41,8 @@
   <ItemGroup>
     <Compile Include="BalanceParser.cs" />
     <Compile Include="ParsedItem.cs" />
-    <Compile Include="Parsers\GjExcelParser.cs" />
+    <Compile Include="Parsers\GjExcelParserDress.cs" />
+    <Compile Include="Parsers\GjExcelParserShoes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

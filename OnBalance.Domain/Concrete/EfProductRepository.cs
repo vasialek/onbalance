@@ -84,5 +84,6 @@ namespace OnBalance.Domain.Concrete
                 .ToList();
             
         }
+
     }
 }

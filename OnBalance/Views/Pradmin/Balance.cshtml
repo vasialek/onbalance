@@ -1,0 +1,224 @@
+﻿@model OnBalance.ViewModels.Products.ProductsByCategoryViewModel
+
+@{
+    ViewBag.Title = "Balance";
+}
+    <style>
+        .product-qnt {
+            width: 25px; float: left; overflow: hidden; font-size: x-small;
+        }
+        .product-qnt-minus {
+            width: 8px; float: left; cursor: pointer;
+        }
+        .product-qnt-plus {
+            width: 8px; float: left; cursor: pointer;
+        }
+    </style>
+
+<h2>Balance</h2>
+
+@foreach (var c in Model.ProductsByCategories)
+{
+    <table class="table table-bordered table-condensed table-striped">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Code
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Price (release)
+            </th>
+            @foreach (var s in c.Sizes)
+            {
+                <th>@s.SizeName</th>
+            }
+        </tr>
+        @foreach (var item in c.Products)
+	    {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InternalCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuantityCalculated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriceFirst)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriceReleaseFirst)
+                </td>
+                @foreach (var s in c.Sizes)
+                {
+                    if(item.ProductDetails != null)
+                    {
+                    var qnt = item.ProductDetails.FirstOrDefault(x => x.parameter_value == s.SizeName);
+                    int qntId = qnt == null ? 0 : qnt.id;
+                    <td id="@("Pr_" + qntId)">
+                        <div id="@("Qnt_" + qntId)" class="product-qnt">@(qnt == null ? 0 : qnt.quantity)</div>
+                        <div id="@("Decrease_" + qntId)" class="product-qnt-minus">@Html.Image("/images/decrease.gif", 6, 3, "-", null)</div>
+                        <div id="@("Increase_" + qntId)" class="product-qnt-plus">@Html.Image("/images/increase.gif", 6, 3, "+", null)</div>
+                    </td>
+                    }else
+                    {
+                        <td>-</td>
+                    }
+                }
+            </tr>
+            
+	    }
+    </table>
+}
+
+<script src="//code.jquery.com/jquery-1.6.2.min.js"></script>
+<script type="text/javascript">
+
+    var gBaseUrl = "/";
+
+    jQuery(function () {
+        Grid.init();
+    });
+
+    var Grid = {
+        _products: [],
+        _colors: [
+            { color: "#f00", name: "Red", code: 0 },
+            { color: "#0f0", name: "Green", code: 1 },
+            { color: "#00f", name: "Blue", code: 2 },
+        ],
+
+        init: function () {
+            //this._initContextMenu();
+            this._initProductActions();
+
+        },
+
+        onContextMenuClicked: function (e, menuIndex) {
+            console.log("Clicked on context menu: " + menuIndex);
+            //$(e.target).closest("tr").attr("style", "background: red;");
+            var productId = this.getClickedProductId(e, "tr", "ListItem_");
+            console.log("  product ID: " + productId);
+
+            var color = this._resolveMenuItemColor(menuIndex);
+            if (color !== null) {
+                console.log("  color to set: " + color.name + " (" + color.color + ")");
+                var product = this._getProductInGrid(productId);
+                console.log("  current product color: " + (product == null || product.color == null ? "NOT SET" : product.color.color));
+                if (product == null) {
+                    product = {
+                        id: productId,
+                        color: color
+                    };
+                    this._products[this._products.length] = product;
+                } else if (color.color === product.color.color) {
+                    this.clearProductColor(productId);
+                }
+
+                $("#ListItem_" + productId).attr("style", "background-color: " + product.color.color);
+            } else {
+                console.log("  Bad color!");
+            }
+        },
+
+        clearProductColor: function (productId) {
+            console.log("Clearing color of product #" + productId);
+            console.log("  current style: " + $("#ListItem_" + productId).attr("style"));
+            $("#ListItem_" + productId).attr("style", "background-color: #000");
+            console.log("  remove BG style: " + $("#ListItem_" + productId).attr("style"));
+        },
+
+        getClickedProductId: function (e, closestSelector, idPrefix) {
+            var s = $(e.target).closest(closestSelector).attr("id");
+            if (s !== undefined) {
+                var id = parseInt(s.replace(idPrefix, ""));
+                return isNaN(id) ? -2 : id;
+            }
+            return -1;
+        },
+
+        changeProductQuantityBy: function(productId, dQnt) {
+            console.log("Going to change quantity of product ID: " + productId + " by " + dQnt);
+            if (productId < 1 || dQnt == 0) {
+                return;
+            }
+
+            var qntDiv = $("#Qnt_" + productId);
+            var currentQnt = parseInt(qntDiv.html());
+            //qntDiv.html("<img src='/images/loader.gif' width='16' height='16' alt='Loading...' />");
+
+            $.ajax({
+                url: gBaseUrl + "test/changequantity/" + productId,
+                data: { dQnt: dQnt },
+                success: function (data, status, xhr) {
+                    console.log("  current quantity of product is: " + qntDiv.html());
+                    if (isNaN(currentQnt) === false) {
+                        qntDiv.html(currentQnt + dQnt);
+                    }
+                },
+                error: function (status, xhr) {
+                    console.log("Error changing product quantity! ID: " + productId);
+                }
+            });
+        },
+
+        _initContextMenu: function () {
+            var self = this;
+            var items = [];
+            for (var i = 0; i < this._colors.length; i++) {
+                items[items.length] = {
+                    _index: i,
+                    label: this._colors[i].name,
+                    icon: this._colors[i].code,
+                    action: function (e) {
+                        self.onContextMenuClicked(e, this._index);
+                    }
+                };
+            }
+            $("#grid").contextPopup({
+                title: "My menu",
+                items: items,
+            });
+        },
+
+        _initProductActions: function () {
+            var self = this;
+            $(".product-qnt-plus").click(function (e) {
+                var id = self.getClickedProductId(e, "td", "Pr_");
+                self.changeProductQuantityBy(id, 1);
+            });
+            $(".product-qnt-minus").click(function (e) {
+                var id = self.getClickedProductId(e, "td", "Pr_");
+                self.changeProductQuantityBy(id, -1);
+            });
+        },
+
+        _resolveMenuItemColor: function (menuIndex) {
+            for (var i = 0; i < this._colors.length; i++) {
+                if (this._colors[i].code === menuIndex) {
+                    return this._colors[i];
+                }
+            }
+            return null;
+        },
+
+        _getProductInGrid: function (productId) {
+            for(var i = 0; i < this._products.length; i++) {
+                if (this._products[i].id == productId) {
+                    return this._products[i];
+                }
+            }
+            return null;
+        }
+    };
+</script>

@@ -48,6 +48,27 @@ namespace OnBalance.Controllers
         }
 
         //
+        // GET: /pradmin/balance/500000
+
+        [OutputCache(Duration = 120)]
+        public ActionResult Balance(int id)
+        {
+            try
+            {
+                var pos = _organizationRepository.GetById(id);
+                var productsByCategories = GetProductsByCategories();
+                //var products = _productRepository.GetLastInPos(pos.Id, 0, 20);
+                //return View("Balance", new ViewModels.Products.ProductsByCategoryViewModel(products.ToList()));
+                return View("Balance", productsByCategories);
+            }
+            catch (Exception ex)
+            {
+                Error("Error showing balance for POS #" + id, ex);
+                throw;
+            }
+        }
+
+        //
         // GET: /pradmin/list/100003
 
         [Authorize]
@@ -516,6 +537,91 @@ namespace OnBalance.Controllers
             }
 
             return View(model);
+        }
+
+        private ProductsByCategoryViewModel GetProductsByCategories()
+        {
+            string cs = "Data Source=192.185.10.193;Initial Catalog=vasialek_onbalance;User ID=vasialek_onbalance_user;Password=w3N2SPzGgwL4";
+            var con = new System.Data.SqlClient.SqlConnection(cs);
+            con.Open();
+            var cmd = new System.Data.SqlClient.SqlCommand(
+@"select 
+    --top 100
+    p.id as id,             -- 0
+    p.internal_code, 
+    p.uid, 
+    p.name, 
+    p.price, 
+	c.id as category_id,    -- 5
+    c.name as category_name,
+	isnull(pd.parameter_value, '') as size_name, 
+    isnull(pd.price_minor, 0) as price_minor, 
+    isnull(pd.price_release_minor, 0) as price_release_minor, 
+    isnull(pd.quantity, 0),             -- 10
+    isnull(pd.id, 0) as price_id
+from product p
+	join category c on p.category_id = c.id
+	left join product_detail pd on p.id = pd.product_id
+order by p.id", con);
+
+            ProductsByCategoryViewModel productsByCategories = new ProductsByCategoryViewModel();
+            var products = new List<OnBalance.Domain.Entities.Product>();
+            decimal priceMinor, priceReleaseMinor;
+            int priceId;
+
+            var r = cmd.ExecuteReader();
+            while (r.Read())
+            {
+                var p = new Product();
+                p.Id = r.GetInt32(0);
+                p.InternalCode = r.GetString(1);
+                p.Uid = r.GetString(2);
+                p.Name = r.GetString(3);
+                //p.Price = r.GetDecimal(4);
+                p.CategoryId = r.GetInt32(5);
+                p.Price = r.GetDecimal(9);
+                priceMinor = r.GetDecimal(8);
+                priceReleaseMinor = r.GetDecimal(9);
+                var psq = new ProductSizeQuantity();
+                psq.SizeName = r.GetString(7);
+                psq.Quantity = r.GetInt32(10);
+                priceId = r.GetInt32(11);
+
+                var existing = products.FirstOrDefault(x => x.Id == p.Id);
+                if (existing == null)
+                {
+                    var newP = new Domain.Entities.Product
+                    {
+                        Id = p.Id,
+                        InternalCode = p.InternalCode,
+                        Uid = p.Uid,
+                        Name = p.Name,
+                        CategoryId = p.CategoryId
+                        
+                    };
+                    newP.ProductDetails.Add(new Domain.Entities.ProductDetail
+                    {
+                        Id = priceId,
+                        ParameterValue = psq.SizeName,
+                        Quantity = psq.Quantity,
+                        PriceMinor = priceMinor,
+                        PriceReleaseMinor = priceReleaseMinor,
+                    });
+                    products.Add(newP);
+                }
+                else
+                {
+                    existing.ProductDetails.Add(new Domain.Entities.ProductDetail {
+                        Id = priceId,
+                        ParameterValue = psq.SizeName,
+                        Quantity = psq.Quantity,
+                        PriceMinor = priceMinor,
+                        PriceReleaseMinor = priceReleaseMinor,
+                    });
+                }
+            }
+
+            return new ProductsByCategoryViewModel(products);
         }
     }
 }

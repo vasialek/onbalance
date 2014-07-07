@@ -42,7 +42,7 @@ namespace OnBalance.Parsers
             switch (type)
             {
                 case ParserType.GjExcel:
-                    return new Parsers.GjExcelParser();
+                    return new Parsers.GjExcelParserShoes();
             }
             throw new NotImplementedException("No Parser is defined for type: " + type);
         }

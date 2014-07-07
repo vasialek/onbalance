@@ -7,16 +7,16 @@ using System.Text.RegularExpressions;
 
 namespace OnBalance.Parsers.Parsers
 {
-    public class GjExcelParser : IBalanceParser
+    public class GjExcelParserShoes : IBalanceParser
     {
         protected IObLogger _logger = null;
 
-        public GjExcelParser()
+        public GjExcelParserShoes()
         {
             _logger = new ObFakeLogger();
         }
 
-        public GjExcelParser(IObLogger logger)
+        public GjExcelParserShoes(IObLogger logger)
         {
             if (logger == null)
             {
@@ -177,7 +177,7 @@ namespace OnBalance.Parsers.Parsers
         // terex 043980
         private Regex _rxNameCodeDigits = new Regex(@"(\s)(\d+)", RegexOptions.CultureInvariant | RegexOptions.Singleline);
 
-        private ParsedItem ExtractInternalCodeFromName(ParsedItem pi)
+        protected virtual ParsedItem ExtractInternalCodeFromName(ParsedItem pi)
         {
             // super skate G 05415
             // cc a.t. Q 23572
@@ -210,27 +210,27 @@ namespace OnBalance.Parsers.Parsers
             return pi;
         }
 
-        private bool IsCodeAndProductNameField(int i)
+        protected virtual bool IsCodeAndProductNameField(int i)
         {
             return i == 0;
         }
 
-        private bool IsCodeField(int i)
+        protected virtual bool IsCodeField(int i)
         {
             return i == 1;
         }
 
-        private bool IsQuantityField(int i)
+        protected virtual bool IsQuantityField(int i)
         {
             return i == 2;
         }
 
-        private bool IsPriceField(int i)
+        protected virtual bool IsPriceField(int i)
         {
             return i == 3;
         }
 
-        private bool IsPriceOfReleaseField(int i)
+        protected virtual bool IsPriceOfReleaseField(int i)
         {
             return i == 24;
         }
