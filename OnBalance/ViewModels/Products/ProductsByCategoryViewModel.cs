@@ -9,6 +9,8 @@ namespace OnBalance.ViewModels.Products
 
     public class ProductsByCategoryViewModel
     {
+        public int PosId { get; set; }
+
         public IList<ProductsAndSizesViewModel> ProductsByCategories { get; private set; }
 
         public ProductsByCategoryViewModel()

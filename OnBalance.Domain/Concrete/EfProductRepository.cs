@@ -35,6 +35,11 @@ namespace OnBalance.Domain.Concrete
             _dbContext.ProductDetails.Add(productDetail);
         }
 
+        public ProductDetail GetDetailsById(int productDetailsId)
+        {
+            return _dbContext.ProductDetails.FirstOrDefault(x => x.Id == productDetailsId);
+        }
+
         public Category GetCategory(int id)
         {
             throw new NotImplementedException();
@@ -68,7 +73,27 @@ namespace OnBalance.Domain.Concrete
 
         public void Update(Product product)
         {
-            throw new NotImplementedException();
+            var existing = Products.First(x => x.Id == product.Id);
+            existing.InternalCode = product.InternalCode;
+            existing.Name = product.Name;
+            existing.PosId = product.PosId;
+            existing.Price = product.Price;
+            existing.StatusId = product.StatusId;
+            existing.Uid = product.Uid;
+            existing.UserId = product.UserId;
+        }
+
+        public void Update(ProductDetail pd)
+        {
+            var existing = _dbContext.ProductDetails.First(x => x.Id == pd.Id);
+            existing.ParameterName = pd.ParameterName;
+            existing.ParameterValue = pd.ParameterValue;
+            existing.PriceMinor = pd.PriceMinor;
+            existing.PriceReleaseMinor = pd.PriceReleaseMinor;
+            existing.ProductId = pd.ProductId;
+            existing.Quantity = pd.Quantity;
+            existing.StatusId = pd.StatusId;
+            existing.UpdatedAt = DateTime.UtcNow;
         }
 
         public Product GetByUid(string id)

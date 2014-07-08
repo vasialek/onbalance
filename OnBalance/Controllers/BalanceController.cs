@@ -385,7 +385,7 @@ namespace OnBalance.Controllers
         //
         // GET: /balance/confir/10843
 
-        [Authorize]
+        //[Authorize]
         public ActionResult Confirm(int id)
         {
             //var db = new OnBalance.Models.BalanceItemRepository();
@@ -394,15 +394,19 @@ namespace OnBalance.Controllers
             {
                 return HttpNotFound();
             }
-            return View("Confirm", new BalanceItem {
-                Id = itemDbo.Id,
-                PosId = itemDbo.PosId,
-                ProductName = itemDbo.ProductName,
-                Price = itemDbo.Price,
-                InternalCode = itemDbo.InternalCode,
-                Quantity = itemDbo.Quantity,
-                StatusId = itemDbo.StatusId
-            });
+
+            //var product = _productRepository.Products
+            //    .Where(x => x.InternalCode == itemDbo.InternalCode)
+            //    .Where(x => x.PosId == itemDbo.PosId)
+            //    .FirstOrDefault();
+            //if (product == null)
+            //{
+            //    return HttpNotFound();
+            //}
+
+            //// TODO: build model for this view
+            //ViewBag.Product = new Product(product);
+            return View("Confirm", new BalanceItem(itemDbo));
         }
 
         //
@@ -412,6 +416,11 @@ namespace OnBalance.Controllers
         public ActionResult Confirm(int id, string confirm)
         {
             //var dbBalanceItems = new OnBalance.Models.BalanceItemRepository();
+            if (string.IsNullOrEmpty(confirm))
+            {
+                return RedirectToAction("confirm", new { id = id });
+            }
+
             InfoFormat("Going to confirm updated product ID #{0} from POS", id);
             var item = _balanceItemsRepository.BalanceItems.SingleOrDefault(x => x.Id == id);
             if(item == null)
@@ -420,7 +429,9 @@ namespace OnBalance.Controllers
             }
 
             InfoFormat("Searching for product with code: [{0}]", item.InternalCode);
-            var product = _productRepository.Products.SingleOrDefault(x => x.InternalCode == item.InternalCode);
+            var product = _productRepository.Products
+                .Where(x => x.PosId == item.PosId)
+                .SingleOrDefault(x => x.InternalCode == item.InternalCode);
             if(product == null)
             {
                 return HttpNotFound();
@@ -434,8 +445,28 @@ namespace OnBalance.Controllers
             InfoFormat("Going to save changes from POS to Online Balance System DB...");
             _productRepository.Update(product);
 
+            // Change quantity for size
+            var details = _productRepository.GetDetailsByProduct(product.Id);
+            if (details != null)
+            {
+                var pd = details.FirstOrDefault(x => x.ParameterValue == item.SizeName);
+                if (pd != null)
+                {
+                    pd.Quantity += item.Quantity;
+                    if (pd.Quantity < 0)
+                    {
+                        pd.Quantity = 0;
+                    }
+                    _productRepository.Update(pd);
+                    _productRepository.SubmitChanges();
+                }
+            }
+
             item.StatusId = (byte)Status.Completed;
             _balanceItemsRepository.Save(item);
+
+            _productRepository.SubmitChanges();
+            _balanceItemsRepository.SubmitChanges();
 
             return RedirectToAction("list", new { id = item.PosId });
         }
@@ -443,7 +474,7 @@ namespace OnBalance.Controllers
         //
         // GET: /balance/
 
-        [Authorize]
+        //[Authorize]
         public ActionResult Index()
         {
             return List(_organizationRepository.Organizations.FirstOrDefault().Id);
@@ -473,7 +504,7 @@ namespace OnBalance.Controllers
         //
         // GET: /balance/list/100001
 
-        [Authorize]
+        //[Authorize]
         public ActionResult List(int id)
         {
             // List all not-synced products between OBS and POS
@@ -489,17 +520,8 @@ namespace OnBalance.Controllers
                 .OrderByDescending(x => x.Id)
                 .Skip(offset)
                 .Take(perPage)
-                .Select(x => new BalanceItem {
-                    Id = x.Id,
-                    InternalCode = x.InternalCode,
-                    PosId = x.PosId,
-                    Price = x.Price,
-                    //PriceOfRelease = x.PriceOfRelease,
-                    ProductName = x.ProductName,
-                    Quantity = x.Quantity,
-                    StatusId = x.StatusId,
-                    //IsNew = x._DbFieldIsNew == 'Y',
-                });
+                .ToList()
+                .Select(x => new BalanceItem(x));
             return View("List", Layout, list);
         }
 

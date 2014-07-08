@@ -25,6 +25,8 @@ namespace OnBalance.Domain.Abstract
 
         IList<ProductDetail> GetDetailsByProduct(int productId);
 
+        ProductDetail GetDetailsById(int productDetailsId);
+
         void SubmitChanges();
 
         IEnumerable<Product> GetLastInPos(int posId, int p, int p_2);
@@ -33,6 +35,9 @@ namespace OnBalance.Domain.Abstract
 
         void Update(Product product);
 
+        void Update(ProductDetail pd);
+
         Product GetByUid(string id);
+
     }
 }

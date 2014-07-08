@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Confirm";
+    //OnBalance.Models.Product product = (OnBalance.Models.Product)ViewBag.Product;
 }
 
 <h2>Confirm product update</h2>
@@ -21,23 +22,33 @@
             </colgroup>
             <tr>
                 <th>Property</th>
-                <th>Online Balance System</th>
-                <th>Point of Service</th>
+                @*<th>Current value</th>*@
+                <th>Changes</th>
             </tr>
             <tr>
                 <td>@Html.LabelFor(x => Model.ProductName)</td>
-                <td>???</td>
+                @*<td>@Html.DisplayFor(x => product.Name)</td>*@
                 <td>@Html.DisplayFor(x => Model.ProductName)</td>
             </tr>
             <tr>
+                <td>@Html.LabelFor(x => Model.SizeName)</td>
+                @*<td></td>*@
+                <td>@Html.DisplayFor(x => Model.SizeName)</td>
+            </tr>
+            <tr>
                 <td>@Html.LabelFor(x => Model.Quantity)</td>
-                <td>???</td>
+                @*<td>@Html.DisplayFor(x => product.QuantityCalculated)</td>*@
                 <td>@Html.DisplayFor(x => Model.Quantity)</td>
             </tr>
             <tr>
                 <td>@Html.LabelFor(x => Model.Price)</td>
-                <td>???</td>
+                @*<td>@Html.DisplayFor(x => product.Price)</td>*@
                 <td>@Html.DisplayFor(x => Model.Price)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(x => Model.PriceOfRelease)</td>
+                @*<td>@Html.DisplayFor(x => product.PriceReleaseFirst)</td>*@
+                <td>@Html.DisplayFor(x => Model.PriceOfRelease)</td>
             </tr>
         </table>
     </div>

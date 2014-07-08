@@ -18,7 +18,23 @@ namespace OnBalance.Domain.Concrete
 
         public void Save(Entities.BalanceItem item)
         {
-            _dbContext.BalanceItems.Add(item);
+            if (item.Id < 1)
+            {
+                _dbContext.BalanceItems.Add(item);
+            }
+            else
+            {
+                var existing = _dbContext.BalanceItems.First(x => x.Id == item.Id);
+                existing.ChangedFrom = item.ChangedFrom;
+                existing.InternalCode = item.InternalCode;
+                existing.PosId = item.PosId;
+                existing.PriceOfRelease = item.PriceOfRelease;
+                existing.Price = item.Price;
+                existing.ProductName = item.ProductName;
+                existing.Quantity = item.Quantity;
+                existing.SizeName = item.SizeName;
+                existing.StatusId = item.StatusId;
+            }
         }
 
 

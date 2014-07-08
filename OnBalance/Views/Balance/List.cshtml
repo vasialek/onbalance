@@ -8,12 +8,14 @@
         <th>
             POS Id
         </th>
+        <th>Changed from</th>
         <th>
             Internal code
         </th>
         <th>
             Product name
         </th>
+        <th>Size</th>
         <th>
             Quantity
         </th>
@@ -41,11 +43,21 @@
                 @Html.DisplayFor(modelItem => item.PosId)
             </td>
             <td>
+                @if(item.IsChangedLocally)
+                {
+                    <span class="badge badge-success">Local</span>
+                }else
+                {
+                    <span class="badge badge-info">Eshop</span>
+                }
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.InternalCode)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProductName)
             </td>
+            <td>@Html.DisplayFor(x => item.SizeName)</td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
@@ -68,7 +80,7 @@
                 @Html.DisplayFor(modelItem => item.HasRemoteChanges)
             </td>*@
             <td>
-                @if(item.Status == OnBalance.Status.Approved)
+                @if(item.Status == OnBalance.Status.Pending)
                 {
                     @Html.ActionLink("Confirm", "confirm", new { id = item.Id });
                 }
@@ -78,7 +90,7 @@
 } else
 {
     <tr>
-        <td colspan="8">
+        <td colspan="9">
             No pending changes from this POS
         </td>
     </tr>

@@ -17,6 +17,8 @@
 
 <h2>Balance</h2>
 
+@Html.ActionLink("Pending changes", "list", "balance", new { id = Model.PosId }, new { @class = "btn btn-mini btn-primary", target = "_blank" })
+
 @foreach (var c in Model.ProductsByCategories)
 {
     <table class="table table-bordered table-condensed table-striped">
@@ -63,13 +65,19 @@
                 {
                     if(item.ProductDetails != null)
                     {
-                    var qnt = item.ProductDetails.FirstOrDefault(x => x.parameter_value == s.SizeName);
-                    int qntId = qnt == null ? 0 : qnt.id;
-                    <td id="@("Pr_" + qntId)">
-                        <div id="@("Qnt_" + qntId)" class="product-qnt">@(qnt == null ? 0 : qnt.quantity)</div>
-                        <div id="@("Decrease_" + qntId)" class="product-qnt-minus">@Html.Image("/images/decrease.gif", 6, 3, "-", null)</div>
-                        <div id="@("Increase_" + qntId)" class="product-qnt-plus">@Html.Image("/images/increase.gif", 6, 3, "+", null)</div>
-                    </td>
+                        var qnt = item.ProductDetails.FirstOrDefault(x => x.parameter_value == s.SizeName);
+                        if(qnt != null)
+                        {
+                        <td id="@("Pr_" + qnt.id)">
+                            <div id="@("Qnt_" + qnt.id)" class="product-qnt">@qnt.quantity</div>
+                            <div id="@("Decrease_" + qnt.id)" class="product-qnt-minus">@Html.Image("/images/decrease.gif", 6, 3, "-", null)</div>
+                            <div id="@("Increase_" + qnt.id)" class="product-qnt-plus">@Html.Image("/images/increase.gif", 6, 3, "+", null)</div>
+                        </td>
+                        }
+                        else
+                        {
+                            <td>-</td>
+                        }
                     }else
                     {
                         <td>-</td>
@@ -163,7 +171,7 @@
                 success: function (data, status, xhr) {
                     console.log("  current quantity of product is: " + qntDiv.html());
                     if (isNaN(currentQnt) === false) {
-                        qntDiv.html(currentQnt + dQnt);
+                        qntDiv.html(currentQnt + dQnt).css({ "color": "green" });
                     }
                 },
                 error: function (status, xhr) {

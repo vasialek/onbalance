@@ -56,7 +56,8 @@ namespace OnBalance.Controllers
             try
             {
                 var pos = _organizationRepository.GetById(id);
-                var productsByCategories = GetProductsByCategories();
+                var productsByCategories = GetProductsByCategories(pos.Id);
+                productsByCategories.PosId = id;
                 //var products = _productRepository.GetLastInPos(pos.Id, 0, 20);
                 //return View("Balance", new ViewModels.Products.ProductsByCategoryViewModel(products.ToList()));
                 return View("Balance", productsByCategories);
@@ -539,14 +540,14 @@ namespace OnBalance.Controllers
             return View(model);
         }
 
-        private ProductsByCategoryViewModel GetProductsByCategories()
+        private ProductsByCategoryViewModel GetProductsByCategories(int posId)
         {
             string cs = "Data Source=192.185.10.193;Initial Catalog=vasialek_onbalance;User ID=vasialek_onbalance_user;Password=w3N2SPzGgwL4";
             var con = new System.Data.SqlClient.SqlConnection(cs);
             con.Open();
             var cmd = new System.Data.SqlClient.SqlCommand(
 @"select 
-    --top 100
+    -- top 100
     p.id as id,             -- 0
     p.internal_code, 
     p.uid, 
@@ -562,6 +563,7 @@ namespace OnBalance.Controllers
 from product p
 	join category c on p.category_id = c.id
 	left join product_detail pd on p.id = pd.product_id
+where p.pos_id = " + posId + @"
 order by p.id", con);
 
             ProductsByCategoryViewModel productsByCategories = new ProductsByCategoryViewModel();

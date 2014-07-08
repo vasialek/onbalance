@@ -54,7 +54,7 @@ namespace OnBalance.Controllers
             }
             catch (Exception ex)
             {
-                Logger.Error("Error in Test", ex);
+                Error("Error in Test", ex);
                 return Content(ex.Message);
             }
         }
@@ -67,9 +67,59 @@ namespace OnBalance.Controllers
 
             try
             {
-                int dQnt = int.Parse(Request["dQnt"]);
-                quantity += dQnt;
-                status = true;
+                var dbBalance = new EfBalanceItemRepository();
+                var dbProducts = new EfProductRepository();
+
+                var pd = dbProducts.GetDetailsById(id);
+                if (pd == null)
+                {
+                    message = "Could not found ProductDetail";
+                    ErrorFormat("Could not get ProductDetail by ID: {0}", id);
+                }
+                else
+                {
+
+                    var product = dbProducts.GetById(pd.ProductId);
+                    if (product == null)
+	                {
+		                message = "Could not found Product to change quantity";
+                        ErrorFormat("Could not get Product by ID: {0}", pd.ProductId);
+	                }
+
+                    var balanceItem = dbBalance.BalanceItems
+                        .Where(x => x.InternalCode == product.InternalCode)
+                        .Where(x => x.SizeName == pd.ParameterValue)
+                        .Where(x => x.PosId == product.PosId)
+                        .Where(x => x.StatusId == (byte)Status.Pending)
+                        .FirstOrDefault();
+
+                    int dQnt = int.Parse(Request["dQnt"]);
+                    if (balanceItem == null)
+                    {
+                        balanceItem = new OnBalance.Domain.Entities.BalanceItem();
+                        balanceItem.InternalCode = product.InternalCode;
+                        balanceItem.SizeName = pd.ParameterValue;
+                        balanceItem.PosId = product.PosId;
+                        balanceItem.ProductName = product.Name;
+                        balanceItem.StatusId = (byte)Status.Pending;
+                        balanceItem.Quantity = dQnt;
+                    }
+                    else
+                    {
+                        balanceItem.Quantity += dQnt;
+                    }
+
+                    balanceItem.Price = pd.PriceMinor / 100;
+                    balanceItem.PriceOfRelease = pd.PriceReleaseMinor / 100;
+                    // Locally
+                    balanceItem.ChangedFrom = 'L';
+
+                    dbBalance.Save(balanceItem);
+                    dbBalance.SubmitChanges();
+
+                    quantity = balanceItem.Quantity;
+                    status = true;
+                }
             }
             catch (Exception ex)
             {
@@ -94,7 +144,7 @@ namespace OnBalance.Controllers
 
         public ActionResult Grid()
         {
-            return View();
+            return View("Grid", "_LayoutLogin");
         }
 
         public ActionResult Sync()

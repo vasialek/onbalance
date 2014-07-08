@@ -32,6 +32,10 @@ namespace OnBalance.Models
                         return Status.Completed;
                     case (byte)Status.Deleted:
                         return Status.Deleted;
+                    case (byte)Status.Pending:
+                        return Status.Pending;
+                    case (byte)Status.Failed:
+                        return Status.Failed;
                 }
                 return Status.Unknown;
             }
@@ -75,12 +79,14 @@ namespace OnBalance.Models
         /// <summary>
         /// Gets/sets whether changes from local should be synced with remote (shop, POS)
         /// </summary>
-        public bool HasLocalChanges { get; set; }
+        //public bool HasLocalChanges { get; set; }
 
         /// <summary>
         /// Gets/sets whether product was changed on remote side (shop, POS) and need be updated
         /// </summary>
-        public bool HasRemoteChanges { get; set; }
+        public bool IsChangedLocally { get; set; }
+
+        public string SizeName { get; set; }
 
         public BalanceItem()
         {
@@ -88,6 +94,20 @@ namespace OnBalance.Models
         //    IsNew = true;
         //    HasLocalChanges = false;
         //    HasRemoteChanges = false;
+        }
+
+        public BalanceItem(OnBalance.Domain.Entities.BalanceItem x)
+        {
+            Id = x.Id;
+            InternalCode = x.InternalCode;
+            PosId = x.PosId;
+            Price = x.Price;
+            PriceOfRelease = x.PriceOfRelease;
+            ProductName = x.ProductName;
+            SizeName = x.SizeName;
+            Quantity = x.Quantity;
+            StatusId = x.StatusId;
+            IsChangedLocally = x.ChangedFrom.Equals('L') || x.ChangedFrom.Equals('l');
         }
     }
 }

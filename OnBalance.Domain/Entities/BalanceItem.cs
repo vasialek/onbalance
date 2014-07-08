@@ -33,6 +33,10 @@ namespace OnBalance.Domain.Entities
                         return Status.Completed;
                     case (byte)Status.Deleted:
                         return Status.Deleted;
+                    case (byte)Status.Pending:
+                        return Status.Pending;
+                    case (byte)Status.Failed:
+                        return Status.Failed;
                 }
                 return Status.Unknown;
             }
@@ -72,6 +76,12 @@ namespace OnBalance.Domain.Entities
         /// </summary>
         [NotMapped]
         public decimal PriceOfRelease { get; set; }
+
+        [Column("size_name")]
+        public string SizeName { get; set; }
+
+        [Column("changed_from")]
+        public char ChangedFrom { get; set; }
 
         [Column("is_new")]
         public char _DbFieldIsNew
