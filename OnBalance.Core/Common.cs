@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -8,6 +9,11 @@ namespace OnBalance.Core
 
     public class Common
     {
+
+        /// <summary>
+        /// Unix epoch start, used for timestamp calculations
+        /// </summary>
+        private static DateTime _unixStart = new DateTime(1970, 1, 1, 0, 0, 0);
 
         public static byte[] CalculateMd5(string p)
         {
@@ -18,6 +24,125 @@ namespace OnBalance.Core
             byte[] ba = Encoding.UTF8.GetBytes(p);
             return System.Security.Cryptography.MD5CryptoServiceProvider.Create().ComputeHash(ba, 0, ba.Length);
         }
+
+        public static Dictionary<string, object> DynamicObjectToDictionaryInsensitive(object o)
+        {
+            Dictionary<string, object> ar = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(o))
+            {
+                ar[pd.Name] = pd.GetValue(o);
+            }
+            return ar;
+        }
+
+        public static Dictionary<string, object> DynamicObjectToDictionary(object o)
+        {
+            Dictionary<string, object> ar = new Dictionary<string, object>();
+            foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(o))
+            {
+                ar[pd.Name] = pd.GetValue(o);
+            }
+            return ar;
+        }
+
+        #region Timestamp
+
+        /// <summary>
+        /// Converts DateTime value to Unix timestamp
+        /// </summary>
+        /// <param name="dt">DateTime to convert</param>
+        public static double GetTimestamp(DateTime dt)
+        {
+            return Math.Floor((dt - _unixStart).TotalSeconds);
+        }
+
+        /// <summary>
+        /// Returns current Unix timestamp
+        /// </summary>
+        public static double GetTimestamp()
+        {
+            return GetTimestamp(DateTime.Now);
+        }
+
+        /// <summary>
+        /// Converts Unix timestamp to DateTime object
+        /// </summary>
+        /// <param name="timestamp">Timestamp to convert</param>
+        public static DateTime TimestampToDateTime(double timestamp)
+        {
+            return _unixStart.AddSeconds(timestamp);
+        }
+
+        public static string TimeSpanToStringAgo(DateTime date)
+        {
+            int s = (int)(DateTime.Now - date).TotalSeconds;
+            string fmt = "";
+
+            if (s < 3600)
+            {
+                fmt = "%minutes% %seconds%";
+            }
+            else if (s < 24 * 3600)
+            {
+                fmt = "%hours% %minutes%";
+            }
+            else
+            {
+                fmt = "%days% %hours%";
+            }
+
+            return TimeSpanToStringAgo(date, DateTime.Now, fmt);
+        }
+
+        /// <summary>
+        /// Returns string, replacing %VAR% w/ values, i.e. "34 hours 13 seconds ago"
+        /// </summary>
+        /// <param name="date">Date in past</param>
+        /// <param name="now">Date in future</param>
+        /// <param name="fmt">String could contains %days% %hours% %minutes% %seconds%</param>
+        public static string TimeSpanToStringAgo(DateTime date, DateTime now, string fmt)
+        {
+            TimeSpan ts = now - date;
+            int v = 0;
+
+            if (fmt.IndexOf("%days%") != -1)
+            {
+                v = (int)Math.Floor(ts.TotalDays);
+                fmt = fmt.Replace("%days%", v > 0 ? v.ToString() + " days" : "");
+                now = now.AddDays(0 - v);
+                ts = now - date;
+            }
+
+            if (fmt.IndexOf("%hours%") != -1)
+            {
+                v = (int)Math.Floor(ts.TotalHours);
+                fmt = fmt.Replace("%hours%", v > 0 ? v.ToString() + " hours" : "");
+                now = now.AddHours(0 - v);
+                ts = now - date;
+            }
+
+            if (fmt.IndexOf("%minutes%") != -1)
+            {
+                v = (int)Math.Floor(ts.TotalMinutes);
+                fmt = fmt.Replace("%minutes%", v > 0 ? v.ToString() + " minutes" : "");
+                now = now.AddMinutes(0 - v);
+                ts = now - date;
+            }
+
+            if (fmt.IndexOf("%seconds%") != -1)
+            {
+                v = (int)Math.Floor(ts.TotalSeconds);
+                fmt = fmt.Replace("%seconds%", v > 0 ? v.ToString() + " seconds" : "");
+                now = now.AddSeconds(0 - v);
+                ts = now - date;
+            }
+
+            return fmt.Trim();
+        }
+
+
+        #endregion
+
 
         #region Hex Encode/Decode
         private static char[] _hex = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
