@@ -48,12 +48,21 @@ namespace OnBalance.Controllers
             //ViewBag.CategoryNames = items.Select(x => x.CategoryName)
             //    .Distinct()
             //    .ToList();
-            PrepareInsertSql(items, 102000);
+            //PrepareInsertSql(items, 102000);
 
             if (items.Count > 0)
             {
                 items = items.OrderBy(x => x.CategoryName).ToList();
                 TempData["ExchangeItems"] = items;
+
+                //StringBuilder sb = new StringBuilder();
+                //foreach (var e in p.Errors)
+                //{
+                //    sb.AppendFormat("#{0}\t{1}", e.LineNr, e.Line);
+                //    sb.AppendLine("<br />");
+                //    Response.Write(sb.ToString());
+                //    Response.End();
+                //}
             }
 
             return View("Preview", "_LayoutLogin", items);

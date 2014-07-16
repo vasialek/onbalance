@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Linq;
 using System.Configuration;
+using OnBalance.Core;
 
 namespace OnBalance.Models
 {

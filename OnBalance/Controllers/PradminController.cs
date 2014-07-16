@@ -14,6 +14,8 @@ using OnBalance.ViewModels.Products;
 using OnBalance.ViewModels.Categories;
 //using OnBalance.Domain.Entities;
 using OnBalance.Domain.Abstract;
+using OnBalance.Core;
+using OnBalance.Domain.Concrete;
 
 namespace OnBalance.Controllers
 {
@@ -22,6 +24,12 @@ namespace OnBalance.Controllers
     {
         private IOrganizationRepository _organizationRepository = null;
         private IProductRepository _productRepository = null;
+
+        public PradminController()
+            : this(new OnBalance.Domain.Concrete.EfProductRepository(), new EfOrganizationRepository())
+        {
+
+        }
 
         public PradminController(IProductRepository productRepository, IOrganizationRepository organisationRepository)
         {
@@ -350,79 +358,79 @@ namespace OnBalance.Controllers
         public ActionResult Parse(TextParserViewModel model)
         {
             List<BalanceItem> parsed = new List<BalanceItem>();
-            BalanceItem exi = null;
+            //BalanceItem exi = null;
 
-            try
-            {
-                StringBuilder sb = new StringBuilder();
-                string[] lines = model == null ? null : model.Text.Split(Environment.NewLine.ToCharArray());
-                int temp = 0;
-                decimal tempPrice = 0m;
-                string codeAndName = "";
-                int pos = 0;
+            //try
+            //{
+            //    StringBuilder sb = new StringBuilder();
+            //    string[] lines = model == null ? null : model.Text.Split(Environment.NewLine.ToCharArray());
+            //    int temp = 0;
+            //    decimal tempPrice = 0m;
+            //    string codeAndName = "";
+            //    int pos = 0;
 
-                for(int i = 0; (lines != null) && (i < lines.Length); i++)
-                {
-                    string line = lines[i].Trim();
-                    string lineNr = (i + i).ToString();
-                    if(line.Length < 5)
-                    {
-                        //ModelState.AddModelError("Text", MyMessages.Parser.LineIsTooShortFmt.Replace("%NR%", lineNr).Replace("%LENGTH%", line.Length.ToString()));
-                    } else
-                    {
-                        string[] ar = line.Split(new char[] { '\t' });
-                        if(ar.Length < 4)
-                        {
-                            ModelState.AddModelError("Text", MyMessages.Parser.SplittedLineHasTooLessArgumentsFmt.Replace("%NR%", lineNr));
-                        } else
-                        {
-                            exi = new BalanceItem();
-                            codeAndName = ar[0].Trim();
-                            exi.Quantity = int.TryParse(ar[2].Trim(), out temp) ? temp : -1;
-                            exi.Price = decimal.TryParse(ar[3].Trim(), System.Globalization.NumberStyles.Currency, CultureInfo.InvariantCulture, out tempPrice) ? tempPrice : -1;
-                            exi.PriceOfRelease = decimal.TryParse(ar[ar.Length - 1].Trim(), NumberStyles.Currency, CultureInfo.InvariantCulture, out tempPrice) ? tempPrice : -1;
+            //    for(int i = 0; (lines != null) && (i < lines.Length); i++)
+            //    {
+            //        string line = lines[i].Trim();
+            //        string lineNr = (i + i).ToString();
+            //        if(line.Length < 5)
+            //        {
+            //            //ModelState.AddModelError("Text", MyMessages.Parser.LineIsTooShortFmt.Replace("%NR%", lineNr).Replace("%LENGTH%", line.Length.ToString()));
+            //        } else
+            //        {
+            //            string[] ar = line.Split(new char[] { '\t' });
+            //            if(ar.Length < 4)
+            //            {
+            //                ModelState.AddModelError("Text", MyMessages.Parser.SplittedLineHasTooLessArgumentsFmt.Replace("%NR%", lineNr));
+            //            } else
+            //            {
+            //                exi = new BalanceItem();
+            //                codeAndName = ar[0].Trim();
+            //                exi.Quantity = int.TryParse(ar[2].Trim(), out temp) ? temp : -1;
+            //                exi.Price = decimal.TryParse(ar[3].Trim(), System.Globalization.NumberStyles.Currency, CultureInfo.InvariantCulture, out tempPrice) ? tempPrice : -1;
+            //                exi.PriceOfRelease = decimal.TryParse(ar[ar.Length - 1].Trim(), NumberStyles.Currency, CultureInfo.InvariantCulture, out tempPrice) ? tempPrice : -1;
 
-                            // Search for N-digit code
-                            pos = codeAndName.LastIndexOf(' ');
-                            if(pos >= 0)
-                            {
-                                exi.InternalCode = "---";
-                                if(int.TryParse(codeAndName.Substring(pos), out temp))
-                                {
-                                    exi.InternalCode = temp.ToString();
-                                    exi.ProductName = codeAndName.Substring(0, codeAndName.Length - temp.ToString().Length);
-                                }
-                                sb.AppendFormat("Code: {0}, name: {1}, qnt: {2}, price: {3}, price of release: {4}", exi.InternalCode, exi.ProductName, exi.Quantity, exi.Price, exi.PriceOfRelease);
+            //                // Search for N-digit code
+            //                pos = codeAndName.LastIndexOf(' ');
+            //                if(pos >= 0)
+            //                {
+            //                    exi.InternalCode = "---";
+            //                    if(int.TryParse(codeAndName.Substring(pos), out temp))
+            //                    {
+            //                        exi.InternalCode = temp.ToString();
+            //                        exi.ProductName = codeAndName.Substring(0, codeAndName.Length - temp.ToString().Length);
+            //                    }
+            //                    sb.AppendFormat("Code: {0}, name: {1}, qnt: {2}, price: {3}, price of release: {4}", exi.InternalCode, exi.ProductName, exi.Quantity, exi.Price, exi.PriceOfRelease);
 
-                                if( !string.IsNullOrEmpty(exi.ProductName) && !string.IsNullOrEmpty(exi.InternalCode) )
-                                {
-                                    parsed.Add(exi);
-                                }
-                            } else
-                            {
-                                ModelState.AddModelError("Text", MyMessages.Parser.CouldNotParseCodeForLineFmt.Replace("%NR%", lineNr));
-                            }
+            //                    if( !string.IsNullOrEmpty(exi.ProductName) && !string.IsNullOrEmpty(exi.InternalCode) )
+            //                    {
+            //                        parsed.Add(exi);
+            //                    }
+            //                } else
+            //                {
+            //                    ModelState.AddModelError("Text", MyMessages.Parser.CouldNotParseCodeForLineFmt.Replace("%NR%", lineNr));
+            //                }
 
-                        }
-                    }
-                }
+            //            }
+            //        }
+            //    }
 
-                if( parsed.Count > 0 )
-                {
-                    TempData["ExchangeItems"] = parsed;
-                    if(Request.Params.AllKeys.Contains("ExportBtn"))
-                    {
-                        return RedirectToAction("export", new { id = 100001 });
-                    }
-                    return RedirectToAction("balance", new { id = 100001 });
-                }
+            //    if( parsed.Count > 0 )
+            //    {
+            //        TempData["ExchangeItems"] = parsed;
+            //        if(Request.Params.AllKeys.Contains("ExportBtn"))
+            //        {
+            //            return RedirectToAction("export", new { id = 100001 });
+            //        }
+            //        return RedirectToAction("balance", new { id = 100001 });
+            //    }
 
-                return Content(sb.ToString());
+            //    return Content(sb.ToString());
 
-            } catch(Exception ex)
-            {
-                return Content("Error: " + ex.ToString());
-            }
+            //} catch(Exception ex)
+            //{
+            //    return Content("Error: " + ex.ToString());
+            //}
 
             return View(model);
         }
@@ -540,6 +548,56 @@ namespace OnBalance.Controllers
             return View(model);
         }
 
+        //
+        // POST: /pradmin/donewsize/<PRODUCT_ID>?s=<SIZENAME>
+
+        [HttpPost]
+        public ActionResult DoNewSize(int id)
+        {
+            string sizeName = "";
+            var pd = new OnBalance.Domain.Entities.ProductDetail();
+            bool status = false;
+            var sb = new StringBuilder();
+            try
+            {
+                Info("Adding new size...");
+                sizeName = Request["sname"].Trim().ToUpper();
+                var details = _productRepository.GetDetailsByProduct(id);
+                if (details.FirstOrDefault(x => x.ParameterValue == sizeName) != null)
+                {
+                    throw new ArgumentException("Size already exists: " + sizeName);
+                }
+
+                pd.Quantity = 1;
+                pd.ParameterValue = sizeName;
+                pd.ParameterName = "size";
+                pd.ProductId = id;
+                pd.CreatedAt = DateTime.UtcNow;
+                pd.UpdatedAt = DateTime.UtcNow;
+                pd.StatusId = (byte)Status.Pending;
+
+                _productRepository.Save(pd);
+                _productRepository.SubmitChanges();
+
+                sb.AppendFormat("<div id=\"Qnt_{0}\" class=\"product-qnt\">{1}</div>", pd.Id, pd.Quantity);
+                sb.AppendFormat("<div id=\"Decrease_{0}\" class=\"product-qnt-minus\">-</div>", pd.Id);
+                sb.AppendFormat("<div id=\"Increase_{0}\" class=\"product-qnt-plus\">+</div>", pd.Id);
+                status = true;
+            }
+            catch (Exception ex)
+            {
+                Error("Error adding quantity for size: " + sizeName, ex);
+                //resp.Message = ex.Message;
+            }
+
+            return Json(new
+            {
+                Status = status,
+                HtmlData = sb.ToString(),
+                NewSizeId = pd.Id
+            });
+        }
+
         private ProductsByCategoryViewModel GetProductsByCategories(int posId)
         {
             string cs = "Data Source=192.185.10.193;Initial Catalog=vasialek_onbalance;User ID=vasialek_onbalance_user;Password=w3N2SPzGgwL4";
@@ -547,7 +605,7 @@ namespace OnBalance.Controllers
             con.Open();
             var cmd = new System.Data.SqlClient.SqlCommand(
 @"select 
-    -- top 100
+    --top 100
     p.id as id,             -- 0
     p.internal_code, 
     p.uid, 

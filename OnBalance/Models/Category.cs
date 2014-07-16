@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Linq.Mapping;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using OnBalance.Core;
 
 namespace OnBalance.Models
 {

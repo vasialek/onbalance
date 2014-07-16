@@ -19,6 +19,9 @@ OnBalance/OnBalance.csproj.user
 OnBalance/packages.config
 OnBalance.UnitTests/packages.config
 
+OnBalance.WebDev/*
+TestConsole/*
+
 OnBalance.Domain/bin/
 OnBalance.Domain/bin/Debug/
 OnBalance.Domain/bin/Release/
@@ -48,3 +51,10 @@ OnBalance.Core/obj/Debug/OnBalance.Core.csproj.FileListAbsolute.txt
 OnBalance.ParsersUnitTest/bin/Debug/OnBalance.ParsersUnitTest.dll.config
 doc/import/2014-07-01/SANDELIAI DRABUZIAI.sxc
 doc/import/2014-07-01/SANDELIAI KEDAI.sxc
+OnBalance.Core/obj/Release/OnBalance.Core.csproj.FileListAbsolute.txt
+OnBalance.Parsers/obj/Release/OnBalance.Parsers.csproj.FileListAbsolute.txt
+OnBalance.ParsersUnitTest/obj/Release/OnBalance.ParsersUnitTest.csproj.FileListAbsolute.txt
+OnBalance.Core/bin/Debug/OnBalance.Core.dll.config
+OnBalance.Core/bin/Release/OnBalance.Core.dll.config
+OnBalance.Parsers/bin/Debug/OnBalance.Parsers.dll.config
+OnBalance.Parsers/bin/Release/OnBalance.Parsers.dll.config

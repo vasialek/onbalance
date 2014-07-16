@@ -32,9 +32,9 @@
             @Html.DisplayFor(modelItem => item.OrganizationId)
         </td>
         <td>
-            @(item.ParentId == 0 ? "" : item.Parent.Name)
+            @(item.ParentId == 0 ? "" : "item.Parent.Name")
         </td>
-        <td>@item.CategoryTypeName</td>
+        <td>item.CategoryTypeName</td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
         </td>

@@ -5,7 +5,7 @@
 
 <div class="editor-label">@Html.LabelFor(x => x.StatusId)</div>
 <div class="editor-field">
-    @Html.StatusDropDownList((OnBalance.Status)Model.StatusId, "StatusId")
+    @Html.StatusDropDownList((OnBalance.Core.Status)Model.StatusId, "StatusId")
     @*@Html.EditorFor(x => x.StatusId, "Enum")*@
     @Html.ValidationMessageFor(x => x.StatusId)
 </div>

@@ -7,6 +7,7 @@ using System.Web.Security;
 using OnBalance.ViewModels.User;
 using OnBalance.Models;
 using System.ComponentModel.DataAnnotations;
+using OnBalance.Core;
 
 namespace OnBalance.Controllers
 {

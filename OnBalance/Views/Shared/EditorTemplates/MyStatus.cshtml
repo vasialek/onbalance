@@ -4,7 +4,7 @@
     string name = ViewData.TemplateInfo.GetFullHtmlFieldName("");
     ViewData.TemplateInfo.HtmlFieldPrefix = ViewData.TemplateInfo.HtmlFieldPrefix.Replace(".StatusId", "");
 
-    OnBalance.Status s = OnBalance.Status.Unknown;
+    OnBalance.Core.Status s = OnBalance.Core.Status.Unknown;
     if(Model.HasValue)
     {
         Enum.TryParse(Model.Value.ToString(), out s);

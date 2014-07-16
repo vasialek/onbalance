@@ -22,7 +22,7 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink(OnBalance.MyConstants.Name, "index", "home")
+            @Html.ActionLink(OnBalance.Core.MyConstants.Name, "index", "home")
             <span class="divider">\</span>
         </li>
         <li>@ViewBag.Title</li>
@@ -31,7 +31,7 @@
     <table class="table">
         <tr>
             <td>@Model.Category.Name</td>
-            <td>@Model.Category.StatusName</td>
+            <td>@Model.Category.StatusId</td>
         </tr>
     </table>
 

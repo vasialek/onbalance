@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Web.Mvc;
 using System.Data.Linq.Mapping;
 using System.ComponentModel.DataAnnotations;
+using OnBalance.Core;
 
 namespace OnBalance.Models
 {

@@ -15,59 +15,59 @@ namespace OnBalance.Controllers
         //
         // GET: /size/
 
-        public ActionResult Index()
-        {
-            SizeConvertorRepository db = new SizeConvertorRepository();
-            return RedirectToAction("edit", new { id = db.GetCategories().First().Id });
-        }
+        //public ActionResult Index()
+        //{
+        //    SizeConvertorRepository db = new SizeConvertorRepository();
+        //    return RedirectToAction("edit", new { id = db.GetCategories().First().Id });
+        //}
 
-        //
-        // GET: /size/edit
+        ////
+        //// GET: /size/edit
 
-        public ActionResult Edit(int id)
-        {
-            SizeConvertorRepository db = new SizeConvertorRepository();
-            SizeConvertorViewModel szViewModel = new SizeConvertorViewModel();
-            szViewModel.Categories = db.GetCategories();
-            szViewModel.SelectedCategory = szViewModel.Categories.FirstOrDefault(x => x.Id == id);
-            szViewModel.Sizes = db.GetAll(id).OrderBy(x => x.euro_size).ToList();
-            return View("edit", szViewModel);
-        }
+        //public ActionResult Edit(int id)
+        //{
+        //    SizeConvertorRepository db = new SizeConvertorRepository();
+        //    SizeConvertorViewModel szViewModel = new SizeConvertorViewModel();
+        //    szViewModel.Categories = db.GetCategories();
+        //    szViewModel.SelectedCategory = szViewModel.Categories.FirstOrDefault(x => x.Id == id);
+        //    szViewModel.Sizes = db.GetAll(id).OrderBy(x => x.euro_size).ToList();
+        //    return View("edit", szViewModel);
+        //}
 
-        //
-        // POST: /size/edit
+        ////
+        //// POST: /size/edit
 
-        [HttpPost]
-        public ActionResult Edit(List<SizeConvertor> model)
-        {
-            if( ModelState.IsValid )
-            {
-                SizeConvertorRepository db = new SizeConvertorRepository();
+        //[HttpPost]
+        //public ActionResult Edit(List<SizeConvertor> model)
+        //{
+        //    if( ModelState.IsValid )
+        //    {
+        //        SizeConvertorRepository db = new SizeConvertorRepository();
 
-                db.Update(model);
+        //        db.Update(model);
 
-                SizeConvertor newSize = new SizeConvertor();
-                newSize.category_id = int.Parse(Request["new[CategoryId]"]);
-                newSize.euro_size = Request["new[EuroSize]"];
-                newSize.uk_size = Request["new[UkSize]"];
-                newSize.us_size = Request["new[UsSize]"];
+        //        SizeConvertor newSize = new SizeConvertor();
+        //        newSize.category_id = int.Parse(Request["new[CategoryId]"]);
+        //        newSize.euro_size = Request["new[EuroSize]"];
+        //        newSize.uk_size = Request["new[UkSize]"];
+        //        newSize.us_size = Request["new[UsSize]"];
 
-                db.Insert(newSize);
-            }
-            return RedirectToAction("edit");
-        }
+        //        db.Insert(newSize);
+        //    }
+        //    return RedirectToAction("edit");
+        //}
 
-        //
-        // GET: /size/delete/1234
+        ////
+        //// GET: /size/delete/1234
 
-        public ActionResult Delete(int id)
-        {
-            SizeConvertorRepository db = new SizeConvertorRepository();
-            SizeConvertor model = db.GetById(id);
-            int categoryId = model.category_id;
-            db.Delete(model);
-            return RedirectToAction("edit", new { id = categoryId });
-        }
+        //public ActionResult Delete(int id)
+        //{
+        //    SizeConvertorRepository db = new SizeConvertorRepository();
+        //    SizeConvertor model = db.GetById(id);
+        //    int categoryId = model.category_id;
+        //    db.Delete(model);
+        //    return RedirectToAction("edit", new { id = categoryId });
+        //}
 
         //
         // GET: /size/getlist

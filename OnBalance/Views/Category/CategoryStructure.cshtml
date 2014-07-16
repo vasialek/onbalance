@@ -27,7 +27,7 @@
             @Html.TextBoxFor(x => CategoryStructure[i].FieldName)
         </td>
         <td>
-            @Html.CheckBox(ViewData.TemplateInfo.GetFullHtmlFieldName(string.Concat("CategoryStructure[", i, "].StatusId")), CategoryStructure[i].StatusId == (byte)OnBalance.Status.Approved)
+            @Html.CheckBox(ViewData.TemplateInfo.GetFullHtmlFieldName(string.Concat("CategoryStructure[", i, "].StatusId")), CategoryStructure[i].StatusId == (byte)OnBalance.Core.Status.Approved)
         </td>
         <td>
             @Html.TextBoxFor(x => CategoryStructure[i].FieldType)

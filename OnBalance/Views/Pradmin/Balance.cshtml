@@ -38,7 +38,7 @@
             <th>
                 Price (release)
             </th>
-            @foreach (var s in c.Sizes)
+            @foreach (var s in c.SizesOrdered)
             {
                 <th>@s.SizeName</th>
             }
@@ -61,12 +61,13 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.PriceReleaseFirst)
                 </td>
-                @foreach (var s in c.Sizes)
+                @*@foreach (var s in c.SizesOrdered)*@
+                @for (int i = 0; i < c.SizesOrdered.Length; i++)
                 {
-                    if(item.ProductDetails != null)
+                    if (item.ProductDetails != null)
                     {
-                        var qnt = item.ProductDetails.FirstOrDefault(x => x.parameter_value == s.SizeName);
-                        if(qnt != null)
+                        var qnt = item.ProductDetails.FirstOrDefault(x => x.parameter_value == c.SizesOrdered[i].SizeName);
+                        if (qnt != null)
                         {
                         <td id="@("Pr_" + qnt.id)">
                             <div id="@("Qnt_" + qnt.id)" class="product-qnt">@qnt.quantity</div>
@@ -76,9 +77,12 @@
                         }
                         else
                         {
-                            <td>-</td>
+                            <td id="@string.Concat("NewS_", item.Id, "_", i)">
+                                <div data-product-id="@item.Id" data-size-name="@c.SizesOrdered[i].SizeName" class="product-new-size" style="font-size: x-small">Add</div>
+                            </td>
                         }
-                    }else
+                    }
+                    else
                     {
                         <td>-</td>
                     }
@@ -180,6 +184,59 @@
             });
         },
 
+        reportError: function (msg) {
+            alert(msg);
+        },
+
+        addNewSizeQuantity: function (objToUpdate, productId, sizeName) {
+            if (productId < 1) {
+                this.reportError("Error determing ID of product (contact administrator)");
+                return;
+            }
+            if (sizeName == "") {
+                this.reportError("Error determing size (contact administrator)");
+                return;
+            }
+
+            console.log("Adding new product for size: " + sizeName);
+            var self = this;
+            //var qntDiv = $("#NewS_" + productId);
+
+            $.ajax({
+                url: gBaseUrl + "pradmin/donewsize/" + productId,
+                type: "POST",
+                data: { sname: sizeName },
+                success: function (data, status, xhr) {
+                    console.log("  Added new product for size: " + sizeName);
+                    console.log(data);
+                    if (data.Status) {
+                        console.log("    Got OK for new size");
+                        objToUpdate
+                            .unbind("click")
+                            .html(data.HtmlData)
+                            .css({ "color": "green" });
+                        // Bind increase/decrese events for new size
+                        $(".product-qnt-plus", objToUpdate).click(function (e) {
+                            var id = self.getClickedProductId(e, "td", "Pr_");
+                            self.changeProductQuantityBy(id, 1);
+                        });
+                        $(".product-qnt-minus", objToUpdate).click(function (e) {
+                            var id = self.getClickedProductId(e, "td", "Pr_");
+                            self.changeProductQuantityBy(id, -1);
+                        });
+
+                        objToUpdate.parent().attr("id", "Pr_" + data.NewSizeId);
+                    } else {
+                        self.reportError("Server error, adding new size");
+                    }
+                },
+                error: function (status, xhr) {
+                    console.log("Error adding product to size: " + sizeName);
+                    self.reportError("Internal server error (500) adding new size");
+                }
+            });
+        },
+
         _initContextMenu: function () {
             var self = this;
             var items = [];
@@ -208,6 +265,17 @@
             $(".product-qnt-minus").click(function (e) {
                 var id = self.getClickedProductId(e, "td", "Pr_");
                 self.changeProductQuantityBy(id, -1);
+            });
+
+            // Creation of size name
+            $(".product-new-size").click(function (e) {
+                console.log($(e.target));
+                var sizeName = $(e.target).attr("data-size-name");
+                var productId = $(e.target).attr("data-product-id");
+                if (confirm("Do you want to add product for size: " + sizeName + "?")) {
+                    //var productId = self.getClickedProductId(e, "td", "NewS_");
+                    self.addNewSizeQuantity($(e.target), productId, sizeName);
+                }
             });
         },
 

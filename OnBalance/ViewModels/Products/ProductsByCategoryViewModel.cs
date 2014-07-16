@@ -46,7 +46,7 @@ namespace OnBalance.ViewModels.Products
             var c = new ProductsAndSizesViewModel();
             c.CategoryId = p.CategoryId;
             
-            c.Sizes = new List<ProductSizeQuantity>();
+            c._sizes = new List<ProductSizeQuantity>();
             foreach (var s in p.ProductDetails)
             {
                 AddSizeName(c, s.ParameterValue);
@@ -60,11 +60,11 @@ namespace OnBalance.ViewModels.Products
 
         private void AddSizeName(ProductsAndSizesViewModel productSizes, string sizeName)
         {
-            var size = productSizes.Sizes.FirstOrDefault(x => x.SizeName.Equals(sizeName, StringComparison.InvariantCultureIgnoreCase));
+            var size = productSizes._sizes.FirstOrDefault(x => x.SizeName.Equals(sizeName, StringComparison.InvariantCultureIgnoreCase));
             if (size == null)
             {
                 // Create new size with one product
-                productSizes.Sizes.Add(new ProductSizeQuantity { SizeName = sizeName, Quantity = 1 });
+                productSizes._sizes.Add(new ProductSizeQuantity { SizeName = sizeName, Quantity = 1 });
             }
         }
 
@@ -74,12 +74,13 @@ namespace OnBalance.ViewModels.Products
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public IList<ProductSizeQuantity> Sizes { get; set; }
+        public IList<ProductSizeQuantity> _sizes { get; set; }
+        public ProductSizeQuantity[] SizesOrdered { get { return _sizes == null ? new ProductSizeQuantity[0] : _sizes.OrderBy(x => x.SizeName).ToArray(); } }
         public IList<Product> Products { get; set; }
 
         public ProductsAndSizesViewModel()
         {
-            Sizes = new List<ProductSizeQuantity>();
+            _sizes = new List<ProductSizeQuantity>();
             Products = new List<Product>();
         }
     }

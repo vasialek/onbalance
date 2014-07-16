@@ -44,19 +44,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>D:\install\HtmlAgilityPack.1.4.6\Net40\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="EntityFramework">
+      <HintPath>bin\lib\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>bin\lib\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.1.1309.1617\lib\net40\Moq.dll</HintPath>
+      <HintPath>bin\lib\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\install\Json60r1\Bin\Net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>bin\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
-      <HintPath>D:\install\Ninject-3.0.0.15-release-net-3.5\Ninject.dll</HintPath>
+      <HintPath>bin\lib\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -64,12 +69,10 @@
     <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xml.Linq" />
@@ -89,11 +92,9 @@
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LgfController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Controllers\ParamController.cs" />
-    <Compile Include="Controllers\ParserController.cs" />
     <Compile Include="Controllers\PradminController.cs" />
     <Compile Include="Controllers\SizeController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -107,9 +108,9 @@
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
     <Compile Include="Helpers\AvHtmlHelper.cs" />
-    <Compile Include="Import\ImportLgf.cs" />
     <Compile Include="Import\IPosImport.cs" />
     <Compile Include="Infrastructure\NinjectControllerFactory.cs" />
+    <Compile Include="Models\AjaxResponse.cs" />
     <Compile Include="Models\ApiRequestParameters.cs" />
     <Compile Include="Models\ApiResponseCodes.cs" />
     <Compile Include="Models\BalanceItem.cs" />
@@ -123,29 +124,19 @@
     <Compile Include="Models\CategoryType.cs" />
     <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\IFilter.cs" />
-    <Compile Include="Models\ObLog.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ObLog.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ObLogRepository.cs" />
     <Compile Include="Models\ParamModel.cs" />
     <Compile Include="Models\ParamRepository.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductDetail.cs" />
     <Compile Include="Models\ProductRepository.cs" />
     <Compile Include="Models\ProductSizeQuantity.cs" />
-    <Compile Include="Models\SizeConvertor.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
+    <Compile Include="Models\SizeConvertor.cs">
       <DependentUpon>SizeConvertor.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Models\SizeConvertorRepository.cs" />
     <Compile Include="Models\Task.cs" />
     <Compile Include="Models\UserCreate.cs" />
     <Compile Include="Models\UserOrganization.cs" />
     <Compile Include="Models\UserOrganizationRepository.cs" />
-    <Compile Include="MyConstants.cs" />
     <Compile Include="MyMessages.cs" />
     <Compile Include="ObLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -165,16 +156,6 @@
     <Compile Include="ViewModels\User\DashboardViewModel.cs" />
     <Compile Include="ViewModels\User\LoginViewModel.cs" />
     <Compile Include="ViewModels\User\UserViewModel.cs" />
-    <None Include="Models\ObLog.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>ObLog.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Models\SizeConvertor.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>SizeConvertor.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="css\gh-buttons.css" />
     <Content Include="images\add.png" />
     <Content Include="images\categoryparameters.png" />
@@ -240,10 +221,9 @@
     <Content Include="Views\Category\Create.cshtml" />
     <Content Include="Views\Category\Reset.cshtml" />
     <Content Include="Views\Balance\GetRemoteChanges.cshtml" />
-    <Content Include="Views\Parser\Edit.cshtml" />
-    <Content Include="Views\Parser\Preview.cshtml" />
-    <Content Include="Views\Parser\Import.cshtml" />
     <Content Include="Views\Pradmin\Balance.cshtml" />
+    <Content Include="Views\Pradmin\DoNewSize.cshtml" />
+    <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
     <Content Include="Views\Useradmin\CreateInPos.cshtml" />
@@ -275,9 +255,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scripts\yui\build\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
@@ -333,16 +310,6 @@
     <Content Include="Views\Size\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models\SizeConvertor.dbml.layout">
-      <DependentUpon>SizeConvertor.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\ObLog.dbml.layout">
-      <DependentUpon>ObLog.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\OnBalance.Core\OnBalance.Core.csproj">
       <Project>{a2d7571e-436a-454a-b220-12cca35c6bb0}</Project>
       <Name>OnBalance.Core</Name>
@@ -350,10 +317,6 @@
     <ProjectReference Include="..\OnBalance.Domain\OnBalance.Domain.csproj">
       <Project>{2569C3E0-A81E-4395-BD68-931AF55C37B9}</Project>
       <Name>OnBalance.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OnBalance.Parsers\OnBalance.Parsers.csproj">
-      <Project>{99d90559-4b38-46d2-8a12-73253838f1bd}</Project>
-      <Name>OnBalance.Parsers</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

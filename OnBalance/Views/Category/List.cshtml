@@ -9,7 +9,7 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink(OnBalance.MyConstants.Name, "index", "home")
+            @Html.ActionLink(OnBalance.Core.MyConstants.Name, "index", "home")
             <span class="divider">\</span>
         </li>
         <li>Categories for POS @Model.Organization.Name</li>
@@ -29,7 +29,7 @@
         {
             <tr>
                 <td>@item.Name</td>
-                <td>@item.StatusName</td>
+                <td>@item.StatusId</td>
                 <td>item.CategoryTypeName</td>
                 <td>
                     @Html.ActionLink("Edit", "edit", new { id = item.Id }, new { @class = "btn btn-mini" })

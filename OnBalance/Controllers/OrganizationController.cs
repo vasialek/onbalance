@@ -7,6 +7,7 @@ using OnBalance.Models;
 using OnBalance.ViewModels.Organizations;
 using OnBalance.Domain.Entities;
 using OnBalance.Domain.Abstract;
+using OnBalance.Core;
 
 namespace OnBalance.Controllers
 {

@@ -6,6 +6,7 @@ using NUnit.Framework;
 using OnBalance.Domain.Entities;
 using OnBalance.Domain.Abstract;
 using Moq;
+using OnBalance.Domain.Primitives;
 
 namespace OnBalance.UnitTests.Organizations
 {

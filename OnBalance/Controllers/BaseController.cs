@@ -69,7 +69,7 @@ namespace OnBalance.Controllers
 
             _logger = logger;
             _isDebugEnabled = false; //Logger.IsDebugEnabled;
-            _isInfoEnabled = false; //Logger.IsInfoEnabled;
+            _isInfoEnabled = true; //Logger.IsInfoEnabled;
             _isWarnEnabled = false;// Logger.IsWarnEnabled;
             _isErrorEnabled = false; // Logger.IsErrorEnabled;
 
@@ -96,11 +96,11 @@ namespace OnBalance.Controllers
             }
         }
 
-        protected void Info(object msg)
+        protected void Info(string msg)
         {
             if(_isInfoEnabled)
             {
-                //_logger.Info(msg);
+                _logger.Info(msg);
             }
         }
 

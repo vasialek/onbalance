@@ -45,7 +45,7 @@
                     }
                 </td>
                 <td>
-                    @Html.Display(item.StatusName, new { @class = item.StatusId == (int)OnBalance.Status.Approved ? "label-success" : "label-inverse" })
+                    @Html.Display(item.StatusName, new { @class = item.StatusId == (int)OnBalance.Core.Status.Approved ? "label-success" : "label-inverse" })
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.InternalCode)

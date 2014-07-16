@@ -31,7 +31,7 @@
     @Html.LabelFor(model => model.StatusId)
 </div>
 <div class="editor-field">
-    @Html.StatusDropDownList((OnBalance.Status)Model.StatusId)
+    @Html.StatusDropDownList((OnBalance.Core.Status)Model.StatusId)
     @Html.ValidationMessageFor(model => model.StatusId)
 </div>
 

@@ -10,6 +10,7 @@ using OnBalance.Helpers;
 using System.Security.Cryptography;
 using System.Text;
 using OnBalance.Domain.Abstract;
+using OnBalance.Core;
 
 namespace OnBalance.Controllers
 {

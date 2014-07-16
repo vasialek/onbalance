@@ -1,0 +1,5 @@
+﻿@model OnBalance.Models.ProductDetail
+
+<div id="@("Qnt_" + Model.id)" class="product-qnt">1</div>
+<div id="@("Decrease_" + Model.id)" class="product-qnt-minus">@Html.Image("/images/decrease.gif", 6, 3, "-", null)</div>
+<div id="@("Increase_" +Model.id)" class="product-qnt-plus">@Html.Image("/images/increase.gif", 6, 3, "+", null)</div>

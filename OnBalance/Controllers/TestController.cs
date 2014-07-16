@@ -9,6 +9,7 @@ using System.Text;
 using Newtonsoft.Json;
 using OnBalance.ViewModels.Balance;
 using OnBalance.Domain.Concrete;
+using OnBalance.Core;
 
 namespace OnBalance.Controllers
 {
