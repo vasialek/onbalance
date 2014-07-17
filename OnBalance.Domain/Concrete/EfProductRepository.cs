@@ -17,7 +17,14 @@ namespace OnBalance.Domain.Concrete
             get { return _dbContext.Products; }
         }
 
-        public IQueryable<Category> Categories { get { return Products.Select(x => new Category { Id = x.CategoryId }); } }
+        public IQueryable<Category> Categories
+        {
+            get
+            {
+                return _dbContext.Categories;
+                //return Products.Select(x => new Category { Id = x.CategoryId });
+            }
+        }
 
 
         public void Save(Category category)
