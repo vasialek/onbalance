@@ -43,6 +43,12 @@
                 <th>@s.SizeName</th>
             }
         </tr>
+        <tbody id="ProCat_@(c.CategoryId)">
+            <tr>
+                <td colspan="@(c.SizesOrdered.Count() + 4)">
+                    <a href="#" class="btn btn-mini btn-primary product-add-new" data-category-id="@c.CategoryId"><i class="icon-plus"></i></a>
+                </td>
+            </tr>
         @foreach (var item in c.Products)
 	    {
             <tr>
@@ -90,10 +96,18 @@
             </tr>
             
 	    }
+        </tbody>
     </table>
 }
 
-<script src="//code.jquery.com/jquery-1.6.2.min.js"></script>
+<div id="DialogDiv" style="display: none;">
+    @Html.LoaderDiv()
+    <div id="DynamicDiv"></div>
+</div>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 <script type="text/javascript">
 
     var gBaseUrl = "/";
@@ -275,6 +289,64 @@
                 if (confirm("Do you want to add product for size: " + sizeName + "?")) {
                     //var productId = self.getClickedProductId(e, "td", "NewS_");
                     self.addNewSizeQuantity($(e.target), productId, sizeName);
+                }
+            });
+
+            $(".product-add-new").click(function (e) {
+                console.log($(e.target));
+                var categoryId = $(e.target).parent().attr("data-category-id");
+                console.log("Category to add new product is: " + categoryId);
+                if (confirm("Do you want to add new product?")) {
+                    self.addNewProduct(categoryId);
+                }
+            });
+        },
+
+        addNewProduct: function (categoryId) {
+            $("#LoaderDiv").show();
+            $("#DynamicDiv").html("");
+            var tdQnt = $("")
+            $.ajax({
+                url: gBaseUrl + "pradmin/getnewproduct/@Model.PosId",
+                data: "categoryId=" + categoryId,
+                success: function (data) {
+                    $("#LoaderDiv").hide();
+                    $("#DynamicDiv").html(data);
+                },
+                error: function (status) {
+                    $("#LoaderDiv").hide();
+                    alert("Error displaying new product form: " + status);
+                },
+            });
+            $("#DialogDiv").dialog({
+                resizable: false,
+                height: 450,
+                width: 500,
+                modal: true,
+                buttons: {
+                    "Create": function () {
+                        var productName = $("#ProductName").val();
+                        if (productName.length < 3) {
+                            alert("Product name should be at least 3");
+                            return;
+                        }
+                        var oDialog = this;
+                        $.ajax({
+                            url: gBaseUrl + "pradmin/donewproduct/@Model.PosId",
+                            data: $("#NewProductForm").serialize(),
+                            type: "POST",
+                            success: function (data) {
+                                $("#ProCat_" + categoryId).append(data);
+                                $(oDialog).dialog("close");
+                            },
+                            error: function (status) {
+                                alert("Error creating new product: " + productName);
+                            }
+                        });
+                    },
+                    Cancel: function () {
+                        $(this).dialog("close");
+                    }
                 }
             });
         },

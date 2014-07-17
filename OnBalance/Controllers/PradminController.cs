@@ -58,7 +58,7 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/balance/500000
 
-        [OutputCache(Duration = 120)]
+        //[OutputCache(Duration = 120)]
         public ActionResult Balance(int id)
         {
             try
@@ -598,6 +598,71 @@ namespace OnBalance.Controllers
             });
         }
 
+        /// <summary>
+        /// Displays new product form (fro Ajax)
+        /// </summary>
+        /// <param name="id">POS ID</param>
+        public ActionResult GetNewProduct(int id)
+        {
+            try
+            {
+                var model = new ProductNew();
+                var pos = _organizationRepository.GetById(id);
+                model.PosId = pos.Id;
+                model.PosName = pos.Name;
+                model.CategoryId = int.Parse(Request["categoryId"]);
+                var category = _productRepository.Categories.First(x => x.Id == model.CategoryId);
+                    //.Select(x => new Category { Id = x.Id, Name = x.Name })
+                    //.First(x => x.Equals(model.CategoryId));
+                model.CategoryName = category.Name;
+
+                return PartialView(model);
+            }
+            catch (Exception ex)
+            {
+                Error("Error getting new product form", ex);
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DoNewProduct(ProductNew model)
+        {
+            try
+            {
+                decimal d;
+                var productPdo = new Domain.Entities.Product();
+                productPdo.PosId = model.PosId;
+                productPdo.CategoryId = model.CategoryId;
+                productPdo.Name = HttpUtility.HtmlEncode(model.ProductName);
+                productPdo.CreatedAt = DateTime.UtcNow;
+                productPdo.UserId = "gj";
+                productPdo.StatusId = (byte)Status.Pending;
+                productPdo.InternalCode = model.InternalCode;
+                productPdo.Uid = string.Concat("GJ_ES_", model.InternalCode);
+                if (decimal.TryParse(model.PriceStr, out d))
+                {
+                    productPdo.Price = d;
+                }
+                _productRepository.Save(productPdo);
+                _productRepository.SubmitChanges();
+
+                var product = new Product();
+                product.Name = HttpUtility.HtmlEncode(model.ProductName);
+                product.InternalCode = HttpUtility.HtmlEncode(model.InternalCode);
+                //if (decimal.TryParse(model.PriceReleaseStr, out d))
+                //{
+                //    product.
+                //}
+                return PartialView(product);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
         private ProductsByCategoryViewModel GetProductsByCategories(int posId)
         {
             string cs = "Data Source=192.185.10.193;Initial Catalog=vasialek_onbalance;User ID=vasialek_onbalance_user;Password=w3N2SPzGgwL4";
@@ -605,7 +670,7 @@ namespace OnBalance.Controllers
             con.Open();
             var cmd = new System.Data.SqlClient.SqlCommand(
 @"select 
-    --top 100
+    top 100
     p.id as id,             -- 0
     p.internal_code, 
     p.uid, 

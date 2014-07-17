@@ -1,0 +1,40 @@
+﻿@model OnBalance.Models.ProductNew
+
+<form id="NewProductForm">
+    @Html.HiddenFor(x => x.PosId)
+    @Html.HiddenFor(x => x.CategoryId)
+    <table class="table table-bordered table-condensed">
+        <tr>
+            <th colspan="2">New product form</th>
+        </tr>
+        <tr>
+            <td align="right">Product name: </td>
+            <td>@Html.TextBoxFor(x => x.ProductName)</td>
+        </tr>
+        <tr>
+            <td align="right">Internal code: </td>
+            <td>
+                <div class="input-prepend">
+                    <span class="add-on">GJ_ES_</span>
+                    @Html.TextBoxFor(x => x.InternalCode, new { @class = "input-small" })
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">Price: </td>
+            <td>@Html.TextBoxFor(x => x.PriceStr, new { @class = "input-mini" })</td>
+        </tr>
+        <tr>
+            <td align="right">Release price: </td>
+            <td>@Html.TextBoxFor(x => x.PriceReleaseStr, new { @class = "input-mini" })</td>
+        </tr>
+        <tr>
+            <td align="right">Category: </td>
+            <td>@Model.CategoryName</td>
+        </tr>
+        <tr>
+            <td align="right">Point Of Service: </td>
+            <td>@Model.PosName</td>
+        </tr>
+    </table>
+</form>

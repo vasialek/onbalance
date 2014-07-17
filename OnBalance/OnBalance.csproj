@@ -123,6 +123,7 @@
     <Compile Include="Models\CategoryStructure.cs" />
     <Compile Include="Models\CategoryType.cs" />
     <Compile Include="Models\ChangePassword.cs" />
+    <Compile Include="Models\ProductNew.cs" />
     <Compile Include="Models\IFilter.cs" />
     <Compile Include="Models\ParamModel.cs" />
     <Compile Include="Models\ParamRepository.cs" />
@@ -224,6 +225,8 @@
     <Content Include="Views\Pradmin\Balance.cshtml" />
     <Content Include="Views\Pradmin\DoNewSize.cshtml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
+    <Content Include="Views\Pradmin\DoNewProduct.cshtml" />
+    <Content Include="Views\Pradmin\GetNewProduct.cshtml" />
     <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
     <Content Include="Views\Useradmin\CreateInPos.cshtml" />
