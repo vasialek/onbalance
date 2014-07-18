@@ -651,16 +651,10 @@ namespace OnBalance.Controllers
                 {
                     productPdo.Price = d;
                 }
-                //_productRepository.Save(productPdo);
-                //_productRepository.SubmitChanges();
+                _productRepository.Save(productPdo);
+                _productRepository.SubmitChanges();
 
-                var product = new Product();
-                product.Name = HttpUtility.HtmlEncode(model.ProductName);
-                product.InternalCode = HttpUtility.HtmlEncode(model.InternalCode);
-                //if (decimal.TryParse(model.PriceReleaseStr, out d))
-                //{
-                //    product.
-                //}
+                var product = new Product(productPdo);
 
                 ViewBag.TotalSizes = model.TotalSizes;
                 return PartialView(product);

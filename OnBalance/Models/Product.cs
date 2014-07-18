@@ -83,6 +83,6 @@ namespace OnBalance.Models
 
         public decimal PriceFirst { get { return ProductDetails == null ? 0m : ProductDetails.First().price_minor / 100; } }
 
-        public decimal PriceReleaseFirst { get { return ProductDetails == null ? 0m : ProductDetails.First().price_release_minor / 100; } }
+        public decimal PriceReleaseFirst { get { return ProductDetails == null || ProductDetails.Count < 1 ? 0m : ProductDetails.First().price_release_minor / 100; } }
     }
 }

@@ -22,7 +22,7 @@
 @foreach (var c in Model.ProductsByCategories)
 {
     <table class="table table-bordered table-condensed table-striped">
-        <tr>
+        <tr id="ProSiz_@(c.CategoryId)">
             <th>
                 Name
             </th>
@@ -38,9 +38,10 @@
             <th>
                 Price (release)
             </th>
-            @foreach (var s in c.SizesOrdered)
+            @* @foreach (var s in c.SizesOrdered) *@
+            @for (int i = 0; i < c.SizesOrdered.Length; i++)
             {
-                <th>@s.SizeName</th>
+                <th id="@string.Concat("Siz_", c.CategoryId, "_", i)" data-size-name="@c.SizesOrdered[i].SizeName">@c.SizesOrdered[i].SizeName</th>
             }
         </tr>
         <tbody id="ProCat_@(c.CategoryId)">
@@ -322,6 +323,7 @@
                     alert("Error displaying new product form: " + status);
                 },
             });
+            var self = this;
             $("#DialogDiv").dialog({
                 resizable: false,
                 height: 450,
@@ -342,6 +344,7 @@
                             success: function (data) {
                                 $("#ProCat_" + categoryId).append(data);
                                 $(oDialog).dialog("close");
+                                self._initializeCreatedProductActions(categoryId);
                             },
                             error: function (status) {
                                 alert("Error creating new product: " + productName);
@@ -352,6 +355,25 @@
                         $(this).dialog("close");
                     }
                 }
+            });
+        },
+
+        _initializeCreatedProductActions: function (categoryId) {
+            var self = this;
+            $(".product-created-size.no-init").each(function (i, e) {
+                console.log(e);
+                // Prevent multiple initialization
+                $(e).removeClass("no-init");
+                $(e).click(function (sizeE) {
+                    var oSize = $(sizeE.target);
+                    var sizeIndex = oSize.attr("data-size-index");
+                    console.log("Size of index: " + sizeIndex);
+                    var productId = $(sizeE.target).closest("tr").attr("data-product-id");
+                    console.log("ID of product: " + productId);
+                    var sizeName = $("#Siz_" + categoryId + "_" + sizeIndex).attr("data-size-name");
+                    console.log("Name of size: " + sizeName);
+                    self.addNewSizeQuantity($(sizeE.target), productId, sizeName);
+                });
             });
         },
 

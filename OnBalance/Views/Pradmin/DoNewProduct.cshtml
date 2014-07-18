@@ -4,7 +4,7 @@
     int totalSizes = (int)ViewBag.TotalSizes;
 }
 
-    <tr>
+    <tr data-product-id="@Model.Id">
         <td>@Html.DisplayFor(x => x.Name)</td>
         <td>@Html.DisplayFor(x => x.InternalCode)</td>
         <td>@Html.DisplayFor(x => x.QuantityCalculated)</td>
@@ -13,7 +13,8 @@
         @for (int i = 0; i < totalSizes; i++)
         {
             <td>
-                <div data-product-id="@Model.Id" data-size-name="xxx" class="product-new-size" style="font-size: x-small">Add</div>
+                @* class no-init for JS *@
+                <div data-product-id="@Model.Id" data-size-index="@i" class="product-created-size no-init" style="font-size: x-small">Add</div>
             </td>
         }
     </tr>
