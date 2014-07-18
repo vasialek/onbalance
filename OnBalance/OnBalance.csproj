@@ -188,7 +188,6 @@
     <Content Include="Scripts\category.js" />
     <Content Include="Scripts\product.js" />
     <Content Include="Views\Balance\List.cshtml" />
-    <Content Include="Views\Log\List.cshtml" />
     <Content Include="Views\Balance\Confirm.cshtml" />
     <Content Include="Views\Pradmin\List.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\ProductDetail.cshtml" />
@@ -224,6 +223,7 @@
     <Content Include="Views\Balance\GetRemoteChanges.cshtml" />
     <Content Include="Views\Pradmin\Balance.cshtml" />
     <Content Include="Views\Pradmin\DoNewSize.cshtml" />
+    <None Include="Properties\PublishProfiles\DEV server.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <Content Include="Views\Pradmin\DoNewProduct.cshtml" />
     <Content Include="Views\Pradmin\GetNewProduct.cshtml" />
@@ -258,6 +258,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scripts\yui\build\" />
+    <Folder Include="Views\Log\" />
+    <Folder Include="Views\Size\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
@@ -310,7 +312,6 @@
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\QuantityForSizes.cshtml" />
     <Content Include="Views\Pradmin\Edit.cshtml" />
-    <Content Include="Views\Size\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OnBalance.Core\OnBalance.Core.csproj">

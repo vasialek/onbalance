@@ -46,7 +46,7 @@
         <tbody id="ProCat_@(c.CategoryId)">
             <tr>
                 <td colspan="@(c.SizesOrdered.Count() + 4)">
-                    <a href="#" class="btn btn-mini btn-primary product-add-new" data-category-id="@c.CategoryId"><i class="icon-plus"></i></a>
+                    <a href="#" class="btn btn-mini btn-primary product-add-new" data-category-id="@c.CategoryId" data-size-qnt="@c.SizesOrdered.Length"><i class="icon-plus"></i></a>
                 </td>
             </tr>
         @foreach (var item in c.Products)
@@ -184,7 +184,7 @@
             //qntDiv.html("<img src='/images/loader.gif' width='16' height='16' alt='Loading...' />");
 
             $.ajax({
-                url: gBaseUrl + "test/changequantity/" + productId,
+                url: gBaseUrl + "pradmin/changequantity/" + productId,
                 data: { dQnt: dQnt },
                 success: function (data, status, xhr) {
                     console.log("  current quantity of product is: " + qntDiv.html());
@@ -293,22 +293,26 @@
             });
 
             $(".product-add-new").click(function (e) {
+                e.preventDefault();
                 console.log($(e.target));
-                var categoryId = $(e.target).parent().attr("data-category-id");
+                var oLink = $(e.target).parent();
+                var categoryId = oLink.attr("data-category-id");
+                var totalSize = oLink.attr("data-size-qnt");
                 console.log("Category to add new product is: " + categoryId);
+                console.log("  there are total sizes: " + totalSize);
                 if (confirm("Do you want to add new product?")) {
-                    self.addNewProduct(categoryId);
+                    self.addNewProduct(categoryId, totalSize);
                 }
             });
         },
 
-        addNewProduct: function (categoryId) {
+        addNewProduct: function (categoryId, totalSize) {
             $("#LoaderDiv").show();
             $("#DynamicDiv").html("");
-            var tdQnt = $("")
+            
             $.ajax({
                 url: gBaseUrl + "pradmin/getnewproduct/@Model.PosId",
-                data: "categoryId=" + categoryId,
+                data: "categoryId=" + categoryId + "&sizes=" + totalSize,
                 success: function (data) {
                     $("#LoaderDiv").hide();
                     $("#DynamicDiv").html(data);

@@ -16,5 +16,6 @@ namespace OnBalance.Models
         public string PriceStr { get; set; }
         public string PriceReleaseStr { get; set; }
         public int ProductId { get; set; }
+        public int TotalSizes { get; set; }
     }
 }

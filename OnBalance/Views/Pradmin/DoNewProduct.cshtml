@@ -1,9 +1,19 @@
 ﻿@model OnBalance.Models.Product
 
+@{
+    int totalSizes = (int)ViewBag.TotalSizes;
+}
+
     <tr>
         <td>@Html.DisplayFor(x => x.Name)</td>
         <td>@Html.DisplayFor(x => x.InternalCode)</td>
         <td>@Html.DisplayFor(x => x.QuantityCalculated)</td>
         <td>@Html.DisplayFor(x => x.Price)</td>
         <td>@Html.DisplayFor(x => x.PriceReleaseFirst)</td>
+        @for (int i = 0; i < totalSizes; i++)
+        {
+            <td>
+                <div data-product-id="@Model.Id" data-size-name="xxx" class="product-new-size" style="font-size: x-small">Add</div>
+            </td>
+        }
     </tr>

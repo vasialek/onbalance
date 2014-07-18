@@ -24,14 +24,15 @@ namespace OnBalance.Controllers
     {
         private IOrganizationRepository _organizationRepository = null;
         private IProductRepository _productRepository = null;
+        private IBalanceItemRepository _balanceRepository = null;
 
-        public PradminController()
-            : this(new OnBalance.Domain.Concrete.EfProductRepository(), new EfOrganizationRepository())
-        {
+        //public PradminController()
+        //    : this(new OnBalance.Domain.Concrete.EfProductRepository(), new EfOrganizationRepository())
+        //{
 
-        }
+        //}
 
-        public PradminController(IProductRepository productRepository, IOrganizationRepository organisationRepository)
+        public PradminController(IProductRepository productRepository, IOrganizationRepository organisationRepository, IBalanceItemRepository balanceRepository)
         {
             if(productRepository == null)
             {
@@ -41,9 +42,14 @@ namespace OnBalance.Controllers
             {
                 throw new ArgumentNullException("organisationRepository");
             }
+            if (balanceRepository == null)
+            {
+                throw new ArgumentNullException("balanceRepository");
+            }
 
             _productRepository = productRepository;
             _organizationRepository = organisationRepository;
+            _balanceRepository = balanceRepository;
         }
 
         //
@@ -611,6 +617,7 @@ namespace OnBalance.Controllers
                 model.PosId = pos.Id;
                 model.PosName = pos.Name;
                 model.CategoryId = int.Parse(Request["categoryId"]);
+                model.TotalSizes = HasRequestParameter("sizes") ? int.Parse(Request["sizes"]) : 0;
                 var category = _productRepository.Categories.First(x => x.Id == model.CategoryId);
                     //.Select(x => new Category { Id = x.Id, Name = x.Name })
                     //.First(x => x.Equals(model.CategoryId));
@@ -644,8 +651,8 @@ namespace OnBalance.Controllers
                 {
                     productPdo.Price = d;
                 }
-                _productRepository.Save(productPdo);
-                _productRepository.SubmitChanges();
+                //_productRepository.Save(productPdo);
+                //_productRepository.SubmitChanges();
 
                 var product = new Product();
                 product.Name = HttpUtility.HtmlEncode(model.ProductName);
@@ -654,6 +661,8 @@ namespace OnBalance.Controllers
                 //{
                 //    product.
                 //}
+
+                ViewBag.TotalSizes = model.TotalSizes;
                 return PartialView(product);
             }
             catch (Exception ex)
@@ -663,6 +672,78 @@ namespace OnBalance.Controllers
             }
         }
 
+        public ActionResult ChangeQuantity(int id)
+        {
+            bool status = false;
+            string message = "";
+            int quantity = 0;
+
+            try
+            {
+                var pd = _productRepository.GetDetailsById(id);
+                if (pd == null)
+                {
+                    message = "Could not found ProductDetail";
+                    ErrorFormat("Could not get ProductDetail by ID: {0}", id);
+                }
+                else
+                {
+
+                    var product = _productRepository.GetById(pd.ProductId);
+                    if (product == null)
+                    {
+                        message = "Could not found Product to change quantity";
+                        ErrorFormat("Could not get Product by ID: {0}", pd.ProductId);
+                    }
+
+                    var balanceItem = _balanceRepository.BalanceItems
+                        .Where(x => x.InternalCode == product.InternalCode)
+                        .Where(x => x.SizeName == pd.ParameterValue)
+                        .Where(x => x.PosId == product.PosId)
+                        .Where(x => x.StatusId == (byte)Status.Pending)
+                        .FirstOrDefault();
+
+                    int dQnt = int.Parse(Request["dQnt"]);
+                    if (balanceItem == null)
+                    {
+                        balanceItem = new OnBalance.Domain.Entities.BalanceItem();
+                        balanceItem.InternalCode = product.InternalCode;
+                        balanceItem.SizeName = pd.ParameterValue;
+                        balanceItem.PosId = product.PosId;
+                        balanceItem.ProductName = product.Name;
+                        balanceItem.StatusId = (byte)Status.Pending;
+                        balanceItem.Quantity = dQnt;
+                    }
+                    else
+                    {
+                        balanceItem.Quantity += dQnt;
+                    }
+
+                    balanceItem.Price = pd.PriceMinor / 100;
+                    balanceItem.PriceOfRelease = pd.PriceReleaseMinor / 100;
+                    // Locally
+                    balanceItem.ChangedFrom = 'L';
+
+                    _balanceRepository.Save(balanceItem);
+                    _balanceRepository.SubmitChanges();
+
+                    quantity = balanceItem.Quantity;
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
+
+            return Json(new
+            {
+                Staus = status,
+                Message = message,
+                Quantity = quantity
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         private ProductsByCategoryViewModel GetProductsByCategories(int posId)
         {
             string cs = "Data Source=192.185.10.193;Initial Catalog=vasialek_onbalance;User ID=vasialek_onbalance_user;Password=w3N2SPzGgwL4";
@@ -670,7 +751,7 @@ namespace OnBalance.Controllers
             con.Open();
             var cmd = new System.Data.SqlClient.SqlCommand(
 @"select 
-    top 100
+    --top 100
     p.id as id,             -- 0
     p.internal_code, 
     p.uid, 
