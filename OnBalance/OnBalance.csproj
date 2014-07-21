@@ -157,7 +157,16 @@
     <Compile Include="ViewModels\User\DashboardViewModel.cs" />
     <Compile Include="ViewModels\User\LoginViewModel.cs" />
     <Compile Include="ViewModels\User\UserViewModel.cs" />
+    <Content Include="bootstrap\css\bootstrap-responsive.css" />
+    <Content Include="bootstrap\css\bootstrap-responsive.min.css" />
+    <Content Include="bootstrap\css\bootstrap.css" />
+    <Content Include="bootstrap\css\bootstrap.min.css" />
+    <Content Include="bootstrap\img\glyphicons-halflings-white.png" />
+    <Content Include="bootstrap\img\glyphicons-halflings.png" />
+    <Content Include="bootstrap\js\bootstrap.js" />
+    <Content Include="bootstrap\js\bootstrap.min.js" />
     <Content Include="css\gh-buttons.css" />
+    <Content Include="css\jquery.contextmenu.css" />
     <Content Include="images\add.png" />
     <Content Include="images\categoryparameters.png" />
     <Content Include="images\changepassword.png" />
@@ -168,9 +177,13 @@
     <Content Include="images\header-repeat.jpg" />
     <Content Include="images\import.png" />
     <Content Include="images\increase.gif" />
+    <Content Include="images\loader.gif" />
     <Content Include="images\login.png" />
     <Content Include="images\logo.png" />
     <Content Include="images\logout.png" />
+    <Content Include="images\menu\color_0.gif" />
+    <Content Include="images\menu\color_1.gif" />
+    <Content Include="images\menu\color_2.gif" />
     <Content Include="images\poscategories.png" />
     <Content Include="images\posmoveto.png" />
     <Content Include="images\productadmin.png" />
@@ -186,6 +199,8 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Scripts\category.js" />
+    <Content Include="Scripts\grid.js" />
+    <Content Include="Scripts\jquery.contextmenu.js" />
     <Content Include="Scripts\product.js" />
     <Content Include="Views\Balance\List.cshtml" />
     <Content Include="Views\Balance\Confirm.cshtml" />
