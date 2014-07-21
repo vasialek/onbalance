@@ -63,6 +63,7 @@
     <Compile Include="Entities\Organization.cs" />
     <Compile Include="Entities\OrganizationConfiguration.cs" />
     <Compile Include="Entities\Product.cs" />
+    <Compile Include="Entities\ProductDataJson.cs" />
     <Compile Include="Entities\ProductDetail.cs" />
     <Compile Include="Primitives\Status.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

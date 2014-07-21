@@ -1,10 +1,13 @@
 ﻿var Grid = {
     _products: [],
     _colors: [
-        { color: "#f00", name: "Red", code: 0 },
-        { color: "#0f0", name: "Green", code: 1 },
-        { color: "#00f", name: "Blue", code: 2 },
-        //{ color: "#00f", name: "Magento", code: 4 },
+        { color: "#02FF06", name: "2011 discounts", code: 0 },
+        { color: "#DB08BA", name: "2011 autumn", code: 1 },
+        { color: "#A64B4A", name: "2012 autumn", code: 2 },
+        { color: "#00D4F2", name: "2012 spring-summer", code: 3 },
+        { color: "#1D11B9", name: "2013 spring-summer", code: 4 },
+        { color: "#FBF94E", name: "2013 autumn-winter", code: 5 },
+        { color: "#874D80", name: "2014 spring", code: 6 },
     ],
 
     init: function () {
@@ -24,6 +27,7 @@
         if (color !== null) {
             console.log("  color to set: " + color.name + " (" + color.color + ")");
             $(e.target).closest("td").attr("style", "background: " + color.color);
+            console.log(JSON.stringify({Color:"#f00", BackgroundColor:"#00f", Remarks:"Test"}));
             //var product = this._getProductInGrid(productId);
             //console.log("  current product color: " + (product == null || product.color == null ? "NOT SET" : product.color.color));
             //if (product == null) {

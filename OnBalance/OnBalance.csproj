@@ -123,6 +123,7 @@
     <Compile Include="Models\CategoryStructure.cs" />
     <Compile Include="Models\CategoryType.cs" />
     <Compile Include="Models\ChangePassword.cs" />
+    <Compile Include="Models\ProductDecoratorColor.cs" />
     <Compile Include="Models\ProductNew.cs" />
     <Compile Include="Models\IFilter.cs" />
     <Compile Include="Models\ParamModel.cs" />

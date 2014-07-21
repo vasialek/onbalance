@@ -740,12 +740,12 @@ namespace OnBalance.Controllers
 
         private ProductsByCategoryViewModel GetProductsByCategories(int posId)
         {
-            string cs = "Data Source=192.185.10.193;Initial Catalog=vasialek_onbalance;User ID=vasialek_onbalance_user;Password=w3N2SPzGgwL4";
-            var con = new System.Data.SqlClient.SqlConnection(cs);
+            //string cs = "Data Source=192.185.10.193;Initial Catalog=vasialek_onbalance;User ID=vasialek_onbalance_user;Password=w3N2SPzGgwL4";
+            var con = new System.Data.SqlClient.SqlConnection(MySettings.ConnectionStringDefault);
             con.Open();
             var cmd = new System.Data.SqlClient.SqlCommand(
 @"select 
-    --top 100
+    top 100
     p.id as id,             -- 0
     p.internal_code, 
     p.uid, 
