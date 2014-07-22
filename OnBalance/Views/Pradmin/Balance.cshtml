@@ -52,7 +52,7 @@
             </tr>
         @foreach (var item in c.Products)
 	    {
-            <tr>
+            <tr data-product-id="@item.Id">
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
@@ -76,7 +76,8 @@
                         var qnt = item.ProductDetails.FirstOrDefault(x => x.parameter_value == c.SizesOrdered[i].SizeName);
                         if (qnt != null)
                         {
-                        <td id="@("Pr_" + qnt.id)">
+                            var pd = String.IsNullOrEmpty(qnt.DataJson) ? null : Newtonsoft.Json.JsonConvert.DeserializeObject<OnBalance.Models.ProductDecoratorColor>(qnt.DataJson);
+                        <td id="@("Pr_" + qnt.id)" @Html.Raw(pd == null || String.IsNullOrEmpty(pd.BackgroundColor) ? "" : String.Format("style='background-color: {0};'", pd.BackgroundColor))>
                             <div id="@("Qnt_" + qnt.id)" class="product-qnt">@qnt.quantity</div>
                             <div id="@("Decrease_" + qnt.id)" class="product-qnt-minus">@Html.Image("/images/decrease.gif", 6, 3, "-", null)</div>
                             <div id="@("Increase_" + qnt.id)" class="product-qnt-plus">@Html.Image("/images/increase.gif", 6, 3, "+", null)</div>
@@ -120,4 +121,7 @@
         Grid.init();
     });
 
+</script>
+<script type="text/javascript">
+    @Html.Raw(Model.GetDecoratorsAsJs("gDecorators"))
 </script>

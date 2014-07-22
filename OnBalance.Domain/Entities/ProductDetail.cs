@@ -36,6 +36,9 @@ namespace OnBalance.Domain.Entities
         [Column("quantity")]
         public int Quantity { get; set; }
 
+        [Column("data_json")]
+        public string DataJson { get; set; }
+
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
 

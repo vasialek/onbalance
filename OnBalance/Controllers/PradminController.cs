@@ -586,8 +586,8 @@ namespace OnBalance.Controllers
                 _productRepository.SubmitChanges();
 
                 sb.AppendFormat("<div id=\"Qnt_{0}\" class=\"product-qnt\">{1}</div>", pd.Id, pd.Quantity);
-                sb.AppendFormat("<div id=\"Decrease_{0}\" class=\"product-qnt-minus\">-</div>", pd.Id);
-                sb.AppendFormat("<div id=\"Increase_{0}\" class=\"product-qnt-plus\">+</div>", pd.Id);
+                sb.AppendFormat("<div id=\"Decrease_{0}\" class=\"product-qnt-minus\"><img alt=\"-\" height=\"3\" src=\"/images/decrease.gif\" title=\"-\" width=\"6\"></div>", pd.Id);
+                sb.AppendFormat("<div id=\"Increase_{0}\" class=\"product-qnt-plus\"><img alt=\"+\" height=\"3\" src=\"/images/increase.gif\" title=\"+\" width=\"6\"></div>", pd.Id);
                 status = true;
             }
             catch (Exception ex)
@@ -740,7 +740,6 @@ namespace OnBalance.Controllers
 
         private ProductsByCategoryViewModel GetProductsByCategories(int posId)
         {
-            //string cs = "Data Source=192.185.10.193;Initial Catalog=vasialek_onbalance;User ID=vasialek_onbalance_user;Password=w3N2SPzGgwL4";
             var con = new System.Data.SqlClient.SqlConnection(MySettings.ConnectionStringDefault);
             con.Open();
             var cmd = new System.Data.SqlClient.SqlCommand(
@@ -757,7 +756,8 @@ namespace OnBalance.Controllers
     isnull(pd.price_minor, 0) as price_minor, 
     isnull(pd.price_release_minor, 0) as price_release_minor, 
     isnull(pd.quantity, 0),             -- 10
-    isnull(pd.id, 0) as price_id
+    isnull(pd.id, 0) as price_id,
+    pd.data_json as data_json
 from product p
 	join category c on p.category_id = c.id
 	left join product_detail pd on p.id = pd.product_id
@@ -768,6 +768,7 @@ order by p.id", con);
             var products = new List<OnBalance.Domain.Entities.Product>();
             decimal priceMinor, priceReleaseMinor;
             int priceId;
+            string dataJson;
 
             var r = cmd.ExecuteReader();
             while (r.Read())
@@ -786,6 +787,7 @@ order by p.id", con);
                 psq.SizeName = r.GetString(7);
                 psq.Quantity = r.GetInt32(10);
                 priceId = r.GetInt32(11);
+                dataJson = r.GetString(12);
 
                 var existing = products.FirstOrDefault(x => x.Id == p.Id);
                 if (existing == null)
@@ -806,6 +808,7 @@ order by p.id", con);
                         Quantity = psq.Quantity,
                         PriceMinor = priceMinor,
                         PriceReleaseMinor = priceReleaseMinor,
+                        DataJson = dataJson,
                     });
                     products.Add(newP);
                 }

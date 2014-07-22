@@ -31,6 +31,8 @@ namespace OnBalance.Models
 
         private int _quantity;
 
+        private string _data_json;
+
         private System.DateTime _updated_at;
 
         private System.DateTime _created_at;
@@ -57,6 +59,8 @@ namespace OnBalance.Models
         partial void Onprice_release_minorChanged();
         partial void OnquantityChanging(int value);
         partial void OnquantityChanged();
+        partial void Ondata_jsonChanging(string value);
+        partial void Ondata_jsonChanged();
         partial void Onupdated_atChanging(System.DateTime value);
         partial void Onupdated_atChanged();
         partial void Oncreated_atChanging(System.DateTime value);
@@ -229,6 +233,26 @@ namespace OnBalance.Models
                     this._quantity = value;
                     this.SendPropertyChanged("quantity");
                     this.OnquantityChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_data_json", DbType = "VarChar(512) NOT NULL", CanBeNull = false)]
+        public string DataJson
+        {
+            get
+            {
+                return this._data_json;
+            }
+            set
+            {
+                if ((this._data_json != value))
+                {
+                    this.Ondata_jsonChanging(value);
+                    this.SendPropertyChanging();
+                    this._data_json = value;
+                    this.SendPropertyChanged("data_json");
+                    this.Ondata_jsonChanged();
                 }
             }
         }

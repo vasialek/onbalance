@@ -69,6 +69,7 @@ namespace OnBalance.Models
                 price_minor = x.PriceMinor,
                 price_release_minor = x.PriceReleaseMinor,
                 product_id = x.ProductId,
+                DataJson = x.DataJson,
 
             }).ToList();
         }

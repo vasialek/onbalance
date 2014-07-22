@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace OnBalance.ViewModels.Products
@@ -12,6 +13,36 @@ namespace OnBalance.ViewModels.Products
         public int PosId { get; set; }
 
         public IList<ProductsAndSizesViewModel> ProductsByCategories { get; private set; }
+
+        /// <summary>
+        /// Decorations (background) for products
+        /// </summary>
+        public IList<ProductDecoratorColor> Decorators
+        {
+            get
+            {
+                return new List<ProductDecoratorColor>
+                {
+                    new ProductDecoratorColor { ProductId = 100000, SizeName = "100", BackgroundColor = "#a00" },
+                    new ProductDecoratorColor { ProductId = 100000, SizeName = "115", BackgroundColor = "#0a0" },
+                };
+            }
+        }
+        //{ get; private set; }
+
+        public string GetDecoratorsAsJs(string jsArrayName = "xxx")
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendFormat("var {0} = [];", jsArrayName).AppendLine();
+            foreach (var pd in Decorators)
+            {
+                sb.AppendFormat("{0}[{0}.length] = {1};", jsArrayName, pd.ToJs())
+                    .AppendLine();
+            }
+
+            return sb.ToString();
+        }
 
         public ProductsByCategoryViewModel()
         {

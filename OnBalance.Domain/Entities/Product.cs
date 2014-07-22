@@ -40,9 +40,6 @@ namespace OnBalance.Domain.Entities
         [Column("category_id")]
         public int CategoryId { get; set; }
 
-        [Column("data_json")]
-        public string DataJson { get; set; }
-
         private IList<ProductDetail> _productDetails = null;
         public IList<ProductDetail> ProductDetails
         {

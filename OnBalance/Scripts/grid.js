@@ -16,6 +16,14 @@
 
     },
 
+    decorateProducts: function (decorators) {
+        var productTd;
+        for (var i = 0; i < decorators.length; i++)
+        {
+            productTd = $.find()
+        }
+    },
+
     onContextMenuClicked: function (e, menuIndex) {
         e.preventDefault();
         console.log("Clicked on context menu: " + menuIndex);
