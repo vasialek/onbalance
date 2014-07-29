@@ -47,7 +47,7 @@
         <tbody id="ProCat_@(c.CategoryId)">
             <tr>
                 <td colspan="@(c.SizesOrdered.Count() + 4)">
-                    <a href="#" class="btn btn-mini btn-primary product-add-new" data-category-id="@c.CategoryId" data-size-qnt="@c.SizesOrdered.Length"><i class="icon-plus"></i></a>
+                    <a href="#" class="btn btn-mini btn-primary product-add-new" data-category-id="@c.CategoryId" data-size-qnt="@c.SizesOrdered.Length"><i class="icon-plus"></i> @c.CategoryName</a>
                 </td>
             </tr>
         @foreach (var item in c.Products)

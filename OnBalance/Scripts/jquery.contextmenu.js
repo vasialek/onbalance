@@ -60,7 +60,11 @@ jQuery.fn.contextPopup = function(menuData) {
         if (item.isEnabled != undefined && !item.isEnabled()) {
             row.addClass('disabled');
         } else if (item.action) {
-            row.find('a').click(function () { item.action(e); });
+            row.find('a').click(function (ae) {
+                ae.preventDefault();
+                item.action(e);
+                return false;
+            });
         }
 
       } else {
@@ -72,7 +76,7 @@ jQuery.fn.contextPopup = function(menuData) {
   }
 
   // On contextmenu event (right click)
-  this.bind('contextmenu', function(e) {	
+  this.bind('contextmenu', function (e) {
     var menu = createMenu(e)
       .show();
     
@@ -93,7 +97,7 @@ jQuery.fn.contextPopup = function(menuData) {
     var bg = $('<div></div>')
       .css({left:0, top:0, width:'100%', height:'100%', position:'absolute', zIndex:1000000})
       .appendTo(document.body)
-      .bind('contextmenu click', function() {
+      .bind('contextmenu click', function () {
         // If click or right click anywhere else on page: remove clean up.
         bg.remove();
         menu.remove();

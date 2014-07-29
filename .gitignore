@@ -58,3 +58,4 @@ OnBalance.Core/bin/Debug/OnBalance.Core.dll.config
 OnBalance.Core/bin/Release/OnBalance.Core.dll.config
 OnBalance.Parsers/bin/Debug/OnBalance.Parsers.dll.config
 OnBalance.Parsers/bin/Release/OnBalance.Parsers.dll.config
+*.force

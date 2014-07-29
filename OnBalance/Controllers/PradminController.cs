@@ -64,7 +64,7 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/balance/500000
 
-        //[OutputCache(Duration = 120)]
+        [OutputCache(Duration = 120)]
         public ActionResult Balance(int id)
         {
             try
@@ -555,6 +555,57 @@ namespace OnBalance.Controllers
         }
 
         //
+        // POST: /pradmin/dodecorate/{PRODUCT_DETAILS_ID}?bf={BACKGROUND_COLOR}
+
+        [HttpPost]
+        public ActionResult DoDecorate(int id)
+        {
+            AjaxResponse r = new AjaxResponse();
+
+            try
+            {
+                if (String.IsNullOrEmpty(Request["bg"]))
+	            {
+                    throw new ArgumentNullException("Background color is not specified");
+	            }
+                //var p = _productRepository.GetById(id);
+                //if (p == null)
+                //{
+                //    throw new ArgumentNullException("Product does not exist. ID: " + id);
+                //}
+                var pd = _productRepository.GetDetailsById(id);
+                if (pd == null)
+                {
+                    throw new ArgumentNullException("Details does not exist for Product ID: " + id);
+                }
+
+                var decorator = new ProductDecoratorColor();
+                decorator.BackgroundColor = HttpUtility.HtmlEncode(Request["bg"].Trim());
+                decorator.Color = "#000";
+                decorator.Remarks = "";
+                decorator.ProductId = pd.ProductId;
+                decorator.SizeName = pd.ParameterValue;
+
+                pd.DataJson = Newtonsoft.Json.JsonConvert.SerializeObject(decorator);
+                _productRepository.Update(pd);
+                _productRepository.SubmitChanges();
+                
+                r.Status = true;
+                r.Message = "Product details are decorated";
+            }
+            catch (Exception ex)
+            {
+                r.Message = "Error decorating product";
+                if (Request.IsLocal)
+                {
+                    r.Message = string.Concat(r.Message, Environment.NewLine, ex.ToString());
+                }
+            }
+
+            return Json(r);
+        }
+
+        //
         // POST: /pradmin/donewsize/<PRODUCT_ID>?s=<SIZENAME>
 
         [HttpPost]
@@ -581,6 +632,7 @@ namespace OnBalance.Controllers
                 pd.CreatedAt = DateTime.UtcNow;
                 pd.UpdatedAt = DateTime.UtcNow;
                 pd.StatusId = (byte)Status.Pending;
+                pd.DataJson = "";
 
                 _productRepository.Save(pd);
                 _productRepository.SubmitChanges();
@@ -744,7 +796,7 @@ namespace OnBalance.Controllers
             con.Open();
             var cmd = new System.Data.SqlClient.SqlCommand(
 @"select 
-    top 100
+    --top 100
     p.id as id,             -- 0
     p.internal_code, 
     p.uid, 
@@ -757,7 +809,7 @@ namespace OnBalance.Controllers
     isnull(pd.price_release_minor, 0) as price_release_minor, 
     isnull(pd.quantity, 0),             -- 10
     isnull(pd.id, 0) as price_id,
-    pd.data_json as data_json
+    isnull(pd.data_json, '') as data_json
 from product p
 	join category c on p.category_id = c.id
 	left join product_detail pd on p.id = pd.product_id
@@ -769,6 +821,7 @@ order by p.id", con);
             decimal priceMinor, priceReleaseMinor;
             int priceId;
             string dataJson;
+            Dictionary<int, string> categoryNames = new Dictionary<int, string>();
 
             var r = cmd.ExecuteReader();
             while (r.Read())
@@ -788,6 +841,9 @@ order by p.id", con);
                 psq.Quantity = r.GetInt32(10);
                 priceId = r.GetInt32(11);
                 dataJson = r.GetString(12);
+
+                // Store category name
+                categoryNames[p.CategoryId] = r.GetString(6);
 
                 var existing = products.FirstOrDefault(x => x.Id == p.Id);
                 if (existing == null)
@@ -820,11 +876,23 @@ order by p.id", con);
                         Quantity = psq.Quantity,
                         PriceMinor = priceMinor,
                         PriceReleaseMinor = priceReleaseMinor,
+                        DataJson = dataJson
                     });
                 }
             }
 
-            return new ProductsByCategoryViewModel(products);
+            productsByCategories = new ProductsByCategoryViewModel(products);
+
+            // Fill category names
+            foreach (var c in productsByCategories.ProductsByCategories)
+            {
+                var firstProduct = c.Products.FirstOrDefault();
+                if (firstProduct != null)
+                {
+                    c.CategoryName = categoryNames.Keys.Contains(firstProduct.CategoryId) ? categoryNames[firstProduct.CategoryId] : "";
+                }
+            }
+            return productsByCategories;
         }
     }
 }
