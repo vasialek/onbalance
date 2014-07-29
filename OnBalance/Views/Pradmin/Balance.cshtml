@@ -23,19 +23,20 @@
 {
     <table class="table table-bordered table-condensed table-striped">
         <tr id="ProSiz_@(c.CategoryId)">
-            <th>
+            <th class="ob-str">
                 Name
+                <a href="#" class="ob-add-size btn btn-mini" data-category-id="@c.CategoryId"><i class="icon icon-plus"></i> Size</a>
             </th>
-            <th>
+            <th class="ob-str">
                 Code
             </th>
-            <th>
+            <th class="ob-str">
                 Quantity
             </th>
-            <th>
+            <th class="ob-str">
                 Price
             </th>
-            <th>
+            <th class="ob-str">
                 Price (release)
             </th>
             @* @foreach (var s in c.SizesOrdered) *@
@@ -46,26 +47,26 @@
         </tr>
         <tbody id="ProCat_@(c.CategoryId)">
             <tr>
-                <td colspan="@(c.SizesOrdered.Count() + 4)">
+                <td colspan="@(c.SizesOrdered.Count() + 5)">
                     <a href="#" class="btn btn-mini btn-primary product-add-new" data-category-id="@c.CategoryId" data-size-qnt="@c.SizesOrdered.Length"><i class="icon-plus"></i> @c.CategoryName</a>
                 </td>
             </tr>
         @foreach (var item in c.Products)
 	    {
             <tr data-product-id="@item.Id">
-                <td>
+                <td class="ob-str">
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-                <td>
+                <td class="ob-str">
                     @Html.DisplayFor(modelItem => item.InternalCode)
                 </td>
-                <td>
+                <td class="ob-str">
                     @Html.DisplayFor(modelItem => item.QuantityCalculated)
                 </td>
-                <td>
+                <td class="ob-str">
                     @Html.DisplayFor(modelItem => item.PriceFirst)
                 </td>
-                <td>
+                <td class="ob-str">
                     @Html.DisplayFor(modelItem => item.PriceReleaseFirst)
                 </td>
                 @*@foreach (var s in c.SizesOrdered)*@
@@ -107,18 +108,18 @@
     <div id="DynamicDiv"></div>
 </div>
 
-<link rel="stylesheet" href="../../css/jquery.contextmenu.css">
+<link rel="stylesheet" href="@Url.Content("~/css/jquery.contextmenu.css")">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="../../Scripts/jquery.contextmenu.js"></script>
+<script src="@Url.Content("~/Scripts/jquery.contextmenu.js")"></script>
 <script src="//code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
-<script src="../../Scripts/grid.js"></script>
+<script src="@Url.Content("~/Scripts/grid.js")"></script>
 <script type="text/javascript">
 
     var gBaseUrl = "/";
 
     jQuery(function () {
-        Grid.init();
+        Grid.init(@Model.PosId);
     });
 
 </script>

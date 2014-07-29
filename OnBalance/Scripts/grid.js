@@ -1,4 +1,5 @@
 ﻿var Grid = {
+    _posId: 0,
     _isConsole: false,
     _products: [],
     _colors: [
@@ -13,7 +14,8 @@
         { color: "#fff", name: "CLEAR", code: 8 },
     ],
 
-    init: function () {
+    init: function (posId) {
+        this._posId = posId;
         this._isConsole = console !== "undefined";
         this._initContextMenu();
         this._initProductActions();
@@ -198,23 +200,69 @@
         $(".product-add-new").click(function (e) {
             e.preventDefault();
             self._log($(e.target));
-            var oLink = $(e.target).parent();
+            var oLink = $(e.target).closest("a");
             var categoryId = oLink.attr("data-category-id");
             var totalSize = oLink.attr("data-size-qnt");
             self._log("Category to add new product is: " + categoryId);
             self._log("  there are total sizes: " + totalSize);
             if (confirm("Do you want to add new product?")) {
-                self.addNewProduct(categoryId, totalSize);
+                self.addNewProduct(self._posId, categoryId, totalSize);
+            }
+        });
+
+        $(".ob-add-size").click(function (e) {
+            e.preventDefault();
+            var sizeName = "";
+            var categoryId = $(e.target).closest("a").attr("data-category-id");
+            if ((sizeName = prompt("Do you want to add new size row?", "")) !== "") {
+                self._addNewSizeRow(categoryId, sizeName);
             }
         });
     },
 
-    addNewProduct: function (categoryId, totalSize) {
+    _addNewSizeRow: function (categoryId, sizeName) {
+        var self = this;
+        var productId = 0;
+        var totalSizes = 0;
+        var sizeId = -1;
+        this._log("Adding size row to category ID: " + categoryId);
+
+        // How many sizes already exist
+        totalSizes = $("#ProSiz_" + categoryId + " th").not(".ob-str").length;
+        this._log("  category has sizes: " + (totalSizes - 1));
+
+        // Each product in this category
+        $("#ProSiz_" + categoryId).closest("table").find("tr").each(function (i, tr) {
+            // TH
+            if (i == 0) {
+                $(tr).append("<th id=\"Siz_" + categoryId + "_" + totalSizes + "\" data-size-name=\"" + sizeName + "\">" + sizeName + "</th>");
+            } else {
+                // Got product ID
+                productId = $(tr).attr("data-product-id");
+                if (productId > 0) {
+                    $(tr).append("<td><div data-product-id=\"" + productId + "\" data-size-index=\"" + totalSizes + "\" class=\"product-created-size no-init\" style=\"font-size: x-small\">Add</div></td>");
+                } else {
+                    // Category name
+                    oTd = $(tr).find("td");
+                    var colspan = oTd.attr("colspan");
+                    if (colspan > 0) {
+                        oTd.attr("colspan", colspan + 1);
+                    }
+                }
+            }
+        });
+
+        // Making size row links active
+        self._initializeCreatedProductActions(categoryId);
+
+    },
+
+    addNewProduct: function (posId, categoryId, totalSize) {
         $("#LoaderDiv").show();
         $("#DynamicDiv").html("");
 
         $.ajax({
-            url: gBaseUrl + "pradmin/getnewproduct/@Model.PosId",
+            url: gBaseUrl + "pradmin/getnewproduct/" + posId,
             data: "categoryId=" + categoryId + "&sizes=" + totalSize,
             success: function (data) {
                 $("#LoaderDiv").hide();
