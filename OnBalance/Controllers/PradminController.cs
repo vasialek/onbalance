@@ -64,7 +64,7 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/balance/500000
 
-        [OutputCache(Duration = 120)]
+        //[OutputCache(Duration = 120)]
         public ActionResult Balance(int id)
         {
             try
@@ -796,7 +796,7 @@ namespace OnBalance.Controllers
             con.Open();
             var cmd = new System.Data.SqlClient.SqlCommand(
 @"select 
-    top 100
+    --top 100
     p.id as id,             -- 0
     p.internal_code, 
     p.uid, 

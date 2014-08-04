@@ -47,15 +47,15 @@ namespace OnBalance.Controllers
                 //sb.AppendLine(Newtonsoft.Json.JsonConvert.SerializeObject(cd));
 
                 //_repository.Categories.ToList();
-                var db = new EfProductRepository();
-                var p = db.GetById(100000);
-                sb.AppendLine(p.Name);
-                var pd = db.GetDetailsByProduct(p.Id);
-                foreach (var item in pd)
-                {
-                    sb.Append(item.Id.ToString()).AppendLine(item.DataJson);
-                }
-                return Content(sb.ToString());
+                //var db = new EfProductRepository();
+                //var p = db.GetById(100000);
+                //sb.AppendLine(p.Name);
+                //var pd = db.GetDetailsByProduct(p.Id);
+                //foreach (var item in pd)
+                //{
+                //    sb.Append(item.Id.ToString()).AppendLine(item.DataJson);
+                //}
+                //return Content(sb.ToString());
                 //foreach(var item in _repository.Categories.ToList())
                 //{
                 //    sb.AppendLine(item.Name);
@@ -64,6 +64,7 @@ namespace OnBalance.Controllers
                 //InfoFormat("Test/Index...");
                 //BalanceItem bi = new BalanceItem();
                 //return View(bi);
+                return View();
             }
             catch (Exception ex)
             {
