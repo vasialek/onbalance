@@ -95,6 +95,7 @@
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Controllers\ParamController.cs" />
+    <Compile Include="Controllers\ParserController.cs" />
     <Compile Include="Controllers\PradminController.cs" />
     <Compile Include="Controllers\SizeController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -337,6 +338,10 @@
     <ProjectReference Include="..\OnBalance.Domain\OnBalance.Domain.csproj">
       <Project>{2569C3E0-A81E-4395-BD68-931AF55C37B9}</Project>
       <Name>OnBalance.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OnBalance.Parsers\OnBalance.Parsers.csproj">
+      <Project>{99d90559-4b38-46d2-8a12-73253838f1bd}</Project>
+      <Name>OnBalance.Parsers</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -36,12 +36,24 @@ namespace OnBalance.Controllers
             try
             {
                 StringBuilder sb = new StringBuilder();
+
+                //var cd = new ProductDecoratorColor {
+                //    ProductId = 100000,
+                //    Color = "#f00",
+                //    BackgroundColor = "#eee",
+                //    Remarks = "Super",
+                //    SizeName = "100",
+                //};
+                //sb.AppendLine(Newtonsoft.Json.JsonConvert.SerializeObject(cd));
+
                 //_repository.Categories.ToList();
                 var db = new EfProductRepository();
-                var p = db.GetById(100006);
-                foreach (var item in p.ProductDetails)
+                var p = db.GetById(100000);
+                sb.AppendLine(p.Name);
+                var pd = db.GetDetailsByProduct(p.Id);
+                foreach (var item in pd)
                 {
-                    sb.AppendLine(item.ParameterValue);
+                    sb.Append(item.Id.ToString()).AppendLine(item.DataJson);
                 }
                 return Content(sb.ToString());
                 //foreach(var item in _repository.Categories.ToList())

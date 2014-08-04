@@ -48,7 +48,7 @@ namespace OnBalance.Controllers
             //ViewBag.CategoryNames = items.Select(x => x.CategoryName)
             //    .Distinct()
             //    .ToList();
-            //PrepareInsertSql(items, 102000);
+            PrepareInsertSql(items, 102000);
 
             if (items.Count > 0)
             {
@@ -90,7 +90,7 @@ namespace OnBalance.Controllers
                     product.Name = item.ProductName;
                     product.PosId = 500000;
                     product.Price = item.PriceOfRelease;
-                    product.StatusId = (byte)OnBalance.Status.Pending;
+                    product.StatusId = (byte)Status.Pending;
                     product.UserId = User.Identity.Name;
                     product.Uid = Common.EncodeHex(Common.CalculateMd5(string.Format("{0}-{1}-{2}", User.Identity.Name, product.PosId, product.InternalCode)));
                     product.CreatedAt = DateTime.UtcNow;
@@ -103,7 +103,7 @@ namespace OnBalance.Controllers
                         pd.ParameterName = "size";
                         pd.ParameterValue = size.Size;
                         pd.Quantity = size.Quantity;
-                        pd.StatusId = (byte)OnBalance.Status.Pending;
+                        pd.StatusId = (byte)Status.Pending;
                         pd.PriceMinor = (int)(item.Price * 100);
                         pd.PriceReleaseMinor = (int)(item.PriceOfRelease * 100);
                         pd.CreatedAt = DateTime.UtcNow;
@@ -284,6 +284,10 @@ namespace OnBalance.Controllers
             categories.Add(new Category { Id = 1067, Name = "MAIK.NIKE" });
             categories.Add(new Category { Id = 1068, Name = "MAIK.AD" });
             categories.Add(new Category { Id = 1069, Name = "SORTAI PUMA" });
+            categories.Add(new Category { Id = 1070, Name = "slepetes\"ADIDAS\"" });
+            categories.Add(new Category { Id = 1071, Name = "vyr.slepetes\"NIKE\"" });
+            categories.Add(new Category { Id = 1072, Name = "KAMUOLIAI" });
+            categories.Add(new Category { Id = 1073, Name = "krepsinio aprangos" });
 
             return categories;
         }

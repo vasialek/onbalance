@@ -459,15 +459,15 @@ namespace OnBalance.Controllers
                         pd.Quantity = 0;
                     }
                     _productRepository.Update(pd);
-                    //_productRepository.SubmitChanges();
+                    _productRepository.SubmitChanges();
                 }
             }
 
             item.StatusId = (byte)Status.Completed;
             _balanceItemsRepository.Save(item);
 
-            //_productRepository.SubmitChanges();
-            //_balanceItemsRepository.SubmitChanges();
+            _productRepository.SubmitChanges();
+            _balanceItemsRepository.SubmitChanges();
 
             return RedirectToAction("list", new { id = item.PosId });
         }

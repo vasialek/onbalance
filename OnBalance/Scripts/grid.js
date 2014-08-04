@@ -214,7 +214,8 @@
             e.preventDefault();
             var sizeName = "";
             var categoryId = $(e.target).closest("a").attr("data-category-id");
-            if ((sizeName = prompt("Do you want to add new size row?", "")) !== "") {
+            sizeName = prompt("Do you want to add new size row?", "");
+            if ( sizeName != null && sizeName.length > 0) {
                 self._addNewSizeRow(categoryId, sizeName);
             }
         });

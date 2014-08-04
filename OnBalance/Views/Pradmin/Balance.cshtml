@@ -22,29 +22,32 @@
 @foreach (var c in Model.ProductsByCategories)
 {
     <table class="table table-bordered table-condensed table-striped">
-        <tr id="ProSiz_@(c.CategoryId)">
-            <th class="ob-str">
-                Name
-                <a href="#" class="ob-add-size btn btn-mini" data-category-id="@c.CategoryId"><i class="icon icon-plus"></i> Size</a>
-            </th>
-            <th class="ob-str">
-                Code
-            </th>
-            <th class="ob-str">
-                Quantity
-            </th>
-            <th class="ob-str">
-                Price
-            </th>
-            <th class="ob-str">
-                Price (release)
-            </th>
-            @* @foreach (var s in c.SizesOrdered) *@
-            @for (int i = 0; i < c.SizesOrdered.Length; i++)
-            {
-                <th id="@string.Concat("Siz_", c.CategoryId, "_", i)" data-size-name="@c.SizesOrdered[i].SizeName">@c.SizesOrdered[i].SizeName</th>
-            }
-        </tr>
+        <thead>
+            <tr id="ProSiz_@(c.CategoryId)">
+                <th class="ob-str">
+                    <div>Name
+                        <a href="#" class="ob-add-size btn btn-mini" data-category-id="@c.CategoryId"><i class="icon icon-plus"></i> Size</a>
+                    </div>
+                </th>
+                <th class="ob-str">
+                    Code
+                </th>
+                <th class="ob-str">
+                    Quantity
+                </th>
+                <th class="ob-str">
+                    Price
+                </th>
+                <th class="ob-str">
+                    Price (release)
+                </th>
+                @* @foreach (var s in c.SizesOrdered) *@
+                @for (int i = 0; i < c.SizesOrdered.Length; i++)
+                {
+                    <th id="@string.Concat("Siz_", c.CategoryId, "_", i)" data-size-name="@c.SizesOrdered[i].SizeName">@c.SizesOrdered[i].SizeName</th>
+                }
+            </tr>
+        </thead>
         <tbody id="ProCat_@(c.CategoryId)">
             <tr>
                 <td colspan="@(c.SizesOrdered.Count() + 5)">
