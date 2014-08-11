@@ -30,5 +30,9 @@ namespace OnBalance.Domain.Entities
         /// </summary>
         public bool IsProductInfoFromEshop { get { return PhotosUri != null; } }
 
+        /// <summary>
+        /// Get/sets unique string to excahnge with eshop
+        /// </summary>
+        public string HashForExchange { get { return "fk163gj75"; } }
     }
 }

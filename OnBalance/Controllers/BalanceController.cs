@@ -416,7 +416,6 @@ namespace OnBalance.Controllers
         [HttpPost]
         public ActionResult Confirm(int id, string confirm)
         {
-            //var dbBalanceItems = new OnBalance.Models.BalanceItemRepository();
             if (string.IsNullOrEmpty(confirm))
             {
                 return RedirectToAction("confirm", new { id = id });
@@ -438,38 +437,70 @@ namespace OnBalance.Controllers
                 return HttpNotFound();
             }
 
-            if(!string.IsNullOrWhiteSpace(item.ProductName))
+            try
             {
-                product.Name = item.ProductName;
-            }
-            product.Price = item.Price;
-            InfoFormat("Going to save changes from POS to Online Balance System DB...");
-            _productRepository.Update(product);
-
-            // Change quantity for size
-            var details = _productRepository.GetDetailsByProduct(product.Id);
-            if (details != null)
-            {
-                var pd = details.FirstOrDefault(x => x.ParameterValue == item.SizeName);
-                if (pd != null)
+                if (!string.IsNullOrWhiteSpace(item.ProductName))
                 {
-                    pd.Quantity += item.Quantity;
-                    if (pd.Quantity < 0)
-                    {
-                        pd.Quantity = 0;
-                    }
-                    _productRepository.Update(pd);
-                    _productRepository.SubmitChanges();
+                    product.Name = item.ProductName;
                 }
+                product.Price = item.Price;
+
+                // Call and update one product http://www.gjsportland.com/index.php/en/balance/callback?_token=123&act=chq&code=qwer
+
+                string updateUrl = string.Format("http://www.gjsportland.com/index.php/en/balance/callback?_token={0}&act=chq&code={1}&size={2}&qnt={3}&price={4}", "gj-fake-token", item.InternalCode, item.SizeName, item.Quantity, item.Price * 100);
+                WebClient wc = new WebClient();
+                string s = wc.DownloadString(updateUrl);
+                if (String.IsNullOrEmpty(s))
+                {
+                    throw new Exception("Got empty response from e-shop");
+                }
+
+                var resp = Newtonsoft.Json.JsonConvert.DeserializeObject<AjaxResponse>(s);
+                if (resp.Status == false)
+                {
+                    throw new Exception(resp.Message);
+                }
+                //return Content("DONE: " + resp.Message);
+
+                InfoFormat("Going to save changes from POS to Online Balance System DB...");
+                _productRepository.Update(product);
+
+                // Change quantity for size
+                var details = _productRepository.GetDetailsByProduct(product.Id);
+                if (details != null)
+                {
+                    var pd = details.FirstOrDefault(x => x.ParameterValue == item.SizeName);
+                    if (pd != null)
+                    {
+                        pd.Quantity += item.Quantity;
+                        if (pd.Quantity < 0)
+                        {
+                            pd.Quantity = 0;
+                        }
+                        _productRepository.Update(pd);
+                        _productRepository.SubmitChanges();
+                    }
+                }
+
+                item.StatusId = (byte)Status.Completed;
+                _balanceItemsRepository.Save(item);
+
+                _productRepository.SubmitChanges();
+                _balanceItemsRepository.SubmitChanges();
+
+                SetTempOkMessage("Product {0} is updated", item.InternalCode);
+                return RedirectToAction("list", new { id = item.PosId });
             }
-
-            item.StatusId = (byte)Status.Completed;
-            _balanceItemsRepository.Save(item);
-
-            _productRepository.SubmitChanges();
-            _balanceItemsRepository.SubmitChanges();
-
-            return RedirectToAction("list", new { id = item.PosId });
+            catch (Exception ex)
+            {
+                var itemDbo = _balanceItemsRepository.BalanceItems.SingleOrDefault(x => x.Id == id);
+                if (itemDbo == null)
+                {
+                    return HttpNotFound();
+                }
+                this.SetErrorMessage(ex.Message);
+                return View("Confirm", new BalanceItem(itemDbo));
+            }
         }
 
         //
@@ -519,10 +550,13 @@ namespace OnBalance.Controllers
             var list = _balanceItemsRepository.BalanceItems
                 .Where(x => x.PosId == id)
                 .OrderByDescending(x => x.Id)
+                .ThenBy(x => x.InternalCode)
                 .Skip(offset)
                 .Take(perPage)
                 .ToList()
                 .Select(x => new BalanceItem(x));
+
+            SetTempMessagesToViewBag();
             return View("List", Layout, list);
         }
 

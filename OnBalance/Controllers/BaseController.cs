@@ -162,6 +162,11 @@ namespace OnBalance.Controllers
             return rx.IsMatch(vars);
         }
 
+        protected void SetErrorMessage(string fmt, params object[] args)
+        {
+            ViewBag.ErrorMsg = string.Format(fmt, args);
+        }
+
         /// <summary>
         /// Writes message to TempData["ResultMsg"]
         /// </summary>

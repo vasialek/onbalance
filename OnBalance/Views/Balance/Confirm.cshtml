@@ -7,6 +7,8 @@
 
 <h2>Confirm product update</h2>
 
+@Html.Partial("MessagesAndErrors")
+
 @using( Html.BeginForm() )
 {
 
@@ -29,6 +31,10 @@
                 <td>@Html.LabelFor(x => Model.ProductName)</td>
                 @*<td>@Html.DisplayFor(x => product.Name)</td>*@
                 <td>@Html.DisplayFor(x => Model.ProductName)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(x => x.InternalCode)</td>
+                <td>@Html.DisplayFor(x => x.InternalCode)</td>
             </tr>
             <tr>
                 <td>@Html.LabelFor(x => Model.SizeName)</td>
@@ -54,7 +60,7 @@
     </div>
     <div class="btn-group">
         <input type="submit" class="btn btn-small btn-primary" value="@OnBalance.MyMessages.ButtonText.Confirm" />
-        <a class="btn btn-small">@OnBalance.MyMessages.ButtonText.Back</a>
+        @Html.ActionLink(OnBalance.MyMessages.ButtonText.Back, "list", "balance", new { id = Model.PosId }, new { @class = "btn btn-small" })
     </div>
     
     

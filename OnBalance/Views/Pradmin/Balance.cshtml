@@ -47,7 +47,7 @@
             <tr id="ProSiz_@(c.CategoryId)">
                 <th class="ob-str" width="83">
                     <div>Name
-                        @*<a href="#" class="ob-add-size btn btn-mini" data-category-id="@c.CategoryId"><i class="icon icon-plus"></i> Size</a>*@
+                        <a href="#" class="ob-add-size btn btn-mini" data-category-id="@c.CategoryId"><i class="icon icon-plus"></i> Size</a>
                     </div>
                 </th>
                 <th class="ob-str" width="110">
@@ -70,11 +70,11 @@
             </tr>
         </thead>
         <tbody id="ProCat_@(c.CategoryId)">
-            @*<tr>
+            <tr>
                 <td colspan="@(c.SizesOrdered.Count() + 5)">
                     <a href="#" class="btn btn-mini btn-primary product-add-new" data-category-id="@c.CategoryId" data-size-qnt="@c.SizesOrdered.Length"><i class="icon-plus"></i> @c.CategoryName</a>
                 </td>
-            </tr>*@
+            </tr>
         @foreach (var item in c.Products)
 	    {
             <tr data-product-id="@item.Id">
