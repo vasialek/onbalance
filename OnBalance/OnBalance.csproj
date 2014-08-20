@@ -186,6 +186,10 @@
     <Content Include="images\menu\color_0.gif" />
     <Content Include="images\menu\color_1.gif" />
     <Content Include="images\menu\color_2.gif" />
+    <Content Include="images\menu\color_3.gif" />
+    <Content Include="images\menu\color_4.gif" />
+    <Content Include="images\menu\color_5.gif" />
+    <Content Include="images\menu\color_6.gif" />
     <Content Include="images\poscategories.png" />
     <Content Include="images\posmoveto.png" />
     <Content Include="images\productadmin.png" />
@@ -201,6 +205,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Scripts\category.js" />
+    <Content Include="Scripts\dataTables.fixedHeader.js" />
     <Content Include="Scripts\grid.js" />
     <Content Include="Scripts\jquery.contextmenu.js" />
     <Content Include="Scripts\product.js" />
@@ -250,6 +255,7 @@
     <Content Include="Views\Test\GetSync.cshtml" />
     <Content Include="Views\Test\Grid.cshtml" />
     <Content Include="Views\Test\Sync.cshtml" />
+    <Content Include="Views\Shared\_LayoutEmpty.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConnectionString.config">

@@ -289,7 +289,7 @@
                     }
                     var oDialog = this;
                     $.ajax({
-                        url: gBaseUrl + "pradmin/donewproduct/@Model.PosId",
+                        url: gBaseUrl + "pradmin/donewproduct/" + posId,
                         data: $("#NewProductForm").serialize(),
                         type: "POST",
                         success: function (data) {

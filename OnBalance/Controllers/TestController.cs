@@ -64,7 +64,7 @@ namespace OnBalance.Controllers
                 //InfoFormat("Test/Index...");
                 //BalanceItem bi = new BalanceItem();
                 //return View(bi);
-                return View();
+                return View("Index", "_LayoutEmpty");
             }
             catch (Exception ex)
             {

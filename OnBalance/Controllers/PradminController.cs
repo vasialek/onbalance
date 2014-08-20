@@ -74,7 +74,7 @@ namespace OnBalance.Controllers
                 productsByCategories.PosId = id;
                 //var products = _productRepository.GetLastInPos(pos.Id, 0, 20);
                 //return View("Balance", new ViewModels.Products.ProductsByCategoryViewModel(products.ToList()));
-                return View("Balance", productsByCategories);
+                return View("Balance", "_LayoutEmpty", productsByCategories);
             }
             catch (Exception ex)
             {
@@ -697,12 +697,13 @@ namespace OnBalance.Controllers
                 productPdo.CreatedAt = DateTime.UtcNow;
                 productPdo.UserId = "gj";
                 productPdo.StatusId = (byte)Status.Pending;
-                productPdo.InternalCode = model.InternalCode;
+                productPdo.InternalCode = model.InternalCode.StartsWith(productPdo.UserId, StringComparison.InvariantCultureIgnoreCase) ? model.InternalCode : String.Concat(productPdo.UserId.ToUpper(), "_ES_", model.InternalCode);
                 productPdo.Uid = string.Concat("GJ_ES_", model.InternalCode);
                 if (decimal.TryParse(model.PriceStr, out d))
                 {
                     productPdo.Price = d;
                 }
+
                 _productRepository.Save(productPdo);
                 _productRepository.SubmitChanges();
 
