@@ -1,398 +1,348 @@
-﻿<style>
-    /*body{
-  font:1.2em normal Arial,sans-serif;
-  color:#34495E;
-}*/
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Balance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+</head>
 
-    .container {
-        width: 90%;
-        margin: auto;
-    }
+<body>
 
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
+<div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+    <div class="container-fluid">
+        <a class="brand" href="/en-US">Online Balance System</a>
+        <div class="nav-collapse collapse">
+        <p class="navbar-text pull-right">
+            <a href="/en-US/user/login"><img alt="Login to Online Balance System" height="16" src="/images/login.png" title="Login to Online Balance System" width="16"></img></a>
+        </p>
+        </div>
+    </div>
+    </div>
+</div>
 
-    thead {
-        background: #1ABC9C;
-    }
+<div class="container-fluid">
+    <div class="span3">
+        <ul class="nav nav-list">
+          <li class="nav-header">Shops</li>
+                <li>
+                    
+<div>
+    <div class="user_shop_item"><a href="/en-US/pradmin/balance/500000">GJ Sportland</a></div>
+    <div>
+        <div class="btn-group">
+            <a class="btn-mini" href="/en-US/organization/edit/500000"><img alt="Edit POS" height="12" src="/images/edit.png" title="Edit POS" width="12"></img></a>
+            <a class="btn-mini" href="/en-US/pradmin/list/500000"><img alt="Product list" height="12" src="/images/productadmin.png" title="Product list" width="12"></img></a>
+            <a class="btn-mini" href="/en-US/category/list/500000"><img alt="List of categories" height="12" src="/images/poscategories.png" title="List of categories" width="12"></img></a>
+            <a class="btn-mini" href="/en-US/pradmin/parse/500000"><img alt="Import from file" height="12" src="/images/import.png" title="Import from file" width="12"></img></a>
+            <a class="btn-mini" href="/en-US/balance/edit/500000"><img alt="Balance" height="12" src="/images/view.png" title="Balance" width="12"></img></a>
+        </div>
+    </div>
+</div>
 
-    /*.blue {
-        border: 2px solid #1ABC9C;
-    }
+                </li>
+                <li>
+                    
+<div>
+    <div class="user_shop_item"><a href="/en-US/pradmin/balance/500011">GJ London</a></div>
+    <div>
+        <div class="btn-group">
+            <a class="btn-mini" href="/en-US/organization/edit/500011"><img alt="Edit POS" height="12" src="/images/edit.png" title="Edit POS" width="12"></img></a>
+            <a class="btn-mini" href="/en-US/pradmin/list/500011"><img alt="Product list" height="12" src="/images/productadmin.png" title="Product list" width="12"></img></a>
+            <a class="btn-mini" href="/en-US/category/list/500011"><img alt="List of categories" height="12" src="/images/poscategories.png" title="List of categories" width="12"></img></a>
+            <a class="btn-mini" href="/en-US/pradmin/parse/500011"><img alt="Import from file" height="12" src="/images/import.png" title="Import from file" width="12"></img></a>
+            <a class="btn-mini" href="/en-US/balance/edit/500011"><img alt="Balance" height="12" src="/images/view.png" title="Balance" width="12"></img></a>
+        </div>
+    </div>
+</div>
 
-        .blue thead {
-            background: #1ABC9C;
+                </li>
+        </ul>
+    </div>
+    <div class="span9">
+        
+    <style>
+        .product-qnt {
+            width: 25px; float: left; overflow: hidden; font-size: x-small;
+        }
+        .product-qnt-minus {
+            width: 8px; float: left; cursor: pointer;
+        }
+        .product-qnt-plus {
+            width: 8px; float: left; cursor: pointer;
+        }
+        thead {
+            background: #efefef;
         }
 
-    .purple {
-        border: 2px solid #9B59B6;
+        .table-bordered th {
+            border-left: 0 !important;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+        }
+
+        .fixed {
+            top: 0;
+            position: fixed;
+            /*width: auto;*/
+            display: none;
+            border: none;
+        }
+
+        .ob-table {
+            font-size: x-small;
+        }
+
+        .ob-head {
+            display: table-row;
+        }
+
+        .ob-line {
+            display: table-row;
+        }
+
+        .ob-th {
+            display: table-cell;
+            font-weight: bolder;
+            padding: 2px;
+        }
+
+        .ob-td {
+            display: table-cell;
+            padding: 2px;
+        }
+
+        .ob-size {
+            width: 40px;
+        }
+
+        .ob-w-name {
+            width: 150px;
+        }
+
+        .ob-w-code {
+            width: 70px;
+        }
+
+        .ob-w-price {
+            width: 60px;
+        }
+
+    </style>
+
+            <style>
+        /* BASICS: */
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box; /* in case block elements are used inside table cells */
     }
-
-        .purple thead {
-            background: #9B59B6;
-        }*/
-
-    /*thead {
+    html {
+        font-size: 62.5%; /* standardizes older IEs */
+    }
+    body {
+        font: normal 1.3em Verdana; /* = 13px */
+    }
+    table {
+        border-collapse: collapse;
+        table-layout: fixed;
+        empty-cells: show;
+    }
+    td {
+        border: 1px solid black;
+        padding: 4px;
+    }
+        /* SCROLL TABLE ESSENTIALS (+ SOME ADDITIONAL CSS): */
+    div#scrollTableContainer {
+        width: 617px;
+        margin: 40px; /* just for presentation purposes */
+        border: 1px solid black;
+    }
+    .touchScreen div#scrollTableContainer {
+        width: 600px; /* touch devices do not form scrollbars (= 17 px wide) */
+    }
+    #tHeadContainer {
+        background: #CC3600;
         color: white;
+        font-weight: bold;
     }
-
-    th, td {
-        text-align: center;
-        padding: 5px 0;
+    #tBodyContainer {
+        height: 240px;
+        overflow-y: scroll;
     }
-
-    tbody tr:nth-child(even) {
-        background: #ECF0F1;
+    .touchScreen #tBodyContainer {
+        -webkit-overflow-scrolling: touch; /* smooths scrolling on touch screens */
     }
-
-    tbody tr:hover {
-        background: #BDC3C7;
-        color: #FFFFFF;
-    }*/
-
-    .fixed {
-        top: 0;
-        position: fixed;
-        width: auto;
+        /* FINER LAYOUT MATTERS: */
+    tr:first-child td {
+        border-top: 0;
+    }
+    #tBody tr.lastRow td {
+        border-bottom: 0;
+    }
+    td:first-child {
+        min-width: 108px; /* Firefox needs min- and max-widths */
+        max-width: 108px;
+        border-left: 0;
+    }
+    td:first-child + td {
+        min-width: 125px;
+        max-width: 125px;
+    }
+    td:first-child + td + td {
+        min-width: 90px;
+        max-width: 90px;
+    }
+    td:first-child + td + td + td {
+        min-width: 95px;
+        max-width: 95px;
+    }
+    td:first-child + td + td + td + td {
+        width: 180px; /* here, Firefox messes up with only min- and max-widths */
+        border-right: 0;
+    }
+        /* AND SOME CSS TO INFORM TOUCH SCREEN USERS: */
+    p#touchDeviceText {
         display: none;
-        border: none;
     }
-
-    .scrollMore {
-        margin-top: 600px;
+    .touchScreen p#touchDeviceText {
+        display: block;
     }
+    </style>
 
-    .up {
-        cursor: pointer;
-    }
-</style>
+<h2>Balance</h2>
 
-<h1>&darr; SCROLL &darr;</h1>
-<table class="blue">
-    <thead>
-        <tr>
-            <th>Colonne 1</th>
-            <th>Colonne 2</th>
-            <th>Colonne 3</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-    </tbody>
-</table>
+<a class="btn btn-mini btn-primary" href="/en-US/balance/list/500000" target="_blank">Pending changes</a>
 
-<h1 class="scrollMore">&darr; SCROLL MORE &darr;</h1>
-<table class="purple">
-    <thead>
-        <tr>
-            <th>Colonne 1</th>
-            <th>Colonne 2</th>
-            <th>Colonne 3</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-        <tr>
-            <td>Non</td>
-            <td>Mais</td>
-            <td>Allo !</td>
-        </tr>
-    </tbody>
-</table>
-<h1 class="up scrollMore">&uarr; UP &uarr;</h1>
+	
+<div id="DialogDiv" style="display: none;">
+    <div id="LoaderDiv" style="display: none;"><img alt="Loading..." height="16" src="/images/loader.gif" width="16"></img></div>
+    <div id="DynamicDiv"></div>
+</div>
 
+
+    <div id="scrollTableContainer">
+        <div id="tHeadContainer">
+            <table id="tHead">
+                <tr>
+                    <td>Name</td>
+                    <td>Operator</td>
+                    <td>Began operation</td>
+                    <td>Tonnage</td>
+                    <td>Status</td>
+                </tr>
+            </table>
+        </div><!-- tHeadContainer -->
+        <div id="tBodyContainer">
+            <table id="tBody">
+                <tr>
+                    <td>Seabourne Sun</td>
+                    <td>Seabourn Cruise Line</td>
+                    <td>1988</td>
+                    <td>?</td>
+                    <td>Ended service in 2002, currently operating as Prinsendam</td>
+                </tr>
+                <tr>
+                    <td>Adventures of the Seas</td>
+                    <td>Royal Caribbean International</td>
+                    <td>2001</td>
+                    <td>138,000</td>
+                    <td>Operating</td>
+                </tr>
+                <tr>
+                    <td>Oceanic Independence</td>
+                    <td>American Hawaiian Cruises / American Global Line</td>
+                    <td>1974</td>
+                    <td>23,719</td>
+                    <td>Named formerly (1951-1974) and subsequently renamed (1982-2006) the Independence, renamed the Oceanic (2006), sold for scrap in 2008 but remains in mothballs</td>
+                </tr>
+                <tr>
+                    <td>Cunard Ambassador</td>
+                    <td>Cunard Line</td>
+                    <td>1972</td>
+                    <td>14,160</td>
+                    <td>Burnt 1974, rebuilt into a livestock carrier, renamed Linda Clausen, later Procyon, Raslan. Scrapped 1984 after a second fire.</td>
+                </tr>
+                <tr>
+                    <td>Aegean Beauty</td>
+                    <td>Voyages to Antiquity</td>
+                    <td>1973</td>
+                    <td>11,563</td>
+                    <td>Formerly Aegean Dolphin and Aegean I. Operating</td>
+                </tr>
+                <tr>
+                    <td>Serenade of the Seas</td>
+                    <td>Royal Caribbean International</td>
+                    <td>2003</td>
+                    <td>90,090</td>
+                    <td>Operating</td>
+                </tr>
+                <tr>
+                    <td>Queen Elizabeth 2</td>
+                    <td>Cunard Line</td>
+                    <td>1969</td>
+                    <td>70,327</td>
+                    <td>Left fleet in November 2008</td>
+                </tr>
+                <tr>
+                    <td>National Geographic Endeavour</td>
+                    <td>Lindblad Expeditions</td>
+                    <td>1996</td>
+                    <td></td>
+                    <td>Operating, also known as Endeavour</td>
+                </tr>
+                <tr class="lastRow">
+                    <td>Liberty of the Seas</td>
+                    <td>Royal Caribbean International</td>
+                    <td>2007</td>
+                    <td>154,407</td>
+                    <td>Operating</td>
+                </tr>
+            </table>
+        </div><!-- tBodyContainer -->
+    </div><!-- scrollTableContainer -->
+
+
+        @*<div class="ob-table" style="width: @(280 + 40*40)px;">
+            <div class="ob-head">
+                <div class="ob-th ob-w-name">Name</div>
+                <div class="ob-th ob-w-code">Code</div>
+                <div class="ob-th ob-w-code">Quantity</div>
+                <div class="ob-th ob-w-price">Price</div>
+                <div class="ob-th ob-w-price">Price<br />(release)</div>
+                @for (int i = 0; i < 40; i++)
+                {
+                    <div class="ob-th ob-size">@(40 + i)</div>
+                }
+            </div>
+            @for (int i = 0; i < 60; i++)
+            {
+                <div class="ob-line">
+                    <div class="ob-td">Product Name @(i + 1)</div>
+                    <div class="ob-td">Code</div>
+                    <div class="ob-td">Quantity</div>
+                    <div class="ob-td">Price</div>
+                    <div class="ob-td">Price<br />(release)</div>
+                </div>
+            }
+        </div>*@
+
+<link rel="stylesheet" href="/css/jquery.contextmenu.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="/Scripts/jquery.contextmenu.js"></script>
+<script src="//code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+<script src="/Scripts/grid.js"></script>
 <script type="text/javascript">
+
+    var gBaseUrl = "/";
+
     ; (function ($) {
         $.fn.fixMe = function () {
             return this.each(function () {
@@ -425,12 +375,31 @@
         };
     })(jQuery);
 
-    $(document).ready(function () {
+    jQuery(function () {
+        Grid.init(500000);
         $("table").fixMe();
-        //$(".up").click(function () {
-        //    $('html, body').animate({
-        //        scrollTop: 0
-        //    }, 2000);
-        //});
     });
+
+
 </script>
+<script type="text/javascript">
+    var gDecorators = [];
+    gDecorators[gDecorators.length] = { "ProductId": 100000, "SizeName": "100", "Color": null, "BackgroundColor": "#a00", "Remarks": null };
+    gDecorators[gDecorators.length] = { "ProductId": 100000, "SizeName": "115", "Color": null, "BackgroundColor": "#0a0", "Remarks": null };
+
+</script>
+
+    </div>
+</div>
+
+    <div class="navbar navbar-fixed-bottom">&copy; 2012-2014</div>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css">
+
+
+
+</body>
+</html>

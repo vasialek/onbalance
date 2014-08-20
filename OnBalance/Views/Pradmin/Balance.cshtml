@@ -2,6 +2,10 @@
 
 @{
     ViewBag.Title = "Balance";
+    int nameW = 150;
+    int codeW = 100;
+    int qntW = 60;
+    int sizeW = 30;
 }
     <style>
         .product-qnt {
@@ -34,6 +38,32 @@
             border: none;
         }
 
+        .ob-w-name {
+            width: @(nameW)px;
+        }
+
+        .ob-w-code {
+            width: @(codeW)px;
+        }
+
+        .ob-w-price {
+            width: @(qntW)px;
+        }
+
+        .ob-w-size {
+            width: @(sizeW)px;
+        }
+
+        td {
+            font-size: x-small;
+            font-weigth: normal;
+        }
+
+        th {
+            font-size: x-small;
+            font-weigth: bolder;
+        }
+
     </style>
 
 <h2>Balance</h2>
@@ -42,55 +72,62 @@
 
 @foreach (var c in Model.ProductsByCategories)
 {
-    <table class="table table-bordered table-condensed table-striped">
+    <div style="padding-top: 10px;">@c.CategoryName</div>
+    <table class="display cell-border" style="width=@(nameW + codeW + 3 * qntW + c.SizesOrdered.Length * sizeW)px">
         <thead>
             <tr id="ProSiz_@(c.CategoryId)">
-                <th class="ob-str" width="83">
+                <th class="ob-str" style="width: @(nameW)px">
                     <div>Name
                         <a href="#" class="ob-add-size btn btn-mini" data-category-id="@c.CategoryId"><i class="icon icon-plus"></i> Size</a>
                     </div>
                 </th>
-                <th class="ob-str" width="110">
+                <th class="ob-str" style="width: @(codeW)px">
                     Code
                 </th>
-                <th class="ob-str" width="60">
+                <th class="ob-str" style="width: @(qntW)px">
                     Quantity
                 </th>
-                <th class="ob-str">
+                <th class="ob-str" style="width: @(qntW)px">
                     Price
                 </th>
-                <th class="ob-str">
+                <th class="ob-str" style="width: @(qntW)px">
                     Price<br />(release)
                 </th>
                 @* @foreach (var s in c.SizesOrdered) *@
                 @for (int i = 0; i < c.SizesOrdered.Length; i++)
                 {
-                    <th id="@string.Concat("Siz_", c.CategoryId, "_", i)" data-size-name="@c.SizesOrdered[i].SizeName">@c.SizesOrdered[i].SizeName</th>
+                    <th id="@string.Concat("Siz_", c.CategoryId, "_", i)" data-size-name="@c.SizesOrdered[i].SizeName" style="@(sizeW)px">
+                        @c.SizesOrdered[i].SizeName</th>
                 }
+            </tr>
+            <tr>
+                <th colspan="@(c.SizesOrdered.Count() + 5)">
+                    <a href="#" class="btn btn-mini btn-primary product-add-new" data-category-id="@c.CategoryId" data-size-qnt="@c.SizesOrdered.Length">Create product in @c.CategoryName</a>
+                </th>
             </tr>
         </thead>
         <tbody id="ProCat_@(c.CategoryId)">
-            <tr>
+            @*<tr>
                 <td colspan="@(c.SizesOrdered.Count() + 5)">
                     <a href="#" class="btn btn-mini btn-primary product-add-new" data-category-id="@c.CategoryId" data-size-qnt="@c.SizesOrdered.Length"><i class="icon-plus"></i> @c.CategoryName</a>
                 </td>
-            </tr>
+            </tr>*@
         @foreach (var item in c.Products)
 	    {
             <tr data-product-id="@item.Id">
-                <td class="ob-str">
+                <td class="ob-str" style="width: @(nameW)px">
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-                <td class="ob-str">
+                <td class="ob-str" style="width: @(codeW)px">
                     @Html.DisplayFor(modelItem => item.InternalCode)
                 </td>
-                <td class="ob-str">
+                <td class="ob-str" style="width: @(qntW)px">
                     @Html.DisplayFor(modelItem => item.QuantityCalculated)
                 </td>
-                <td class="ob-str">
+                <td class="ob-str" style="width: @(qntW)px">
                     @Html.DisplayFor(modelItem => item.PriceFirst)
                 </td>
-                <td class="ob-str">
+                <td class="ob-str" style="width: @(qntW)px">
                     @Html.DisplayFor(modelItem => item.PriceReleaseFirst)
                 </td>
                 @*@foreach (var s in c.SizesOrdered)*@
@@ -102,7 +139,7 @@
                         if (qnt != null)
                         {
                             var pd = String.IsNullOrEmpty(qnt.DataJson) ? null : Newtonsoft.Json.JsonConvert.DeserializeObject<OnBalance.Models.ProductDecoratorColor>(qnt.DataJson);
-                        <td id="@("Pr_" + qnt.id)" @Html.Raw(pd == null || String.IsNullOrEmpty(pd.BackgroundColor) ? "" : String.Format("style='background-color: {0};'", pd.BackgroundColor))>
+                        <td id="@("Pr_" + qnt.id)" @Html.Raw(pd == null || String.IsNullOrEmpty(pd.BackgroundColor) ? "style='" + sizeW + "px;'" : String.Format("style='background-color: {0}; width: {1}px;'", pd.BackgroundColor, sizeW))>
                             <div id="@("Qnt_" + qnt.id)" class="product-qnt">@qnt.quantity</div>
                             <div id="@("Decrease_" + qnt.id)" class="product-qnt-minus">@Html.Image("/images/decrease.gif", 6, 3, "-", null)</div>
                             <div id="@("Increase_" + qnt.id)" class="product-qnt-plus">@Html.Image("/images/increase.gif", 6, 3, "+", null)</div>
@@ -134,49 +171,29 @@
 
 <link rel="stylesheet" href="@Url.Content("~/css/jquery.contextmenu.css")">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="@Url.Content("~/Scripts/jquery.contextmenu.js")"></script>
 <script src="//code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 <script src="@Url.Content("~/Scripts/grid.js")"></script>
+<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+@*<script src="@Url.Content("~/Scripts/dataTables.fixedHeader.js")"></script>*@
 <script type="text/javascript">
 
     var gBaseUrl = "/";
 
-    ; (function ($) {
-        $.fn.fixMe = function () {
-            return this.each(function () {
-                var $this = $(this),
-                   $t_fixed;
-                function init() {
-                    $this.wrap('<div class="container" />');
-                    $t_fixed = $this.clone();
-                    $t_fixed.find("tbody").remove().end().addClass("fixed").insertBefore($this);
-                    resizeFixed();
-                }
-                function resizeFixed() {
-                    //$t_fixed.find("th").each(function (index) {
-                    //    $(this).css("width", $this.find("th").eq(index).outerWidth() + "px");
-                    //});
-                }
-                function scrollFixed() {
-                    var offset = $(this).scrollTop(),
-                    tableOffsetTop = $this.offset().top,
-                    tableOffsetBottom = tableOffsetTop + $this.height() - $this.find("thead").height();
-                    if (offset < tableOffsetTop || offset > tableOffsetBottom)
-                        $t_fixed.hide();
-                    else if (offset >= tableOffsetTop && offset <= tableOffsetBottom && $t_fixed.is(":hidden"))
-                        $t_fixed.show();
-                }
-                $(window).resize(resizeFixed);
-                $(window).scroll(scrollFixed);
-                init();
-            });
-        };
-    })(jQuery);
-
     jQuery(function () {
         Grid.init(@Model.PosId);
-        $("table").fixMe();
+        var tables = $('table').dataTable({
+            "scrollY": "600px",
+            "scrollX": true,
+            "scrollCollapse": true,
+            "paging": false,
+            "searching": false,
+            "info": false,
+            "ordering": false,
+        });
+        //new $.fn.dataTable.FixedHeader(tables);
     });
 
 
