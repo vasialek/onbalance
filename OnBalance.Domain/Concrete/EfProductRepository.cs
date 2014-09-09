@@ -117,5 +117,9 @@ namespace OnBalance.Domain.Concrete
             
         }
 
+        public void Delete(Product p)
+        {
+            _dbContext.Products.Remove(p);
+        }
     }
 }

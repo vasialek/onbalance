@@ -5,6 +5,9 @@
 }
 
     <tr data-product-id="@Model.Id">
+        <td style="width: 20px;">
+            <a href="#" onclick="Grid.deleteNewProduct($(this), @Model.Id, '@Model.Name'); return false;"><img src="@Url.Content("~/images/delete.png")" width="10" height="10" alt="Delete" class="ob-delete-product" data-product-id="@Model.Id" /></a>
+        </td>
         <td>@Html.DisplayFor(x => x.Name)</td>
         <td>@Html.DisplayFor(x => x.InternalCode)</td>
         <td>@Html.DisplayFor(x => x.QuantityCalculated)</td>

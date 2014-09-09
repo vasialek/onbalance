@@ -219,6 +219,43 @@
                 self._addNewSizeRow(categoryId, sizeName);
             }
         });
+
+        $(".ob-delete-product").click(function (e) {
+            e.preventDefault();
+            var oProductCell = $(e.target);
+            var productId = oProductCell.attr("data-product-id");
+            var name = oProductCell.closest("tr").find("td:nth-child(2)").text().trim();
+            if (productId > 0 && confirm("Do you want to delete product: " + name + "?")) {
+                self._deleteProduct($(e.target), productId);
+            }
+        });
+    },
+
+    deleteNewProduct: function (objToDelete, productId, productName) {
+        if (confirm("Do you want to delete product: " + productName + "?")) {
+            this._deleteProduct(objToDelete, productId);
+        }
+    },
+
+    _deleteProduct: function(objToDelete, productId)
+    {
+        if (productId > 0) {
+            this._log("Going to delete product #" + productId);
+
+            var self = this;
+            $.ajax({
+                url: gBaseUrl + "pradmin/dodelete/" + productId,
+                type: "POST",
+                success: function (data) {
+                    var tr = $(objToDelete).closest("tr");
+                    tr.hide(1000);
+                    tr.remove();
+                },
+                error: function (status) {
+                    self.reportError("Error deleting product #" + productId);
+                }
+            });
+        }
     },
 
     _addNewSizeRow: function (categoryId, sizeName) {

@@ -76,10 +76,10 @@
     <table class="display cell-border" style="width=@(nameW + codeW + 3 * qntW + c.SizesOrdered.Length * sizeW)px">
         <thead>
             <tr id="ProSiz_@(c.CategoryId)">
+                <th style="width: 20px;"></th>
                 <th class="ob-str" style="width: @(nameW)px">
-                    <div>Name
-                        <a href="#" class="ob-add-size btn btn-mini" data-category-id="@c.CategoryId"><i class="icon icon-plus"></i> Size</a>
-                    </div>
+                    Name<br />
+                    <a href="#" class="ob-add-size btn btn-mini" data-category-id="@c.CategoryId">Add size</a>
                 </th>
                 <th class="ob-str" style="width: @(codeW)px">
                     Code
@@ -101,7 +101,7 @@
                 }
             </tr>
             <tr>
-                <th colspan="@(c.SizesOrdered.Count() + 5)">
+                <th colspan="@(c.SizesOrdered.Count() + 6)">
                     <a href="#" class="btn btn-mini btn-primary product-add-new" data-category-id="@c.CategoryId" data-size-qnt="@c.SizesOrdered.Length">Create product in @c.CategoryName</a>
                 </th>
             </tr>
@@ -115,6 +115,7 @@
         @foreach (var item in c.Products)
 	    {
             <tr data-product-id="@item.Id">
+                <td style="width: 20px;"><img src="@Url.Content("~/images/delete.png")" width="10" height="10" alt="Delete" class="ob-delete-product" data-product-id="@item.Id" /></td>
                 <td class="ob-str" style="width: @(nameW)px">
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>

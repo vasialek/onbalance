@@ -39,5 +39,6 @@ namespace OnBalance.Domain.Abstract
 
         Product GetByUid(string id);
 
+        void Delete(Product p);
     }
 }

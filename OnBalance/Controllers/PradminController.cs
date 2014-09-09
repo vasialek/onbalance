@@ -656,6 +656,34 @@ namespace OnBalance.Controllers
             });
         }
 
+        [HttpPost]
+        public ActionResult DoDelete(int id)
+        {
+            AjaxResponse r = new AjaxResponse();
+
+            try
+            {
+                var p = _productRepository.GetById(id);
+                if (p == null)
+                {
+                    throw new Exception("Product does not exist!");
+                }
+
+                _productRepository.Delete(p);
+                _productRepository.SubmitChanges();
+
+                r.Status = true;
+                r.Message = "Product is deleted";
+            }
+            catch (Exception ex)
+            {
+                Error("Error deleting product #" + id, ex);
+                r.Message = ex.Message;
+            }
+
+            return Json(r);
+        }
+
         /// <summary>
         /// Displays new product form (fro Ajax)
         /// </summary>
@@ -797,7 +825,7 @@ namespace OnBalance.Controllers
             con.Open();
             var cmd = new System.Data.SqlClient.SqlCommand(
 @"select 
-    --top 100
+    --top 1000
     p.id as id,             -- 0
     p.internal_code, 
     p.uid, 
