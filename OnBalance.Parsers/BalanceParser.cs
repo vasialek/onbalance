@@ -9,6 +9,9 @@ namespace OnBalance.Parsers
     public interface IBalanceParser
     {
         IList<BalanceParseError> Errors { get; }
+        int TotalProcessedLines { get; }
+        int TotalProcessedNonEmptyLines { get; }
+        int TotalCategoryLines { get; }
         IList<ParsedItem> ParseFileContent(string[] lines);
         ParsedItem ParseLine(string s);
     }

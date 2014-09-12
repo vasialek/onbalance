@@ -249,6 +249,10 @@
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <Content Include="Views\Pradmin\DoNewProduct.cshtml" />
     <Content Include="Views\Pradmin\GetNewProduct.cshtml" />
+    <Content Include="Views\Parser\Edit.cshtml" />
+    <Content Include="Views\Parser\Import.cshtml" />
+    <Content Include="Views\Parser\Preview.cshtml" />
+    <Content Include="Views\Parser\Errors.cshtml" />
     <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
     <Content Include="Views\Useradmin\CreateInPos.cshtml" />

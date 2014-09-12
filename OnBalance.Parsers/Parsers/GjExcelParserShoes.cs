@@ -27,7 +27,26 @@ namespace OnBalance.Parsers.Parsers
         }
 
         private IList<BalanceParseError> _errors = null;
+        protected int _totalProcessedLines = 0;
+        protected int _totalProcessedNonEmptyLines = 0;
+        protected int _totalCategoryLines = 0;
+
         public IList<BalanceParseError> Errors { get { return _errors == null ? new List<BalanceParseError>() : _errors; } }
+
+        public int TotalProcessedLines
+        {
+            get { return _totalProcessedLines; }
+        }
+
+        public int TotalProcessedNonEmptyLines
+        {
+            get { return _totalProcessedNonEmptyLines; }
+        }
+
+        public int TotalCategoryLines
+        {
+            get { return _totalCategoryLines; }
+        }
 
         public IList<ParsedItem> ParseFileContent(string[] lines)
         {
@@ -46,10 +65,18 @@ namespace OnBalance.Parsers.Parsers
             {
                 try
                 {
+                    // Some statistics
+                    _totalProcessedLines++;
+                    if (String.IsNullOrWhiteSpace(lines[i]) == false)
+                    {
+                        _totalProcessedNonEmptyLines++;
+                    }
+
                     cells = lines[i].Split(new char[] { '\t' });
                     if (IsLineCategoryName(cells))
                     {
                         currentCategoryName = cells[0].Trim();
+                        _totalCategoryLines++;
                     }
                     else
                     {
@@ -58,6 +85,10 @@ namespace OnBalance.Parsers.Parsers
                         {
                             pi.CategoryName = currentCategoryName;
                             parsed.Add(pi);
+                        }
+                        else
+                        {
+                            Errors.Add(new BalanceParseError(i, lines[i], "Could not parse line", null));
                         }
                     }
                 }

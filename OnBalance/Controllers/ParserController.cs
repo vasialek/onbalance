@@ -42,13 +42,23 @@ namespace OnBalance.Controllers
             IBalanceParser p = productType == "gjdress" ? new GjExcelParserDress() : new GjExcelParserShoes();
             var items = p.ParseFileContent(lines);
 
+            // Pass statistics
+            ViewBag.ProcessedNonEmptyLines = p.TotalProcessedNonEmptyLines;
+            ViewBag.CategoryLines = p.TotalCategoryLines;
+
+            if (p.Errors.Count > 0)
+            {
+                TempData["ParserErrors"] = p.Errors.ToList();
+                return RedirectToAction("errors", new { id = id });
+            }
+
             // Just to beautify grid
             ViewBag.SizeNames = ExtractAvailableSizes(items);
 
-            //ViewBag.CategoryNames = items.Select(x => x.CategoryName)
-            //    .Distinct()
-            //    .ToList();
-            PrepareInsertSql(items, 102000);
+            ViewBag.CategoryNames = items.Select(x => x.CategoryName)
+                .Distinct()
+                .ToList();
+            //PrepareInsertSql(items, 102000);
 
             if (items.Count > 0)
             {
@@ -66,6 +76,18 @@ namespace OnBalance.Controllers
             }
 
             return View("Preview", "_LayoutLogin", items);
+        }
+
+        //
+        // GET: /parser/errors/500000
+
+        public ActionResult Errors(string id)
+        {
+            IList<Parsers.BalanceParseError> errors = null;
+
+            errors = TempData["ParserErrors"] == null ? null : (List<Parsers.BalanceParseError>)TempData["ParserErrors"];
+
+            return View("Errors", "_LayoutLogin", errors);
         }
 
         //

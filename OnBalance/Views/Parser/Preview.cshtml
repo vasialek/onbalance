@@ -7,7 +7,8 @@
     var categories = ViewBag.CategoryNames as List<string>;
 }
 
-<h2>Preview. Parsed: @Model.Count()</h2>
+<h2>Preview. Parsed: @Model.Count() 
+    out of @ViewBag.ProcessedNonEmptyLines non-empty lines (category lines: @ViewBag.CategoryLines)</h2>
 
 <div>
     @if(categories != null)
