@@ -58,7 +58,7 @@ namespace OnBalance.Controllers
             ViewBag.CategoryNames = items.Select(x => x.CategoryName)
                 .Distinct()
                 .ToList();
-            //PrepareInsertSql(items, 102000);
+            PrepareInsertSql(items, 102000);
 
             if (items.Count > 0)
             {

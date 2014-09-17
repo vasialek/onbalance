@@ -207,6 +207,8 @@ namespace OnBalance.Parsers.Parsers
         private Regex _rxNameCodeDashed = new Regex(@"(\s)(\d+)(\-)(\d+)", RegexOptions.CultureInvariant | RegexOptions.Singleline);
         // terex 043980
         private Regex _rxNameCodeDigits = new Regex(@"(\s)(\d+)", RegexOptions.CultureInvariant | RegexOptions.Singleline);
+        // No NAME, internal code is in first cell: 488160-203
+        private Regex _rxCodeWithDash = new Regex(@"^(\d{3,10})(\-)(\d+)$", RegexOptions.CultureInvariant | RegexOptions.Singleline);
 
         protected virtual ParsedItem ExtractInternalCodeFromName(ParsedItem pi)
         {
@@ -235,6 +237,15 @@ namespace OnBalance.Parsers.Parsers
             {
                 pi.InternalCode = m.Groups[2].Value.Trim();
                 pi.ProductName = pi.ProductName.Substring(0, m.Index).Trim();
+                return pi;
+            }
+
+            // Just code instead of name
+            m = _rxCodeWithDash.Match(pi.ProductName);
+            if (m.Success)
+            {
+                pi.InternalCode = pi.ProductName;
+                pi.ProductName = "";
                 return pi;
             }
 

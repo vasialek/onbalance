@@ -59,3 +59,9 @@ OnBalance.Core/bin/Release/OnBalance.Core.dll.config
 OnBalance.Parsers/bin/Debug/OnBalance.Parsers.dll.config
 OnBalance.Parsers/bin/Release/OnBalance.Parsers.dll.config
 *.force
+OnBalance.ParsersUnitTest/bin/Release/OnBalance.ParsersUnitTest.dll.config
+OnBalance/Properties/PublishProfiles/DEV server.pubxml.user
+OnBalance/Properties/PublishProfiles/DEV server.pubxml
+OnBalance/Properties/PublishProfiles/Local.pubxml
+OnBalance/Properties/PublishProfiles/Local.pubxml.user
+*.sxc

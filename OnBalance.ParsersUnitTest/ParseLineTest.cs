@@ -92,5 +92,15 @@ namespace OnBalance.ParsersUnitTest
             expD = 260;
             Assert.AreEqual(expD, pi.PriceOfRelease, "Expected price of release: " + expD + ", got: " + pi.PriceOfRelease);
         }
+
+        [TestMethod]
+        public void Test_Only_Code_Is_Present()
+        {
+            string s = "488160-203		57	49				7	7	7	7		8	8";
+
+            ParsedItem pi = _gjExcelParser.ParseLine(s);
+
+            Assert.AreEqual("488160-203", pi.InternalCode, "Expected InternalCode to be 488160-203");
+        }
     }
 }
