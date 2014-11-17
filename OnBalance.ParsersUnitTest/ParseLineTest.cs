@@ -29,6 +29,36 @@ namespace OnBalance.ParsersUnitTest
         }
 
         [TestMethod]
+        public void Test_Parse_Price_With_Lt()
+        {
+            string s = "essence G 96433		5	135				42	42		42,5					44,5	44,5								220,00 Lt";
+
+            var p = _gjExcelParser.ParseLine(s);
+
+            Assert.AreEqual(220m, p.PriceOfRelease, "Expected price of release to be 220.00. Got: " + p.PriceOfRelease);
+        }
+
+        [TestMethod]
+        public void Test_Parse_Price_With_Dot_Separator()
+        {
+            string s = "team feather G 56837		0	140.52";
+
+            var p = _gjExcelParser.ParseLine(s);
+
+            Assert.AreEqual(140.52m, p.Price, "Expected price to be 140.52. Got: " + p.Price);
+        }
+
+        [TestMethod]
+        public void Test_Parse_Price_With_Lt_No_Space()
+        {
+            string s = "Kalisto 385716-104		1	164,5lt			43";
+
+            var p = _gjExcelParser.ParseLine(s);
+
+            Assert.AreEqual(164.50m, p.Price, "Expected price to be 164.50. Got: " + p.Price);
+        }
+
+        [TestMethod]
         public void Test_Parse_ProductName_And_Code_Together()
         {
             string s = "super skate G 05415		3	133					44	44,5		41					42	43							220																									";

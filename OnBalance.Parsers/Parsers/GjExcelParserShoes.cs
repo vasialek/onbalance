@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace OnBalance.Parsers.Parsers
 {
@@ -169,7 +170,8 @@ namespace OnBalance.Parsers.Parsers
                     }
                     else if (IsPriceField(i))
                     {
-                        pi.Price = ParseDecimal(cells[i], "Price");
+                        pi.Price = ParsePrice(cells[i], "Price");
+                        //pi.Price = ParseDecimal(cells[i], "Price");
                     }
                     else if (IsPriceOfReleaseField(i))
                     {
@@ -179,7 +181,8 @@ namespace OnBalance.Parsers.Parsers
                         }
                         else
                         {
-                            pi.PriceOfRelease = ParseDecimal(cells[i].Trim(), "Price of release"); 
+                            pi.PriceOfRelease = ParsePrice(cells[i].Trim(), "Price of release"); 
+                            //pi.PriceOfRelease = ParseDecimal(cells[i].Trim(), "Price of release"); 
                         }
                     }
                     else
@@ -209,6 +212,8 @@ namespace OnBalance.Parsers.Parsers
         private Regex _rxNameCodeDigits = new Regex(@"(\s)(\d+)", RegexOptions.CultureInvariant | RegexOptions.Singleline);
         // No NAME, internal code is in first cell: 488160-203
         private Regex _rxCodeWithDash = new Regex(@"^(\d{3,10})(\-)(\d+)$", RegexOptions.CultureInvariant | RegexOptions.Singleline);
+
+        private Regex _rxPriceWithLtl = new Regex(@"\b(lt)(l?)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
 
         protected virtual ParsedItem ExtractInternalCodeFromName(ParsedItem pi)
         {
@@ -322,5 +327,23 @@ namespace OnBalance.Parsers.Parsers
             return v;
         }
 
+        private decimal ParsePrice(string s, string fieldName)
+        {
+            // Strip `LT` or `Ltl` from price
+            s = _rxPriceWithLtl.Replace(s, "");
+
+            if (s.EndsWith(Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencySymbol, StringComparison.InvariantCultureIgnoreCase))
+            {
+                s = s.Substring(0, s.Length - Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencySymbol.Length);
+            }
+
+            // Try to fix "140.52" for LT locale
+            char incorrectDecimalSeparator = Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator == "," ? '.' : ',';
+            if (s.Length > 3 && s[s.Length - 3] == incorrectDecimalSeparator)
+            {
+                s = String.Concat(s.Substring(0, s.Length - 3), Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator, s.Substring(s.Length - 2));
+            }
+            return ParseDecimal(s, fieldName);
+        }
     }
 }
