@@ -110,7 +110,7 @@ namespace OnBalance.Parsers.Parsers
             }
 
             // First cell should be category name
-            if (string.IsNullOrEmpty(cells[0]))
+            if (string.IsNullOrEmpty(cells[0].Trim()))
             {
                 return false;
             }
@@ -166,7 +166,14 @@ namespace OnBalance.Parsers.Parsers
                     }
                     else if (IsQuantityField(i))
                     {
-                        pi.Quantity = ParseInt(cells[i], "Quantity");
+                        if (String.IsNullOrEmpty(cells[i].Trim()))
+                        {
+                            _logger.WarnFormat("  quantity at index {0} is empty!", i);
+                        }
+                        else
+                        {
+                            pi.Quantity = ParseInt(cells[i], "Quantity");
+                        }
                     }
                     else if (IsPriceField(i))
                     {
@@ -217,6 +224,11 @@ namespace OnBalance.Parsers.Parsers
 
         protected virtual ParsedItem ExtractInternalCodeFromName(ParsedItem pi)
         {
+            if (pi.ProductName == null)
+            {
+                throw new ArgumentNullException("ProductName", "Could not extract Code from ProductName, ProductName is null");
+            }
+
             // super skate G 05415
             // cc a.t. Q 23572
             Match m = _rxNameAndCode.Match(pi.ProductName);

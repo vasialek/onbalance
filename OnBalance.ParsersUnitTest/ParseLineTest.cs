@@ -132,5 +132,24 @@ namespace OnBalance.ParsersUnitTest
 
             Assert.AreEqual("488160-203", pi.InternalCode, "Expected InternalCode to be 488160-203");
         }
+
+        [TestMethod]
+        public void Test_Empty_Quantity()
+        {
+            string s = "44      			67																						120																																																					";
+
+            var pi = _gjExcelParser.ParseLine(s);
+
+            Assert.AreEqual(0, pi.Quantity, "Expected Quantity to be 0. Got: " + pi.Quantity);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Test_Line_Of_Empty_Fields()
+        {
+            string s = "																									";
+
+            var pi = _gjExcelParser.ParseLine(s);
+        }
     }
 }
