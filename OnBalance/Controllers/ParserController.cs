@@ -52,13 +52,20 @@ namespace OnBalance.Controllers
                 return RedirectToAction("errors", new { id = id });
             }
 
+            var notFound = FindNonExistingCategories(items);
+            if (notFound.Count > 0)
+            {
+                TempData["NotFound"] = notFound;
+                return RedirectToAction("NotFoundCategories");
+            }
+
             // Just to beautify grid
             ViewBag.SizeNames = ExtractAvailableSizes(items);
 
             ViewBag.CategoryNames = items.Select(x => x.CategoryName)
                 .Distinct()
                 .ToList();
-            PrepareInsertSql(items, 102000);
+            PrepareInsertSql(items, 110000);
 
             if (items.Count > 0)
             {
@@ -86,6 +93,21 @@ namespace OnBalance.Controllers
             IList<Parsers.BalanceParseError> errors = null;
 
             errors = TempData["ParserErrors"] == null ? null : (List<Parsers.BalanceParseError>)TempData["ParserErrors"];
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Line nr          Text");
+            foreach (var e in errors)
+            {
+                if (String.IsNullOrWhiteSpace(e.Line) == false)
+                {
+                    sb.AppendFormat("{0,-8}{1}", e.LineNr, e.Line);
+                    sb.AppendLine();
+                    sb.AppendLine(e.Error);
+                    sb.AppendLine("-------------------------");
+                }
+            }
+            string filename = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "_errors.txt");
+            System.IO.File.WriteAllText(filename, sb.ToString());
 
             return View("Errors", "_LayoutLogin", errors);
         }
@@ -154,6 +176,12 @@ namespace OnBalance.Controllers
             }
         }
 
+        public ViewResult NotFoundCategories()
+        {
+            ViewBag.NotFound = (List<string>)TempData["NotFound"];
+            return View();
+        }
+
         protected IList<ItemSizeQuantity> ExtractAvailableSizes(IList<ParsedItem> parsed)
         {
             List<ItemSizeQuantity> sizes = new List<ItemSizeQuantity>();
@@ -176,7 +204,6 @@ namespace OnBalance.Controllers
         protected string PrepareInsertSql(IList<ParsedItem> parsed, int startId)
         {
             StringBuilder sb = new StringBuilder();
-            
 
             string sqlFmt = "INSERT INTO [vasialek_onbalance].[vasialek_onbalance_user].[product] ([status_id], [pos_id], [internal_code], [uid], [user_id], [name], [price], [created_at], [category_id]) VALUES (%status_id%, %pos_id%, '%internal_code%', '%uid%', '%user_id%', '%name%', %price%, '%created_at%', %category_id%)";
             string sqlDetFmt = "INSERT INTO [vasialek_onbalance].[vasialek_onbalance_user].[product_detail] ([status_id], [product_id], [parameter_name], [parameter_value], [price_minor], [price_release_minor], [quantity], [updated_at], [created_at]) VALUES (%status_id%, @id, '%parameter_name%', '%parameter_value%', %price_minor%, %price_release_minor%, %quantity%, '%updated_at%', '%created_at%')";
@@ -242,6 +269,25 @@ namespace OnBalance.Controllers
             return sb.ToString();
         }
 
+        protected IList<string> FindNonExistingCategories(IList<ParsedItem> parsed)
+        {
+            var notFound = new List<string>();
+            var existingCategories = GetCategories();
+            var parsedCategories = parsed.Select(x => x.CategoryName)
+                .Distinct()
+                .ToList();
+
+            foreach (var c in parsedCategories)
+            {
+                if (existingCategories.FirstOrDefault(x => x.Name.Equals(c, StringComparison.InvariantCultureIgnoreCase)) == null)
+                {
+                    notFound.Add(c);
+                }
+            }
+
+            return notFound;
+        }
+
         protected string FormatInternalCode(string code, string fmt)
         {
             return string.Format(fmt, code.Trim().Replace(" ", "_").Replace("-", "_")).ToUpper();
@@ -278,6 +324,7 @@ namespace OnBalance.Controllers
             categories.Add(new Category { Id = 1039, Name = "NIKE MAIK" });
             categories.Add(new Category { Id = 1040, Name = "Sp.mot.kostiumai AD" });
             categories.Add(new Category { Id = 1041, Name = "VYR.STRIUKĖS" });
+            categories.Add(new Category { Id = 1041, Name = "VYR.STRIUKES" });
             categories.Add(new Category { Id = 1042, Name = "STR,VEJASTR.MOT" });
             categories.Add(new Category { Id = 1043, Name = "VYR.KOST.AD" });
             categories.Add(new Category { Id = 1044, Name = "Vyr.sp.kostiumai NK" });
@@ -310,6 +357,9 @@ namespace OnBalance.Controllers
             categories.Add(new Category { Id = 1071, Name = "vyr.slepetes\"NIKE\"" });
             categories.Add(new Category { Id = 1072, Name = "KAMUOLIAI" });
             categories.Add(new Category { Id = 1073, Name = "krepsinio aprangos" });
+            categories.Add(new Category { Id = 1074, Name = "GETROS" });
+            categories.Add(new Category { Id = 1075, Name = "DZ PUMA" });
+            categories.Add(new Category { Id = 1076, Name = "STR.PUMA" });
 
             return categories;
         }

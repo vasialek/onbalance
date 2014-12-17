@@ -1,0 +1,11 @@
+﻿@{
+    List<string> notFound = (List<string>)ViewBag.NotFound;
+}
+
+<h3>Not found categories</h3>
+<ul style="">
+@foreach (string name in notFound)
+{
+    <li>@name</li>
+}
+</ul>
