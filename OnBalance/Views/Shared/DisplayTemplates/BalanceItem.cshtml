@@ -1,0 +1,43 @@
+﻿@model OnBalance.Models.BalanceItem
+
+<table class="table table-bordered table-condensed table-striped">
+    <colgroup>
+        <col width="20%" />
+        <col width="40%" />
+        <col width="40%" />
+    </colgroup>
+    <tr>
+        <th>Property</th>
+        @*<th>Current value</th>*@
+        <th>Changes</th>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => Model.ProductName)</td>
+        @*<td>@Html.DisplayFor(x => product.Name)</td>*@
+        <td>@Html.DisplayFor(x => Model.ProductName)</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => x.InternalCode)</td>
+        <td>@Html.DisplayFor(x => x.InternalCode)</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => Model.SizeName)</td>
+        @*<td></td>*@
+        <td>@Html.DisplayFor(x => Model.SizeName)</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => Model.Quantity)</td>
+        @*<td>@Html.DisplayFor(x => product.QuantityCalculated)</td>*@
+        <td>@Html.DisplayFor(x => Model.Quantity)</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => Model.Price)</td>
+        @*<td>@Html.DisplayFor(x => product.Price)</td>*@
+        <td>@Html.DisplayFor(x => Model.Price)</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => Model.PriceOfRelease)</td>
+        @*<td>@Html.DisplayFor(x => product.PriceReleaseFirst)</td>*@
+        <td>@Html.DisplayFor(x => Model.PriceOfRelease)</td>
+    </tr>
+</table>

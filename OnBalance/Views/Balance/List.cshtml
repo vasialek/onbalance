@@ -19,7 +19,7 @@
         </th>
         <th>Size</th>
         <th>
-            Quantity
+            Quantity change
         </th>
         <th>
             Price
@@ -81,10 +81,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.HasRemoteChanges)
             </td>*@
-            <td>
+            <td style="white-space: nowrap;">
                 @if(item.Status == OnBalance.Core.Status.Pending)
                 {
-                    @Html.ActionLink("Confirm", "confirm", new { id = item.Id });
+                    @Html.ActionLink("Confirm", "confirm", new { id = item.Id })
+                    @:&nbsp;
+                    @Html.ActionLink("Delete", "delete", new { id = item.Id })
                 }
             </td>
         </tr>

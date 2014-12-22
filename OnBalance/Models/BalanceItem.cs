@@ -54,10 +54,13 @@ namespace OnBalance.Models
         /// <summary>
         /// Code which seller use in his shop
         /// </summary>
+        [Display(Name = "Internal code")]
         public string InternalCode { get; set; }
 
+        [Display(Name = "Product name")]
         public string ProductName { get; set; }
 
+        [Display(Name = "Quantity change")]
         public int Quantity { get; set; }
 
         /// <summary>
@@ -68,6 +71,7 @@ namespace OnBalance.Models
         /// <summary>
         /// Price for sell in shop
         /// </summary>
+        [Display(Name = "Price of release")]
         public decimal PriceOfRelease { get; set; }
 
         /// <summary>
@@ -87,6 +91,7 @@ namespace OnBalance.Models
         /// </summary>
         public bool IsChangedLocally { get; set; }
 
+        [Display(Name = "Size")]
         public string SizeName { get; set; }
 
         public BalanceItem()

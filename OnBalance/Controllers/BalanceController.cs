@@ -386,7 +386,7 @@ namespace OnBalance.Controllers
         //
         // GET: /balance/confir/10843
 
-        //[Authorize]
+        [Authorize]
         public ActionResult Confirm(int id)
         {
             //var db = new OnBalance.Models.BalanceItemRepository();
@@ -414,12 +414,15 @@ namespace OnBalance.Controllers
         // POST: /balance/confirm
 
         [HttpPost]
-        public ActionResult Confirm(int id, string confirm)
+        [Authorize]
+        public ActionResult Confirm(int id, string confirm, string sync)
         {
-            if (string.IsNullOrEmpty(confirm))
+            if (String.IsNullOrEmpty(confirm))
             {
                 return RedirectToAction("confirm", new { id = id });
             }
+
+            bool doSyncWithEshop = String.IsNullOrEmpty(sync) == false;
 
             InfoFormat("Going to confirm updated product ID #{0} from POS", id);
             var item = _balanceItemsRepository.BalanceItems.SingleOrDefault(x => x.Id == id);
@@ -447,18 +450,26 @@ namespace OnBalance.Controllers
 
                 // Call and update one product http://www.gjsportland.com/index.php/en/balance/callback?_token=123&act=chq&code=qwer
 
-                string updateUrl = string.Format("http://www.gjsportland.com/index.php/en/balance/callback?_token={0}&act=chq&code={1}&size={2}&qnt={3}&price={4}", "gj-fake-token", item.InternalCode, item.SizeName, item.Quantity, item.Price * 100);
-                WebClient wc = new WebClient();
-                string s = wc.DownloadString(updateUrl);
-                if (String.IsNullOrEmpty(s))
+                if (doSyncWithEshop)
                 {
-                    throw new Exception("Got empty response from e-shop");
-                }
+                    InfoFormat("Sending synchronization request to eshop...");
+                    string updateUrl = string.Format("http://www.gjsportland.com/index.php/en/balance/callback?_token={0}&act=chq&code={1}&size={2}&qnt={3}&price={4}", "gj-fake-token", item.InternalCode, item.SizeName, item.Quantity, item.Price * 100);
+                    WebClient wc = new WebClient();
+                    string s = wc.DownloadString(updateUrl);
+                    if (String.IsNullOrEmpty(s))
+                    {
+                        throw new Exception("Got empty response from e-shop");
+                    }
 
-                var resp = Newtonsoft.Json.JsonConvert.DeserializeObject<AjaxResponse>(s);
-                if (resp.Status == false)
+                    var resp = Newtonsoft.Json.JsonConvert.DeserializeObject<AjaxResponse>(s);
+                    if (resp.Status == false)
+                    {
+                        throw new Exception(resp.Message);
+                    }
+                }
+                else
                 {
-                    throw new Exception(resp.Message);
+                    Warn("Do NOT synchronize with eshop");
                 }
                 //return Content("DONE: " + resp.Message);
 
@@ -506,7 +517,7 @@ namespace OnBalance.Controllers
         //
         // GET: /balance/
 
-        //[Authorize]
+        [Authorize]
         public ActionResult Index()
         {
             return List(_organizationRepository.Organizations.FirstOrDefault().Id);
@@ -536,7 +547,7 @@ namespace OnBalance.Controllers
         //
         // GET: /balance/list/100001
 
-        //[Authorize]
+        [Authorize]
         public ActionResult List(int id)
         {
             // List all not-synced products between OBS and POS
@@ -558,6 +569,60 @@ namespace OnBalance.Controllers
 
             SetTempMessagesToViewBag();
             return View("List", Layout, list);
+        }
+
+        //
+        // GET: /balance/delete/1000
+
+        [Authorize]
+        public ActionResult Delete(int id)
+        {
+            BalanceItem bi = null;
+            try
+            {
+                bi = new BalanceItem(_balanceItemsRepository.BalanceItems.First(x => x.Id.Equals(id)));
+            }
+            catch (Exception ex)
+            {
+                SetErrorMessage("Error cancelling product change: {0}", ex.Message);
+                Error("Error showing confirmation to delete from balance_item", ex);
+            }
+
+            return View("Delete", bi);
+        }
+
+        //
+        // POST: /balance/delete
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult Delete(int id, string confirm)
+        {
+            Domain.Entities.BalanceItem bi = null;
+            int posId = -1;
+            
+            if (string.IsNullOrEmpty(confirm))
+            {
+                return RedirectToAction("delete", new { id = id });
+            }
+
+            try
+            {
+                InfoFormat("Going to delete balance_item #{0}...", id);
+                bi = _balanceItemsRepository.BalanceItems.First(x => x.Id.Equals(id));
+                posId = bi.PosId;
+
+                _balanceItemsRepository.Delete(bi);
+                _balanceItemsRepository.SubmitChanges();
+            }
+            catch (Exception ex)
+            {
+                SetErrorMessage("Error cancelling product change: {0}", ex.Message);
+                Error("Error deleting from balance_item", ex);
+                return View("Delete", new BalanceItem(bi));
+            }
+
+            return posId > 0 ? RedirectToAction("list", new { id = posId }) : RedirectToAction("list");
         }
 
         public ActionResult GetProductInfo(string id)

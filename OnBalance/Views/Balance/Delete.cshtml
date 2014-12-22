@@ -1,11 +1,11 @@
 ﻿@model OnBalance.Models.BalanceItem
 
 @{
-    ViewBag.Title = "Confirm";
+    ViewBag.Title = "Cancel";
     //OnBalance.Models.Product product = (OnBalance.Models.Product)ViewBag.Product;
 }
 
-<h2>Confirm product update</h2>
+<h2>Confirm product change cancellation</h2>
 
 @Html.Partial("MessagesAndErrors")
 
@@ -13,17 +13,13 @@
 {
 
     <input type="checkbox" name="confirm" />
-    <div class="label label-important">Do you want to update product in Online Balance System with product from Point of Service?</div>
+    <div class="label label-important">Do you want to cancel product change?</div>
     <br /><br />
     <div>
         @Html.DisplayForModel()
     </div>
-    <div>
-        <input type="checkbox" name="sync" value="1" checked="checked" />
-        <div class="label label-info">Sync with online shop</div><br /><br />
-    </div>
     <div class="btn-group">
-        <input type="submit" class="btn btn-small btn-primary" value="@OnBalance.MyMessages.ButtonText.Confirm" />
+        <input type="submit" class="btn btn-small btn-danger" value="@OnBalance.MyMessages.ButtonText.Confirm" />
         @Html.ActionLink(OnBalance.MyMessages.ButtonText.Back, "list", "balance", new { id = Model.PosId }, new { @class = "btn btn-small" })
     </div>
     

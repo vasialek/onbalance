@@ -11,5 +11,6 @@ namespace OnBalance.Domain.Abstract
         IQueryable<BalanceItem> BalanceItems { get; }
         void Save(BalanceItem item);
         void SubmitChanges();
+        void Delete(BalanceItem item);
     }
 }

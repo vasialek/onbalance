@@ -37,10 +37,14 @@ namespace OnBalance.Domain.Concrete
             }
         }
 
-
         public void SubmitChanges()
         {
             _dbContext.SaveChanges();
+        }
+
+        public void Delete(Entities.BalanceItem item)
+        {
+            _dbContext.BalanceItems.Remove(item);
         }
     }
 }

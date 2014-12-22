@@ -254,6 +254,8 @@
     <Content Include="Views\Parser\Preview.cshtml" />
     <Content Include="Views\Parser\Errors.cshtml" />
     <Content Include="Views\Parser\NotFoundCategories.cshtml" />
+    <Content Include="Views\Balance\Delete.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\BalanceItem.cshtml" />
     <None Include="Views\Shared\EditorTemplates\MyStatus.cshtml" />
     <Content Include="Views\Pradmin\AllCategories.cshtml" />
     <Content Include="Views\Useradmin\CreateInPos.cshtml" />
