@@ -4,17 +4,38 @@
     var ajaxOptions = new AjaxOptions() {
         LoadingElementId = "LoadingDiv"
     };
+    
+    var options = new OnBalance.ViewModels.Parsers.ParserOptions();
 }
 
 <h2>Preview data</h2>
 
-@using(Ajax.BeginForm("preview", ajaxOptions))
+@using (Ajax.BeginForm("preview", null, ajaxOptions, new { @class = "form-inline" }))
 {
-    @Html.DropDownList("ProductType", new List<SelectListItem>
-    {
-        new SelectListItem { Text = "GJ shoes", Value = "gjshoes" },
-        new SelectListItem { Text = "GJ dress", Value = "gjdress" }
-    })<br />
+    <div class="form-group">
+        @Html.DropDownList("ProductType", new List<SelectListItem>
+        {
+            new SelectListItem { Text = "GJ shoes", Value = "gjshoes" },
+            new SelectListItem { Text = "GJ dress", Value = "gjdress" }
+        })
+    </div>
+    <div class="checkbox">
+        @Html.LabelFor(x => options.AllowEmptyPrice)
+        @Html.CheckBoxFor(x => options.AllowEmptyPrice)
+    </div>
+    <div class="checkbox">
+        @Html.LabelFor(x => options.RedirectToErrors)
+        @Html.CheckBoxFor(x => options.RedirectToErrors)
+    </div>
+    <div class="checkbox">
+        @Html.LabelFor(x => options.RedirectToCategories)
+        @Html.CheckBoxFor(x => options.RedirectToCategories)
+    </div>
+    <div class="checkbox">
+        @Html.LabelFor(x => options.PrepareInsertSql)
+        @Html.CheckBoxFor(x => options.PrepareInsertSql)
+    </div>
+    <br /><br />
     @Html.TextArea("Data", new { style = "font-family: Courier New; height: 500px; width: 800px" })<br />
     <button class="btn btn-mini btn-primary">Preview</button>
 }

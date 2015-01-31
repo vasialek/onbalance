@@ -56,10 +56,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Mocked\GjExcelParserTst.cs" />
     <Compile Include="ObLog4NetLogger.cs" />
     <Compile Include="ParseGjFileTest.cs" />
     <Compile Include="ParseLineTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ParseGjDressFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OnBalance.Core\OnBalance.Core.csproj">

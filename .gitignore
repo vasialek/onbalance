@@ -68,3 +68,4 @@ OnBalance/Properties/PublishProfiles/Local.pubxml.user
 doc/import/2014-12-15/_errors_kedai.txt
 doc/import/2014-12-15/_errors_drabuziai.txt
 *.ods
+Backup/*

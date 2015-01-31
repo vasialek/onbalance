@@ -83,5 +83,27 @@ namespace OnBalance.ParsersUnitTest
 
             Assert.AreEqual(products.Count, products.Count(x => x.CategoryName == categoryName));
         }
+
+        [TestMethod]
+        public void Test_Find_CategoryName_When_Sizes_Are_Weird()
+        {
+            string[] lines = new string[] {
+                "SX 3807-961		2			38/42											42/46						1",
+		        "1			38/42																	",
+		        "0			30/34											38/42						",
+                "SX 4716-927					30/34											38/42"
+            };
+            bool allowEmpty = _gjParser.AllowEmptyPrice;
+
+            _gjParser.AllowEmptyPrice = true;
+            var products = _gjParser.ParseFileContent(lines);
+
+            _gjParser.AllowEmptyPrice = allowEmpty;
+
+            //Assert.IsTrue(String.IsNullOrEmpty(pi.CategoryName), "Expected string to be ordinal product, not Category name. Got CategoryName: " + pi.CategoryName);
+            //Assert.AreEqual("SX", pi.ProductName, "Expected ProductName to be `SX`. Got: " + pi.ProductName);
+        }
+
+
     }
 }

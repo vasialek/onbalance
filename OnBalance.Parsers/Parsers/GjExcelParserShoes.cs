@@ -31,6 +31,7 @@ namespace OnBalance.Parsers.Parsers
         protected int _totalProcessedLines = 0;
         protected int _totalProcessedNonEmptyLines = 0;
         protected int _totalCategoryLines = 0;
+        protected int _totalEmptyLines = 0;
 
         public IList<BalanceParseError> Errors { get { return _errors == null ? new List<BalanceParseError>() : _errors; } }
 
@@ -48,6 +49,16 @@ namespace OnBalance.Parsers.Parsers
         {
             get { return _totalCategoryLines; }
         }
+
+        public int TotalEmptyLines
+        {
+            get { return _totalEmptyLines; }
+        }
+
+        /// <summary>
+        /// Determines whether to throw exception when price is not set/empty. Or take 0 by default
+        /// </summary>
+        public bool AllowEmptyPrice { get; set; }
 
         public IList<ParsedItem> ParseFileContent(string[] lines)
         {
@@ -74,6 +85,12 @@ namespace OnBalance.Parsers.Parsers
                     }
 
                     cells = lines[i].Split(new char[] { '\t' });
+                    ValidateLine(cells);
+                    //if (IsEmptyLine(cells))
+                    //{
+                    //    Errors.Add(new BalanceParseError(i, lines[i], "Line contains empty cells", true, null));
+                    //}
+                    //else 
                     if (IsLineCategoryName(cells))
                     {
                         currentCategoryName = cells[0].Trim();
@@ -85,21 +102,45 @@ namespace OnBalance.Parsers.Parsers
                         if (pi != null)
                         {
                             pi.CategoryName = currentCategoryName;
+                            pi.LineNr = i;
                             parsed.Add(pi);
                         }
                         else
                         {
-                            Errors.Add(new BalanceParseError(i, lines[i], "Could not parse line", null));
+                            Errors.Add(new BalanceParseError(i, lines[i], "Could not parse line", false, null));
                         }
                     }
                 }
+                catch (BalanceCellException bcex)
+                {
+                    _errors.Add(new BalanceParseError(i, lines[i], bcex.Error, bcex));
+                }
                 catch (Exception ex)
                 {
-                    _errors.Add(new BalanceParseError(i, lines[i], ex.Message, ex));
+                    _errors.Add(new BalanceParseError(i, lines[i], ex.Message, false, ex));
                 }
             }
 
             return parsed;
+        }
+
+        public virtual void ValidateLine(string[] cells)
+        {
+            if (IsEmptyLine(cells))
+            {
+                throw new Exception("Lint contains empty cells only");
+            }
+        }
+
+        protected bool IsEmptyLine(string[] cells)
+        {
+            if (cells == null || cells.Length < 1)
+	        {
+		        return true;
+	        }
+
+            // Check if any of cells contains some text
+            return cells.FirstOrDefault(x => String.IsNullOrWhiteSpace(x) == false) == null;
         }
 
         public bool IsLineCategoryName(string[] cells/*, ref string currentCategoryName*/)
@@ -149,7 +190,12 @@ namespace OnBalance.Parsers.Parsers
                     {
                         if (string.IsNullOrEmpty(cells[i]))
                         {
-                            throw new ArgumentNullException("Product code/name field is empty");
+                            throw new ArgumentNullException("Product code/name field is empty"); 
+                            //// Let's try to extract name from next cell (code)
+                            //if ((i + 1 < cells.Length) && String.IsNullOrWhiteSpace(cells[i + 1]))
+                            //{
+                            //    throw new ArgumentNullException("Product code/name field is empty"); 
+                            //}
                         }
                         pi.ProductName = cells[i].Trim();
                     }
@@ -327,14 +373,24 @@ namespace OnBalance.Parsers.Parsers
 
         private decimal ParseDecimal(string s, string fieldName)
         {
+            return ParseDecimal(s, fieldName, false);
+        }
+
+        private decimal ParseDecimal(string s, string fieldName, bool allowEmpty)
+        {
             if (string.IsNullOrEmpty(s))
             {
-                throw new ArgumentNullException("`" + fieldName + "` field is empty");
+                if (AllowEmptyPrice == false)
+                {
+                    throw new ArgumentNullException("`" + fieldName + "` field is empty");
+                }
+                return 0;
             }
+
             decimal v;
             if (decimal.TryParse(s, out v) == false)
             {
-                throw new InvalidCastException("Could not parse `" + fieldName + "` from: " + s);
+                throw new InvalidCastException("Could not parse `" + fieldName + "` from: " + s); 
             }
             return v;
         }
@@ -355,7 +411,7 @@ namespace OnBalance.Parsers.Parsers
             {
                 s = String.Concat(s.Substring(0, s.Length - 3), Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator, s.Substring(s.Length - 2));
             }
-            return ParseDecimal(s, fieldName);
+            return ParseDecimal(s, fieldName, AllowEmptyPrice);
         }
     }
 }

@@ -28,32 +28,36 @@ namespace OnBalance.Controllers
 
         public ActionResult Edit(string id)
         {
+            // Clear errors
+            Session["ParserErrors"] = null;
             return View("Edit", "_LayoutLogin");
         }
 
         //
         // GET: /parser/preview
 
-        public ActionResult Preview(string id)
+        public ActionResult Preview(string id, OnBalance.ViewModels.Parsers.ParserOptions options)
         {
             string data = Request["Data"];
             string productType = Request["ProductType"].Trim().ToLower();
             string[] lines = data.Split("\n".ToCharArray());
             IBalanceParser p = productType == "gjdress" ? new GjExcelParserDress() : new GjExcelParserShoes();
+            p.AllowEmptyPrice = options.AllowEmptyPrice;
             var items = p.ParseFileContent(lines);
 
             // Pass statistics
             ViewBag.ProcessedNonEmptyLines = p.TotalProcessedNonEmptyLines;
             ViewBag.CategoryLines = p.TotalCategoryLines;
 
-            if (p.Errors.Count > 0)
+            if (p.Errors.Count > 0 && options.RedirectToErrors)
             {
                 TempData["ParserErrors"] = p.Errors.ToList();
+                TempData["TotalProcessedNonEmptyLines"] = p.TotalProcessedNonEmptyLines;
                 return RedirectToAction("errors", new { id = id });
             }
 
             var notFound = FindNonExistingCategories(items);
-            if (notFound.Count > 0)
+            if (notFound.Count > 0 && options.RedirectToCategories)
             {
                 TempData["NotFound"] = notFound;
                 return RedirectToAction("NotFoundCategories");
@@ -62,10 +66,13 @@ namespace OnBalance.Controllers
             // Just to beautify grid
             ViewBag.SizeNames = ExtractAvailableSizes(items);
 
-            ViewBag.CategoryNames = items.Select(x => x.CategoryName)
-                .Distinct()
-                .ToList();
-            PrepareInsertSql(items, 110000);
+            if (options.PrepareInsertSql)
+            {
+                ViewBag.CategoryNames = items.Select(x => x.CategoryName)
+                        .Distinct()
+                        .ToList();
+                PrepareInsertSql(items, 110000); 
+            }
 
             if (items.Count > 0)
             {
@@ -92,9 +99,22 @@ namespace OnBalance.Controllers
         {
             IList<Parsers.BalanceParseError> errors = null;
 
-            errors = TempData["ParserErrors"] == null ? null : (List<Parsers.BalanceParseError>)TempData["ParserErrors"];
+            
+            if (TempData["ParserErrors"] != null)
+            {
+                Session["ParserErrors"] = TempData["ParserErrors"];
+                Session["TotalProcessedNonEmptyLines"] = TempData["TotalProcessedNonEmptyLines"];
+            }
+            errors = (List<Parsers.BalanceParseError>)Session["ParserErrors"];
+            //errors = TempData["ParserErrors"] == null ? null : (List<Parsers.BalanceParseError>)TempData["ParserErrors"];
 
             StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("-------------------------");
+            sb.AppendFormat("Total lines:  {0}", Session["TotalProcessedNonEmptyLines"]).AppendLine();
+            sb.AppendFormat("Total errors: {0}", errors.Count(x => x.IsLineEmpty == false)).AppendLine();
+            sb.AppendLine("-------------------------");
+
             sb.AppendLine("Line nr          Text");
             foreach (var e in errors)
             {
@@ -224,6 +244,13 @@ namespace OnBalance.Controllers
                     {
                         throw new KeyNotFoundException("Could not locate category: " + pi.CategoryName);
                     }
+
+                    //var sameProduct = parsed.Count(x => x.ProductName == pi.ProductName && x.InternalCode == pi.InternalCode);
+                    //if (sameProduct > 1)
+                    //{
+                    //    throw new Exception("Duplicated product line: " + pi.LineNr + ". Product name: " + pi.ProductName + ", price: " + pi.Price);
+                    //}
+
                     string internalCode = FormatInternalCode(pi.InternalCode, "GJ_ES_{0}");
                     sb.AppendLine("--------------------------------------------------");
                     sb.AppendLine(sqlFmt
@@ -231,7 +258,7 @@ namespace OnBalance.Controllers
                         .Replace("%status_id%", "1")
                         .Replace("%pos_id%", posId.ToString())
                         .Replace("%internal_code%", internalCode)
-                        .Replace("%uid%", Common.EncodeHex(Common.CalculateMd5(string.Format("{0}-{1}-{2}", userId, posId, internalCode))))
+                        .Replace("%uid%", Common.EncodeHex(Common.CalculateMd5(string.Format("{0}-{1}-{2}-{3}", userId, posId, pi.ProductName, internalCode))))
                         .Replace("%user_id%", userId)
                         .Replace("%name%", pi.ProductName)
                         .Replace("%price%", pi.PriceOfRelease.ToString("######0.00", System.Globalization.CultureInfo.InvariantCulture.NumberFormat))

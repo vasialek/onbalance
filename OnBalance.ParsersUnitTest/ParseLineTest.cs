@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OnBalance.Parsers;
 using OnBalance.Parsers.Parsers;
+using OnBalance.ParsersUnitTest.Mocked;
 
 namespace OnBalance.ParsersUnitTest
 {
@@ -26,6 +27,21 @@ namespace OnBalance.ParsersUnitTest
             ParsedItem p = _gjExcelParser.ParseLine(s);
 
             Assert.AreEqual(106m, p.Price, "Price is not good");
+        }
+
+        [TestMethod]
+        public void Test_Price_Is_Empty_When_Allowed()
+        {
+            string s = "adiZero Crazy G 48805		7			42,5	43	44	44,5		46	46,5	47						";
+
+            bool allowedEmptyPrice = _gjExcelParser.AllowEmptyPrice;
+
+            _gjExcelParser.AllowEmptyPrice = true;
+            var pi = _gjExcelParser.ParseLine(s);
+            
+            _gjExcelParser.AllowEmptyPrice = allowedEmptyPrice;
+
+            Assert.AreEqual(0m, pi.Price, "Expected Price (empty) to be 0. Got: " + pi.Price);
         }
 
         [TestMethod]
@@ -151,5 +167,44 @@ namespace OnBalance.ParsersUnitTest
 
             var pi = _gjExcelParser.ParseLine(s);
         }
+
+        [TestMethod]
+        public void Test_Line_Is_Empty()
+        {
+            var p = new GjExcelParserTst();
+            string s = "																																																	";
+
+
+            bool isEmpty = p.IsEmptyLineTest(s.Split("\t".ToCharArray()));
+
+            Assert.IsTrue(isEmpty, "Expected line to be empty");
+        }
+
+        [TestMethod]
+        public void Test_Line_Is_Not_Empty()
+        {
+            var p = new GjExcelParserTst();
+            string s = "						4																																										";
+
+
+            bool isEmpty = p.IsEmptyLineTest(s.Split("\t".ToCharArray()));
+
+            Assert.IsFalse(isEmpty, "Expected line to be NOT empty");
+        }
+
+        [TestMethod]
+        public void Test_Line_Contains_Only_Tabs()
+        {
+            string[] lines = new string[] {
+                "																																																	"
+            };
+
+
+            var pi = _gjExcelParser.ParseFileContent(lines);
+
+            Assert.AreEqual(1, _gjExcelParser.Errors.Count, "Expected 1 parsing error");
+            Assert.IsTrue(_gjExcelParser.Errors[0].IsLineEmpty, "Expected parsing error about empty line");
+        }
+
     }
 }
