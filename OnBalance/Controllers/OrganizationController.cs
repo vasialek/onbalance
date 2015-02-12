@@ -11,6 +11,8 @@ using OnBalance.Core;
 
 namespace OnBalance.Controllers
 {
+
+    [Authorize]
     public class OrganizationController : BaseController
     {
         private IOrganizationRepository _repository = null;
@@ -59,6 +61,7 @@ namespace OnBalance.Controllers
         //
         // GET: /organization/create
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult Create(int? id)
         {
             Organization model = new Organization();
@@ -69,6 +72,7 @@ namespace OnBalance.Controllers
         //
         // POST: /organization/create
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult Create(Organization model)
         {
@@ -90,7 +94,7 @@ namespace OnBalance.Controllers
         //
         // GET: /organization/edit/500002
 
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(int id)
         {
             InfoFormat("User #{0} is going to edit Organization #{1}", User.Identity.Name, id);
@@ -113,7 +117,7 @@ namespace OnBalance.Controllers
         //
         // POST: /organization/edit
 
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult Edit(OrganizationEditViewModel model)
         {
@@ -136,6 +140,7 @@ namespace OnBalance.Controllers
         //
         // GET: /organization/moveto/500001
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult MoveTo(int id)
         {
             InfoFormat("User #{0} is going to move Organization #{1}", User.Identity.Name, id);
@@ -152,6 +157,7 @@ namespace OnBalance.Controllers
         //
         // POST: /organization/moveto/500010
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult MoveTo(int id, int newParentId)
         {

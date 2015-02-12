@@ -20,6 +20,7 @@ using OnBalance.Domain.Concrete;
 namespace OnBalance.Controllers
 {
 
+    [Authorize]
     public class PradminController : BaseController
     {
         private IOrganizationRepository _organizationRepository = null;
@@ -55,7 +56,6 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/
 
-        [Authorize]
         public ActionResult Index()
         {
             return List(_organizationRepository.Organizations.First().Id);
@@ -65,6 +65,7 @@ namespace OnBalance.Controllers
         // GET: /pradmin/balance/500000
 
         //[OutputCache(Duration = 120)]
+
         public ActionResult Balance(int id)
         {
             try
@@ -86,7 +87,6 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/list/100003
 
-        [Authorize]
         public ActionResult List(int id)
         {
             ProductsInPosViewModel productsList = new ProductsInPosViewModel();
@@ -145,7 +145,6 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/categories/500001
 
-        [Authorize]
         public ActionResult Categories(int id)
         {
             var model = new PosCategoriesListViewModel();
@@ -189,7 +188,6 @@ namespace OnBalance.Controllers
 
         //
         // POST: /pradmin/editcategory/1003
-        [Authorize]
         [HttpPost]
         public ActionResult EditCategory(int id, FormCollection f)
         {
@@ -351,7 +349,6 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/parse/100002
 
-        [Authorize]
         public ActionResult Parse(int id)
         {
             return View();
@@ -359,7 +356,6 @@ namespace OnBalance.Controllers
 
         // POST: /pradmin/parse
 
-        [Authorize]
         [HttpPost]
         public ActionResult Parse(TextParserViewModel model)
         {
@@ -444,7 +440,6 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/export/100001
 
-        [Authorize]
         public ActionResult Export(int id)
         {
             if( TempData["ExchangeItems"] == null )
@@ -460,7 +455,6 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/confirm
 
-        [Authorize]
         public ActionResult Confirm()
         {
             if(TempData["ExchangeItems"] == null)
@@ -473,7 +467,6 @@ namespace OnBalance.Controllers
             return View();
         }
 
-        [Authorize]
         public ActionResult Create(int id)
         {
             InfoFormat("Creating product in POS with ID #{0}", id);
@@ -489,7 +482,6 @@ namespace OnBalance.Controllers
             return View(model);
         }
 
-        [Authorize]
         [HttpPost]
         public ActionResult Create(OnBalance.Domain.Entities.Product model)
         {
@@ -510,7 +502,6 @@ namespace OnBalance.Controllers
         //
         // GET: /pradmin/edit/1234
 
-        [Authorize]
         public ActionResult Edit(int id)
         {
             InfoFormat("Editing product with ID #{0}", id);
@@ -538,7 +529,6 @@ namespace OnBalance.Controllers
         //
         // POST: /pradmin/edit
 
-        [Authorize]
         [HttpPost]
         public ActionResult Edit(OnBalance.Domain.Entities.Product model)
         {

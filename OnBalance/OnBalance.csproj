@@ -25,6 +25,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -151,6 +152,7 @@
     <Compile Include="ViewModels\Categories\PosCategoryViewModel.cs" />
     <Compile Include="ViewModels\lgf\GunsFilterViewModel.cs" />
     <Compile Include="ViewModels\Organizations\OrganizationEditViewModel.cs" />
+    <Compile Include="ViewModels\Parsers\ParserOptions.cs" />
     <Compile Include="ViewModels\PendingChangesViewModel.cs" />
     <Compile Include="ViewModels\Products\ProductsByCategoryViewModel.cs" />
     <Compile Include="ViewModels\Products\ProductsInPosViewModel.cs" />

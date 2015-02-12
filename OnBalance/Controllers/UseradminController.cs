@@ -12,7 +12,7 @@ using OnBalance.Core;
 namespace OnBalance.Controllers
 {
 
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class UseradminController : BaseController
     {
         //
@@ -231,7 +231,7 @@ namespace OnBalance.Controllers
         // POST: /useradmin/edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(string id, FormCollection collection)
         {
             try
             {
@@ -304,6 +304,21 @@ namespace OnBalance.Controllers
             {
                 return View();
             }
+        }
+
+        //
+        // GET: /useradmin/createrole/ROLENAME
+
+        [Authorize(Roles = "Administrator")]
+        public ActionResult CreateRole(string id)
+        {
+            if (String.IsNullOrEmpty(id))
+            {
+                throw new ArgumentNullException("No role name to create");
+            }
+
+            System.Web.Security.Roles.CreateRole(id.Trim());
+            return Content(String.Concat("Role is created: ", id.Trim()));
         }
     }
 }

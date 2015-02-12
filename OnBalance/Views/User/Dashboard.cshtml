@@ -30,7 +30,10 @@
         <ul>
         @foreach(var u in Model.LastUsers)
         {
-            <li>@u.UserName (at @u.CreationDate.ToShortDateString())</li>
+            <li>
+                @u.UserName (at @u.CreationDate.ToShortDateString())
+                @Html.ImageLink(Url.Content("~/images/edit.png"), "Edit", Url.Action("edit", "useradmin", new { id = u.UserName }), null, null)
+            </li>
         }
         </ul>
     </div>

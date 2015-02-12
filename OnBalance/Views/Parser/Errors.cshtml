@@ -1,9 +1,14 @@
 ﻿@model IEnumerable<OnBalance.Parsers.BalanceParseError>
 
+@{
+    int totalErrors = Model.Count(x => x.IsLineEmpty == false);
+    int totalParsed = int.Parse(Session["TotalProcessedNonEmptyLines"].ToString() ?? "0");
+}
+
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <b>@totalErrors</b> errors out of <b>@totalParsed</b> lines
 </p>
-<table style="width: 90%">
+<table style="width: 100%" class="table table-condensed table-bordered table-striped">
     <tr>
         <th>
             LineNr
@@ -16,7 +21,7 @@
         </th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.Where(x => x.IsLineEmpty == false)) {
     <tr>
         <td>
             @(item.LineNr + 3)

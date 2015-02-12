@@ -13,6 +13,17 @@
     @Html.EditorFor(x => Model)
     
     <input type="submit" value="@OnBalance.MyMessages.ButtonText.Login" class="btn-small btn-primary" />
+    
+    if (User.Identity.IsAuthenticated)
+    {
+        <p></p>
+        <div class="alert alert-warning">
+            You are logged in user, but have no permissions to access this page.<br />
+            Please login as other user or ask for permission.<br /><br />
+            @Html.ActionLink("Dashboard", "dashboard", "user") or
+            @Html.ActionLink("List of POS", "index", "organization")
+        </div>
+    }
 }
 
 <script type="text/javascript">
