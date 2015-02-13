@@ -12,6 +12,8 @@ namespace OnBalance.ViewModels.Products
     {
         public int PosId { get; set; }
 
+        public bool CouldViewPrice { get; set; }
+
         public IList<ProductsAndSizesViewModel> ProductsByCategories { get; private set; }
 
         /// <summary>

@@ -72,6 +72,8 @@ namespace OnBalance.Controllers
             {
                 var pos = _organizationRepository.GetById(id);
                 var productsByCategories = GetProductsByCategories(pos.Id);
+                productsByCategories.CouldViewPrice = System.Web.Security.Roles.IsUserInRole(User.Identity.Name, "ViewSupplierPrice");
+
                 productsByCategories.PosId = id;
                 //var products = _productRepository.GetLastInPos(pos.Id, 0, 20);
                 //return View("Balance", new ViewModels.Products.ProductsByCategoryViewModel(products.ToList()));
@@ -815,7 +817,7 @@ namespace OnBalance.Controllers
             con.Open();
             var cmd = new System.Data.SqlClient.SqlCommand(
 @"select 
-    --top 1000
+--    top 1000
     p.id as id,             -- 0
     p.internal_code, 
     p.uid, 

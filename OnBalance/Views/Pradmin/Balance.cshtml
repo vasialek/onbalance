@@ -126,7 +126,15 @@
                     @Html.DisplayFor(modelItem => item.QuantityCalculated)
                 </td>
                 <td class="ob-str" style="width: @(qntW)px">
-                    @Html.DisplayFor(modelItem => item.PriceFirst)
+                    @if (Model.CouldViewPrice)
+                    {
+                        @Html.DisplayFor(modelItem => item.PriceFirst)
+                    }
+                    else
+                    {
+                        @:-
+                    }
+                    
                 </td>
                 <td class="ob-str" style="width: @(qntW)px">
                     @Html.DisplayFor(modelItem => item.PriceReleaseFirst)
